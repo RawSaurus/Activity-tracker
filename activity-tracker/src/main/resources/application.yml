@@ -1,0 +1,54 @@
+spring:
+  config:
+    import: env.properties
+  datasource:
+    url: jdbc:postgresql://localhost:5432/activity_tracker
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    baseline-on-migrate: true
+    enabled: false
+    user: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    baseline-description: "init"
+    baseline-version: 0
+  mail:
+    host: localhost
+    port: 1025
+    username: username
+    password: password
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
+spring-doc:
+  default-produces-media-type: application/json
+
+application:
+  security:
+    jwt:
+      secret-key: ${SECRET_KEY}
+      expiration: 86400000
+  mailing:
+    frontend:
+      activation-url: http://localhost:4200/activate-account
+server:
+  port: 8088
+  servlet:
+    context-path: /api/v1/
