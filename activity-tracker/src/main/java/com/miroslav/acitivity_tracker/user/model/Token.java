@@ -1,4 +1,4 @@
-package com.miroslav.acitivity_tracker.user;
+package com.miroslav.acitivity_tracker.user.model;
 
 import jakarta.persistence.*;
 import lombok.*;

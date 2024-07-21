@@ -3,10 +3,9 @@ package com.miroslav.acitivity_tracker.activity.model;
 import com.miroslav.acitivity_tracker.achievement.Achievement;
 import com.miroslav.acitivity_tracker.comment.Comment;
 import com.miroslav.acitivity_tracker.session.Session;
-import com.miroslav.acitivity_tracker.user.User;
+import com.miroslav.acitivity_tracker.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -29,6 +28,7 @@ public class Activity {
     private Integer activityId;
     @Column(unique = true)
     private String name;
+    private String group;
     private String info;
     private String type;
     @Enumerated(value = EnumType.STRING)

@@ -1,6 +1,6 @@
 package com.miroslav.acitivity_tracker.security;
 
-import com.miroslav.acitivity_tracker.user.UserRepository;
+import com.miroslav.acitivity_tracker.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

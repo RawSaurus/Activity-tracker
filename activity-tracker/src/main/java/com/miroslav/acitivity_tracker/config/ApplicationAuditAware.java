@@ -1,6 +1,6 @@
 package com.miroslav.acitivity_tracker.config;
 
-import com.miroslav.acitivity_tracker.user.User;
+import com.miroslav.acitivity_tracker.user.model.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

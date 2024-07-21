@@ -1,7 +1,7 @@
 package com.miroslav.acitivity_tracker.role;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.miroslav.acitivity_tracker.user.User;
+import com.miroslav.acitivity_tracker.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

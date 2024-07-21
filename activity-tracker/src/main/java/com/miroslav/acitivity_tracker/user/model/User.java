@@ -1,4 +1,4 @@
-package com.miroslav.acitivity_tracker.user;
+package com.miroslav.acitivity_tracker.user.model;
 
 import com.miroslav.acitivity_tracker.activity.model.Activity;
 import com.miroslav.acitivity_tracker.role.Role;
@@ -50,6 +50,10 @@ public class User implements UserDetails, Principal {
 
     @OneToOne
     private Activity activity;
+
+    @OneToOne(cascade = {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.REFRESH},
+    fetch = FetchType.LAZY)
+    private Profile profile;
 
 
     @Override
