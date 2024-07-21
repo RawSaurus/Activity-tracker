@@ -1,6 +1,6 @@
 package com.miroslav.acitivity_tracker.comment;
 
-import com.miroslav.acitivity_tracker.activity.OriginalActivity;
+import com.miroslav.acitivity_tracker.activity.model.Activity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
@@ -31,7 +31,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "activityId")
-    private OriginalActivity originalActivity;
+    private Activity activity;
 
 
 }

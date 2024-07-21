@@ -1,6 +1,6 @@
 package com.miroslav.acitivity_tracker.achievement;
 
-import com.miroslav.acitivity_tracker.activity.OriginalActivity;
+import com.miroslav.acitivity_tracker.activity.model.Activity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -34,7 +34,7 @@ public class Achievement {
 
     @ManyToOne
     @JoinColumn(name = "activityId")
-    private OriginalActivity originalActivity;
+    private Activity activity;
 
 
 }

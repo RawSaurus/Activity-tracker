@@ -1,4 +1,4 @@
-package com.miroslav.acitivity_tracker.activity;
+package com.miroslav.acitivity_tracker.activity.model;
 
 import com.miroslav.acitivity_tracker.achievement.Achievement;
 import com.miroslav.acitivity_tracker.comment.Comment;
@@ -6,32 +6,38 @@ import com.miroslav.acitivity_tracker.session.Session;
 import com.miroslav.acitivity_tracker.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "_activity")
-public class OriginalActivity {
+@EntityListeners(AuditingEntityListener.class)
+public class Activity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer activityId;
     @Column(unique = true)
     private String name;
     private String info;
     private String type;
-    private String category; //enum ?
+    @Enumerated(value = EnumType.STRING)
+    private Category category;
     private byte[] picture;
     private double rating;
     private int downloads;
+    private boolean isOriginal;
+    private boolean isPrivate;
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private Date createdAt;
@@ -39,13 +45,20 @@ public class OriginalActivity {
     @Column(updatable = false, nullable = false)
     private Date updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "creator_id")
+    @OneToOne
     private User creator;
-    @OneToMany(mappedBy = "originalActivity")
+    @OneToOne
+    private Activity originalActivity;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+    @OneToMany(mappedBy = "activity")
     private List<Achievement> achievements;
-    @OneToMany(mappedBy = "originalActivity")
+    @OneToMany(mappedBy = "activity")
     private List<Session> sessions;
-    @OneToMany(mappedBy = "originalActivity")
+    @OneToMany(mappedBy = "activity")
     private List<Comment> comments;
+
+    //process: create activity (created by = creator, isOriginal = true) -> post activity (isPrivate = false)
+    //-> download activity(create new activity, set originalActivity, isOriginal = false)
 }

@@ -1,6 +1,6 @@
 package com.miroslav.acitivity_tracker.user;
 
-import com.miroslav.acitivity_tracker.activity.OriginalActivity;
+import com.miroslav.acitivity_tracker.activity.model.Activity;
 import com.miroslav.acitivity_tracker.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -48,8 +48,9 @@ public class User implements UserDetails, Principal {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "creator")
-    private List<OriginalActivity> activities;
+    @OneToOne
+    private Activity activity;
+
 
     @Override
     public String getName() {

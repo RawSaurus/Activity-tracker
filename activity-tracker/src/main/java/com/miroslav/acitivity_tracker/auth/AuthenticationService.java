@@ -53,8 +53,21 @@ public class AuthenticationService {
                 .enabled(false)
                 .roles(List.of(userRole))
                 .build();
+        userRepository.save(user);
+        sendValidationEmail(user);
     }
 
+//    public void register(User admin) throws MessagingException{
+//        User user = User.builder()
+//                .firstName(admin.getFirstName())
+//                .lastName(admin.getLastName())
+//                .email(admin.getEmail())
+//                .password(passwordEncoder.encode(admin.getPassword()))
+//                .accountLocked(false)
+//                .enabled(false)
+//                .roles(admin.getRoles())
+//                .build();
+//    }
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

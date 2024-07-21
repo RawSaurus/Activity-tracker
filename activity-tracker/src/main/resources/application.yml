@@ -15,7 +15,7 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
-    baseline-on-migrate: true
+    baseline-on-migrate: false
     enabled: false
     user: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}

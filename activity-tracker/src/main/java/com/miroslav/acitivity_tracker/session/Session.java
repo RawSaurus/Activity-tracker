@@ -1,7 +1,7 @@
 package com.miroslav.acitivity_tracker.session;
 
 
-import com.miroslav.acitivity_tracker.activity.OriginalActivity;
+import com.miroslav.acitivity_tracker.activity.model.Activity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -36,5 +36,5 @@ public class Session {
 
     @ManyToOne
     @JoinColumn(name = "activityId")
-    private OriginalActivity originalActivity;
+    private Activity activity;
 }

@@ -36,7 +36,7 @@ public class Config {
                                 "/swagger-resources",
                                 "/swagger-resources/**",
                                 "/configuration/ui",
-                                "/cofiguration/security",
+                                "/configuration/security",
                                 "/swagger-ui/**",
                                 "/webjars/**",
                                 "/swagger-ui.html"
