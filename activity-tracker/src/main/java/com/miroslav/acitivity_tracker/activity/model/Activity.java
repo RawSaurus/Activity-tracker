@@ -1,5 +1,7 @@
 package com.miroslav.acitivity_tracker.activity.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.miroslav.acitivity_tracker.achievement.Achievement;
 import com.miroslav.acitivity_tracker.comment.Comment;
 import com.miroslav.acitivity_tracker.session.Session;
@@ -28,7 +30,7 @@ public class Activity {
     private Integer activityId;
     @Column(unique = true)
     private String name;
-    private String group;
+//    private String group;
     private String info;
     private String type;
     @Enumerated(value = EnumType.STRING)
@@ -48,6 +50,7 @@ public class Activity {
     @OneToOne
     private User creator;
     @OneToOne
+    @JsonManagedReference
     private Activity originalActivity;
     @ManyToOne
     @JoinColumn(name = "userId")

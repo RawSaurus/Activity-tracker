@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("activity")
@@ -30,6 +33,16 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.findById(activityId));
     }
 
+    @GetMapping("/category/{activity-category}")
+    public ResponseEntity<List<ActivityResponse>> findAllByCategory(@PathVariable("activity-name") String activityCategory){
+        return ResponseEntity.ok(activityService.findAllByCategory(activityCategory));
+    }
+
+    @GetMapping("/name/{activity-name}")
+    public ResponseEntity<ActivityResponse> findByName(@PathVariable("activity-name") String activityName){
+        return ResponseEntity.ok(activityService.findByName(activityName));
+    }
+
     @PostMapping
     public ResponseEntity<Integer> createActivity(@RequestBody ActivityRequest request, Authentication user){
         return ResponseEntity.ok(activityService.createActivity(request, user));
@@ -41,8 +54,13 @@ public class ActivityController {
         return ResponseEntity.accepted().body(activityService.updateActivity(activityId, user));
     }
 
+    @PutMapping("/copy-activity/{activity-id}")
+    public ResponseEntity<ActivityResponse> copyActivityToUser(@PathVariable("activity-id") Integer activityId, Authentication user){
+        return ResponseEntity.ok(activityService.copyActivityToUser(activityId, user));
+    }
+
     @DeleteMapping("/{activity-id}")
-    public ResponseEntity deleteActivityById(@PathVariable("activity-id") Integer activityId){
-        return activityService.deleteActivityById(activityId);
+    public ResponseEntity deleteActivityById(@PathVariable("activity-id") Integer activityId, Authentication user){
+        return activityService.deleteActivityById(activityId, user);
     }
 }
