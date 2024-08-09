@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.miroslav.acitivity_tracker.achievement.Achievement;
 import com.miroslav.acitivity_tracker.comment.Comment;
 import com.miroslav.acitivity_tracker.session.Session;
+import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -48,13 +49,13 @@ public class Activity {
     private Date updatedAt;
 
     @OneToOne
-    private User creator;
+    private Profile creator;
     @OneToOne
     @JsonManagedReference
     private Activity originalActivity;
     @ManyToOne
     @JoinColumn(name = "userId")
-    private User user;
+    private Profile profile;
     @OneToMany(mappedBy = "activity")
     private List<Achievement> achievements;
     @OneToMany(mappedBy = "activity")

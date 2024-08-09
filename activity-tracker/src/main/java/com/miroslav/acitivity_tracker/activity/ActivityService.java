@@ -1,6 +1,7 @@
 package com.miroslav.acitivity_tracker.activity;
 
 import com.miroslav.acitivity_tracker.activity.model.Activity;
+import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.model.User;
 import com.miroslav.acitivity_tracker.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -41,7 +42,7 @@ public class ActivityService {
 
     public Integer createActivity(ActivityRequest request, Authentication user) {
         Activity activity = activityMapper.toEntity(request);
-        activity.setCreator((User) user.getPrincipal());
+        activity.setCreator((Profile) user.getPrincipal());
         activity.setOriginal(true);
 
         //TODO if not private post to market

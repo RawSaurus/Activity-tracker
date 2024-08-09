@@ -1,7 +1,11 @@
 package com.miroslav.acitivity_tracker.user.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.miroslav.acitivity_tracker.activity.model.Activity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,5 +24,12 @@ public class Profile {
     @Setter(AccessLevel.NONE)
     private User user;
 
+
+    @OneToOne
+    @JsonBackReference
+    private Activity activity;
+
+    @OneToMany(mappedBy = "profile")
+    private List<Activity> activities;
 
 }

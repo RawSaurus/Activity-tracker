@@ -52,9 +52,6 @@ public class User implements UserDetails, Principal {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
-    @OneToOne
-    @JsonBackReference
-    private Activity activity;
 
     @OneToOne(cascade = {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.REFRESH},
     fetch = FetchType.LAZY)
