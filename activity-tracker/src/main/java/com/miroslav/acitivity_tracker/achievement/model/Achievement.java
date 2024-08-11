@@ -1,4 +1,4 @@
-package com.miroslav.acitivity_tracker.achievement;
+package com.miroslav.acitivity_tracker.achievement.model;
 
 import com.miroslav.acitivity_tracker.activity.model.Activity;
 import jakarta.persistence.*;
@@ -22,7 +22,8 @@ public class Achievement {
     private Integer achievementId;
     private String name;
     private String info;
-    private String type; //enum
+    @Enumerated(EnumType.STRING)
+    private Type type;
     private byte[] picture;
     private String typeCheckmark; //enum
     @CreatedDate

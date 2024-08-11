@@ -1,8 +1,7 @@
 package com.miroslav.acitivity_tracker.activity.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.miroslav.acitivity_tracker.achievement.Achievement;
+import com.miroslav.acitivity_tracker.achievement.model.Achievement;
 import com.miroslav.acitivity_tracker.comment.Comment;
 import com.miroslav.acitivity_tracker.session.Session;
 import com.miroslav.acitivity_tracker.user.model.Profile;
@@ -29,7 +28,6 @@ public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer activityId;
-    @Column(unique = true)
     private String name;
 //    private String group;
     private String info;
@@ -48,8 +46,8 @@ public class Activity {
     @Column(updatable = false, nullable = false)
     private Date updatedAt;
 
-    @OneToOne
-    private Profile creator;
+    private String creator;
+    private Integer creatorId;
     @OneToOne
     @JsonManagedReference
     private Activity originalActivity;

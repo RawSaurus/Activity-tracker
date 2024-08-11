@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProfileService {
 
-    private final ProfileRepository profileRepository;
-    private final UserRepository userRepository;
+//    private final ProfileRepository profileRepository;
+//    private final UserRepository userRepository;
 }

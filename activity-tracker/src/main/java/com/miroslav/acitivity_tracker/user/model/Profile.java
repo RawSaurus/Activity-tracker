@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "_profile")
 public class Profile {
@@ -19,17 +20,16 @@ public class Profile {
     private Integer profileId;
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH},
         fetch = FetchType.LAZY)
-    @MapsId("profileId")
-    @JoinColumn(name = "profileId", referencedColumnName = "userId")
-    @Setter(AccessLevel.NONE)
+//    @MapsId("profileId")
+//    @JoinColumn(name = "profileId", referencedColumnName = "userId")
+//    @Setter(AccessLevel.NONE)
     private User user;
 
+    //    @JoinColumn(name = "username", referencedColumnName = "username")
+    private String username;
 
-    @OneToOne
+    @OneToMany(mappedBy = "creator")
     @JsonBackReference
-    private Activity activity;
-
-    @OneToMany(mappedBy = "profile")
     private List<Activity> activities;
 
 }

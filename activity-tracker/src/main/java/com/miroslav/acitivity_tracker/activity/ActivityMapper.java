@@ -1,42 +1,60 @@
 package com.miroslav.acitivity_tracker.activity;
 
 import com.miroslav.acitivity_tracker.activity.model.Activity;
-import org.springframework.stereotype.Component;
+import org.mapstruct.*;
 
-@Component
-public class ActivityMapper {
+import static org.mapstruct.NullValuePropertyMappingStrategy.*;
 
-    public ActivityResponse toResponse(Activity activity){
-        return new ActivityResponse(
-                activity.getName(),
-//                activity.getGroup(),
-                activity.getInfo(),
-                activity.getType(),
-                activity.getCategory(),
-                activity.getRating(),
-                activity.getDownloads()
-        );
-    }
+@Mapper(componentModel = "spring")
+public interface ActivityMapper {
 
-    public Activity toEntity(ActivityResponse activityResponse){
-        return Activity.builder()
-                .name(activityResponse.name())
-//                .group(activityResponse.group())
-                .info(activityResponse.info())
-                .type(activityResponse.type())
-                .category(activityResponse.category())
-                .rating(activityResponse.rating())
-                .downloads(activityResponse.downloads())
-                .build();
-    }
+    @Mapping(target = "isPrivate", ignore = true)
+    ActivityRequest toRequest(Activity activity);
+    ActivityResponse toResponse(Activity activity);
+    @Mapping(target = "profile", ignore = true)
+    @Mapping(target = "creatorId", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "sessions", ignore = true)
+    @Mapping(target = "rating", ignore = true)
+    @Mapping(target = "picture", ignore = true)
+    @Mapping(target = "originalActivity", ignore = true)
+    @Mapping(target = "isOriginal", ignore = true)
+    @Mapping(target = "downloads", ignore = true)
+    @Mapping(target = "creator", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "activityId", ignore = true)
+    @Mapping(target = "achievements", ignore = true)
+    Activity toEntity(ActivityRequest request);
+    @Mapping(target = "profile", ignore = true)
+    @Mapping(target = "creatorId", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "sessions", ignore = true)
+    @Mapping(target = "picture", ignore = true)
+    @Mapping(target = "originalActivity", ignore = true)
+    @Mapping(target = "isPrivate", ignore = true)
+    @Mapping(target = "isOriginal", ignore = true)
+    @Mapping(target = "creator", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "activityId", ignore = true)
+    @Mapping(target = "achievements", ignore = true)
+    Activity toEntity(ActivityResponse response);
 
-    public Activity toEntity(ActivityRequest activityRequest){
-        return Activity.builder()
-                .name(activityRequest.name())
-                .info(activityRequest.info())
-                .type(activityRequest.type())
-                .category(activityRequest.category())
-                .build();
-    }
-
+    @Mapping(target = "profile", ignore = true)
+    @Mapping(target = "creatorId", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "sessions", ignore = true)
+    @Mapping(target = "rating", ignore = true)
+    @Mapping(target = "picture", ignore = true)
+    @Mapping(target = "originalActivity", ignore = true)
+    @Mapping(target = "original", ignore = true)
+    @Mapping(target = "downloads", ignore = true)
+    @Mapping(target = "creator", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "activityId", ignore = true)
+    @Mapping(target = "achievements", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
+    void updateToEntity(ActivityRequest request, @MappingTarget Activity activity);
 }

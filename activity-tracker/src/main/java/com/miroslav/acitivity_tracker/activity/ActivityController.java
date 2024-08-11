@@ -18,13 +18,6 @@ public class ActivityController {
     private final ActivityService activityService;
 
 
-    //TODO find activity
-    //TODO find all activities by name
-    //TODO find all activities by category
-    //TODO create activity
-    //TODO update activity
-    //TODO delete activity
-    //TODO copy activity to user
     //TODO create group -> group entity
     //TODO post activity to market
 
@@ -33,14 +26,28 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.findById(activityId));
     }
 
-    @GetMapping("/category/{activity-category}")
-    public ResponseEntity<List<ActivityResponse>> findAllByCategory(@PathVariable("activity-name") String activityCategory){
-        return ResponseEntity.ok(activityService.findAllByCategory(activityCategory));
+    @GetMapping("/library/{activity-id}")//TODO
+    public ResponseEntity<ActivityResponse> findInUserLibrary(@PathVariable("activity-id") Integer activityId, Authentication user){
+        return ResponseEntity.ok(activityService.findInUserLibrary(activityId, user));
+    }
+    @GetMapping("/library/name/{name}")//TODO
+    public ResponseEntity<ActivityResponse> findInUserLibraryByName(@PathVariable("name") String name, Authentication user){
+        return ResponseEntity.ok(activityService.findInUserLibraryByName(name, user));
     }
 
-    @GetMapping("/name/{activity-name}")
-    public ResponseEntity<ActivityResponse> findByName(@PathVariable("activity-name") String activityName){
-        return ResponseEntity.ok(activityService.findByName(activityName));
+    @GetMapping("/market/{activity-id}")//TODO
+    public ResponseEntity<ActivityResponse> findInMarket(@PathVariable("activity-id") Integer activityId){
+        return ResponseEntity.ok(activityService.findInMarket(activityId));
+    }
+
+    @GetMapping("/market/name/{name}")//TODO
+    public ResponseEntity<ActivityResponse> findInMarketByName(@PathVariable("name") String name){
+        return ResponseEntity.ok(activityService.findInMarketByName(name));
+    }
+
+    @GetMapping("/category/{activity-category}")
+    public ResponseEntity<List<ActivityResponse>> findAllByCategory(@PathVariable("activity-category") String activityCategory){
+        return ResponseEntity.ok(activityService.findAllByCategory(activityCategory));
     }
 
     @PostMapping
@@ -49,9 +56,21 @@ public class ActivityController {
     }
 
     @PutMapping("/{activity-id}")
-    public ResponseEntity<ActivityResponse> updateActivity(@PathVariable("activity-id") Integer activityId,
+    public ResponseEntity<ActivityResponse> updateActivity(@PathVariable("activity-id") Integer activityId, @RequestBody ActivityRequest request,
                                                            Authentication user){
-        return ResponseEntity.accepted().body(activityService.updateActivity(activityId, user));
+        return ResponseEntity.accepted().body(activityService.updateActivity(activityId, request, user));
+    }
+
+    //TODO
+    @PutMapping("/create-group")
+    public ResponseEntity<String> createGroup(@RequestBody String group, Authentication user){
+        return ResponseEntity.accepted().body(activityService.createGroup(group, user));
+    }
+
+    //TODO
+    @PutMapping("/add-to-group")
+    public ResponseEntity<String> addToGroup(@RequestBody String group, Authentication user){
+        return ResponseEntity.accepted().body(activityService.addToGroup(group, user));
     }
 
     @PutMapping("/copy-activity/{activity-id}")
@@ -60,7 +79,12 @@ public class ActivityController {
     }
 
     @DeleteMapping("/{activity-id}")
-    public ResponseEntity deleteActivityById(@PathVariable("activity-id") Integer activityId, Authentication user){
-        return activityService.deleteActivityById(activityId, user);
+    public ResponseEntity deleteOriginalActivityById(@PathVariable("activity-id") Integer activityId, Authentication user){
+        return activityService.deleteOriginalActivityById(activityId, user);
+    }
+
+    @DeleteMapping("remove/{activity-id}")
+    public ResponseEntity removeFromUserLibrary(@PathVariable("activity-id") Integer activityId, Authentication user){
+        return activityService.removeFromUserLibrary(activityId, user);
     }
 }

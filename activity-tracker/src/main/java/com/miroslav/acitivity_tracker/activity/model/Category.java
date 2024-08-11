@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum Category {
 
-    ACTIVITY("activities");
+    ACTIVITY("activities"),
+    SPORT("sport");
 
 
     private final String name;

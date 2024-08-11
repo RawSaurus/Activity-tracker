@@ -5,7 +5,9 @@ import com.miroslav.acitivity_tracker.email.EmailTemplateName;
 import com.miroslav.acitivity_tracker.role.Role;
 import com.miroslav.acitivity_tracker.role.RoleRepository;
 import com.miroslav.acitivity_tracker.security.JwtService;
+import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.model.Token;
+import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import com.miroslav.acitivity_tracker.user.repository.TokenRepository;
 import com.miroslav.acitivity_tracker.user.model.User;
 import com.miroslav.acitivity_tracker.user.repository.UserRepository;
@@ -32,6 +34,7 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
     private final TokenRepository tokenRepository;
     private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
@@ -53,20 +56,14 @@ public class AuthenticationService {
                 .roles(List.of(userRole))
                 .build();
         userRepository.save(user);
+        Profile profile = Profile.builder()
+                .profileId(user.getUserId())
+                .user(user)
+                .build();
+        profileRepository.save(profile);
         sendValidationEmail(user);
     }
 
-//    public void register(User admin) throws MessagingException{
-//        User user = User.builder()
-//                .firstName(admin.getFirstName())
-//                .lastName(admin.getLastName())
-//                .email(admin.getEmail())
-//                .password(passwordEncoder.encode(admin.getPassword()))
-//                .accountLocked(false)
-//                .enabled(false)
-//                .roles(admin.getRoles())
-//                .build();
-//    }
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
