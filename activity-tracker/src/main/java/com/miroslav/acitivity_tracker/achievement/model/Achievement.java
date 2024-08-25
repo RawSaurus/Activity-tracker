@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "_achievement")
+@EntityListeners(AuditingEntityListener.class)
 public class Achievement {
 
     @Id
@@ -22,20 +24,20 @@ public class Achievement {
     private Integer achievementId;
     private String name;
     private String info;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private Type type;
     private byte[] picture;
     private String typeCheckmark; //enum
     @CreatedDate
-    @Column(unique = true,nullable = false)
-    private LocalDateTime createdAt;
+    @Column(updatable = false,nullable = false)
+    private Date createdAt;
     @LastModifiedDate
-    @Column(unique = true,nullable = false)
-    private LocalDateTime updatedAt;
+    @Column(updatable = false,nullable = false)
+    private Date updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "activityId")
-    private Activity activity;
+//    @ManyToOne(cascade = CascadeType.PERSIST)
+//    @JoinColumn(name = "activityId", referencedColumnName = "activityId")
+//    private Activity activity;
 
 
 }

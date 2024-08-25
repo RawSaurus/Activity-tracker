@@ -29,9 +29,9 @@ public class Comment {
     @Column(updatable = false, nullable = false)
     private Date postedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "activityId")
-    private Activity activity;
+//    @ManyToOne
+//    @JoinColumn(name = "activityId")
+//    private Activity activity;
 
 
 }

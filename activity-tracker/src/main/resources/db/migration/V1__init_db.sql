@@ -118,3 +118,23 @@ CREATE TABLE IF NOT EXISTS _comment (
    CONSTRAINT pk__comment PRIMARY KEY (comment_id),
    CONSTRAINT FK__COMMENT_ON_ACTIVITYID FOREIGN KEY (activity_id) REFERENCES _activity (activity_id)
 );
+select a1_0.creator,a1_0.activity_id,a1_0.category,a1_0.created_at,a1_0.creator,a1_0.creator_id,a1_0.downloads,a1_0.info,a1_0.is_original,a1_0.is_private,a1_0.name,
+oa1_0.activity_id,oa1_0.category,oa1_0.created_at,oa1_0.creator,oa1_0.creator_id,oa1_0.downloads,oa1_0.info,oa1_0.is_original,oa1_0.is_private,oa1_0.name,oa1_0.original_activity_activity_id,oa1_0.picture,p1_0.profile_id,
+u1_0.user_id,u1_0.account_locked,u1_0.created_at,u1_0.email,u1_0.enabled,u1_0.first_name,u1_0.last_name,u1_0.password,
+p2_0.profile_id,p2_0.user_user_id,p2_0.username,u1_0.updated_at,u1_0.username,p1_0.username,
+oa1_0.rating,oa1_0.type,oa1_0.updated_at,a1_0.picture,
+p3_0.profile_id,
+u3_0.user_id,u3_0.account_locked,u3_0.created_at,u3_0.email,u3_0.enabled,u3_0.first_name,u3_0.last_name,u3_0.password,
+p4_0.profile_id,p4_0.user_user_id,p4_0.username,
+u3_0.updated_at,u3_0.username,
+p3_0.username,
+a1_0.rating,a1_0.type,a1_0.updated_at
+from _activity a1_0
+left join _activity oa1_0 on oa1_0.activity_id=a1_0.original_activity_activity_id
+left join _profile p1_0 on p1_0.profile_id=oa1_0.user_id
+left join _user u1_0 on u1_0.user_id=p1_0.user_user_id
+left join _profile p2_0 on p2_0.profile_id=u1_0.profile_profile_id
+left join _profile p3_0 on p3_0.profile_id=a1_0.user_id
+left join _user u3_0 on u3_0.user_id=p3_0.user_user_id
+left join _profile p4_0 on p4_0.profile_id=u3_0.profile_profile_id
+where a1_0.creator=?

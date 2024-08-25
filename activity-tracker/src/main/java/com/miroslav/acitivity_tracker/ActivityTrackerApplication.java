@@ -47,7 +47,7 @@ public class ActivityTrackerApplication {
 					.build();
 			service.register(administrator);
 			User user = userRepository.findById(1)
-					.orElseThrow(() -> new RuntimeException());
+					.orElseThrow(() -> new RuntimeException("User not found"));
 			user.setEnabled(true);
 			user.setRoles(List.of(adm));
 			userRepository.save(user);

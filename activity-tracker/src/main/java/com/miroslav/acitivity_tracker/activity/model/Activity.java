@@ -15,6 +15,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.util.Date;
 import java.util.List;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Getter
 @Setter
 @Builder
@@ -45,20 +47,31 @@ public class Activity {
     @LastModifiedDate
     @Column(updatable = false, nullable = false)
     private Date updatedAt;
-
-    private String creator;
     private Integer creatorId;
+    @Column(name = "creator_name")
+    private String creator;
     @OneToOne
     @JsonManagedReference
     private Activity originalActivity;
     @ManyToOne
     @JoinColumn(name = "userId")
     private Profile profile;
-    @OneToMany(mappedBy = "activity")
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = LAZY
+    )
+    @JsonManagedReference
+//  cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     private List<Achievement> achievements;
-    @OneToMany(mappedBy = "activity")
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = LAZY
+    )
     private List<Session> sessions;
-    @OneToMany(mappedBy = "activity")
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = LAZY
+    )
     private List<Comment> comments;
 
     //process: create activity (created by = creator, isOriginal = true) -> post activity (isPrivate = false)

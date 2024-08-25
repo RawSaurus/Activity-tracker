@@ -1,13 +1,19 @@
 package com.miroslav.acitivity_tracker.activity;
 
+import com.miroslav.acitivity_tracker.achievement.model.Achievement;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
 import com.miroslav.acitivity_tracker.activity.model.Category;
+import com.miroslav.acitivity_tracker.comment.Comment;
+import com.miroslav.acitivity_tracker.session.Session;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-24T09:39:21+0200",
+    date = "2024-08-24T12:04:38+0200",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.8 (Oracle Corporation)"
 )
 @Component
@@ -113,6 +119,92 @@ public class ActivityMapperImpl implements ActivityMapper {
         }
         if ( request.category() != null ) {
             activity.setCategory( request.category() );
+        }
+    }
+
+    @Override
+    public void updateToEntity(Activity original, Activity copy) {
+        if ( original == null ) {
+            return;
+        }
+
+        copy.setActivityId( original.getActivityId() );
+        copy.setName( original.getName() );
+        copy.setInfo( original.getInfo() );
+        copy.setType( original.getType() );
+        copy.setCategory( original.getCategory() );
+        byte[] picture = original.getPicture();
+        if ( picture != null ) {
+            copy.setPicture( Arrays.copyOf( picture, picture.length ) );
+        }
+        else {
+            copy.setPicture( null );
+        }
+        copy.setRating( original.getRating() );
+        copy.setDownloads( original.getDownloads() );
+        copy.setOriginal( original.isOriginal() );
+        copy.setPrivate( original.isPrivate() );
+        copy.setCreatedAt( original.getCreatedAt() );
+        copy.setUpdatedAt( original.getUpdatedAt() );
+        copy.setCreator( original.getCreator() );
+        copy.setCreatorId( original.getCreatorId() );
+        if ( original.getOriginalActivity() != null ) {
+            if ( copy.getOriginalActivity() == null ) {
+                copy.setOriginalActivity( Activity.builder().build() );
+            }
+            updateToEntity( original.getOriginalActivity(), copy.getOriginalActivity() );
+        }
+        else {
+            copy.setOriginalActivity( null );
+        }
+        copy.setProfile( original.getProfile() );
+        if ( copy.getAchievements() != null ) {
+            List<Achievement> list = original.getAchievements();
+            if ( list != null ) {
+                copy.getAchievements().clear();
+                copy.getAchievements().addAll( list );
+            }
+            else {
+                copy.setAchievements( null );
+            }
+        }
+        else {
+            List<Achievement> list = original.getAchievements();
+            if ( list != null ) {
+                copy.setAchievements( new ArrayList<Achievement>( list ) );
+            }
+        }
+        if ( copy.getSessions() != null ) {
+            List<Session> list1 = original.getSessions();
+            if ( list1 != null ) {
+                copy.getSessions().clear();
+                copy.getSessions().addAll( list1 );
+            }
+            else {
+                copy.setSessions( null );
+            }
+        }
+        else {
+            List<Session> list1 = original.getSessions();
+            if ( list1 != null ) {
+                copy.setSessions( new ArrayList<Session>( list1 ) );
+            }
+        }
+        if ( copy.getComments() != null ) {
+            List<Comment> list2 = original.getComments();
+            if ( list2 != null ) {
+                copy.getComments().clear();
+                copy.getComments().addAll( list2 );
+            }
+            else {
+                copy.setComments( null );
+            }
+        }
+        else {
+            List<Comment> list2 = original.getComments();
+            if ( list2 != null ) {
+                copy.setComments( new ArrayList<Comment>( list2 ) );
+            }
         }
     }
 }

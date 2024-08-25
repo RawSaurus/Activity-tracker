@@ -57,4 +57,6 @@ public interface ActivityMapper {
     @Mapping(target = "achievements", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     void updateToEntity(ActivityRequest request, @MappingTarget Activity activity);
+
+    void updateToEntity(Activity original, @MappingTarget Activity copy);
 }

@@ -28,14 +28,19 @@ public class AchievementController {
         return ResponseEntity.ok(achievementService.findById(activityId, achievementId));
     }
 
+    @GetMapping("/market/{activity-id}/{achievement-id}")
+    public ResponseEntity<AchievementResponse> findPublicById(@PathVariable("activity-id") Integer activityId, @PathVariable("achievement-id") Integer achievementId){
+        return ResponseEntity.ok(achievementService.findPublicById(activityId, achievementId));
+    }
+
     @GetMapping("/{activity-id}")
     public ResponseEntity<List<AchievementResponse>> findAllById(@PathVariable("activity-id") Integer activityId){
         return ResponseEntity.ok(achievementService.findAllById(activityId));
     }
 
-    @PostMapping
-    public ResponseEntity<Integer> createAchievement(@RequestBody AchievementRequest request, Authentication user){
-        return ResponseEntity.accepted().body(achievementService.createAchievement(request, user));
+    @PostMapping("/{activity-id}")
+    public ResponseEntity<Integer> createAchievement(@RequestBody AchievementRequest request, @PathVariable("activity-id")Integer activityId, Authentication user){
+        return ResponseEntity.accepted().body(achievementService.createAchievement(request, activityId, user));
     }
 
     @PutMapping("/{activity-id}/{achievement-id}")

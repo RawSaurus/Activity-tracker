@@ -13,6 +13,7 @@ public interface AchievementMapper {
 
     AchievementResponse toResponse(Achievement achievement);
 
+
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "typeCheckmark", ignore = true)
     @Mapping(target = "picture", ignore = true)
@@ -37,4 +38,5 @@ public interface AchievementMapper {
     @Mapping(target = "achievementId", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     void updateToEntity(AchievementRequest request, @MappingTarget Achievement achievement);
+
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,11 +36,6 @@ public class ActivityService {
                 .collect(Collectors.toList());
     }
 
-    public ActivityResponse findByName(String activityName) {
-        return activityRepository.findByName(activityName)
-                .map(activityMapper::toResponse)
-                .orElseThrow(() -> new EntityNotFoundException("No activities found with this name"));
-    }
 
     //TODO test - need to create addToLibraryFirst
     public ActivityResponse findInUserLibrary(Integer activityId, Authentication user) {
@@ -63,7 +59,6 @@ public class ActivityService {
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found")));
     }
 
-    //TODO works, but make find all
     public ActivityResponse findInMarket(Integer activityId) {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
@@ -74,15 +69,15 @@ public class ActivityService {
             throw new EntityNotFoundException("Activity is not public");
     }
 
-    //TODO works, but make find all
-    public ActivityResponse findInMarketByName(String name) {
-        Activity activity = activityRepository.findByName(name)
-                .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
+    //TODO test
+    public List<ActivityResponse> findInMarketByName(String name) {
+        return activityRepository.findAllByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Activity not found"))
+                .stream()
+                .filter((Activity a) -> !a.isPrivate())
+                .map(activityMapper::toResponse)
+                .collect(Collectors.toList());
 
-        if(!activity.isPrivate())
-            return activityMapper.toResponse(activity);
-        else
-            throw new EntityNotFoundException("Activity is not public");
     }
 
     //TODO test
@@ -101,19 +96,43 @@ public class ActivityService {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
-        if(activity.getCreatorId().equals(((User)user.getPrincipal()).getUserId())){ //TODO not working
+        if(activity.getCreatorId().equals(((User)user.getPrincipal()).getUserId())){ //TODO isPrivate not working
             activityMapper.updateToEntity(request, activity);
             activityRepository.save(activity);
         }
         return activityMapper.toResponse(activity);
     }
 
+    //TODO test
     public String createGroup(String group, Authentication user) {
-        return null;
+        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
+
+        if(!profile.getGroups().containsKey(group))
+            profile.getGroups().put(group, new ArrayList<>());
+
+        profileRepository.save(profile);
+        return group;
     }
 
-    public String addToGroup(String group, Authentication user) {
-        return null;
+
+    //TODO test
+    public String addToGroup(String group, Integer activityId, Authentication user) {
+        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
+
+        Activity activity = profile.getActivities()
+                .stream()
+                .filter(a -> a.getActivityId().equals(activityId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Activity not found in library"));
+
+        if(profile.getGroups().containsKey(group)) {
+            profile.getGroups().get(group).add(activity.getActivityId());
+        }
+
+        profileRepository.save(profile);
+        return group;
     }
 
 
@@ -127,11 +146,16 @@ public class ActivityService {
         //TODO check if - already in library
 
         Activity copiedActivity = new Activity();
+
+        //TODO try this out
+//        activityMapper.updateToEntity(activity, copiedActivity);
+
         copiedActivity.setName(activity.getName());
         copiedActivity.setInfo(activity.getInfo());
         copiedActivity.setType(activity.getType());
         copiedActivity.setCategory(activity.getCategory());
         copiedActivity.setPicture(activity.getPicture());
+        copiedActivity.setAchievements(activity.getAchievements());
         copiedActivity.setOriginal(false);
         copiedActivity.setPrivate(true);
         copiedActivity.setCreator(activity.getCreator());

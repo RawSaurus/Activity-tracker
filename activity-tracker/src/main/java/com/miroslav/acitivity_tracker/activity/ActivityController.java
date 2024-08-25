@@ -18,9 +18,6 @@ public class ActivityController {
     private final ActivityService activityService;
 
 
-    //TODO create group -> group entity
-    //TODO post activity to market
-
     @GetMapping("/{activity-id}")
     public ResponseEntity<ActivityResponse> findById(@PathVariable("activity-id") Integer activityId){
         return ResponseEntity.ok(activityService.findById(activityId));
@@ -35,13 +32,13 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.findInUserLibraryByName(name, user));
     }
 
-    @GetMapping("/market/{activity-id}")//TODO
+    @GetMapping("/market/{activity-id}")
     public ResponseEntity<ActivityResponse> findInMarket(@PathVariable("activity-id") Integer activityId){
         return ResponseEntity.ok(activityService.findInMarket(activityId));
     }
 
-    @GetMapping("/market/name/{name}")//TODO
-    public ResponseEntity<ActivityResponse> findInMarketByName(@PathVariable("name") String name){
+    @GetMapping("/market/name/{name}")
+    public ResponseEntity<List<ActivityResponse>> findInMarketByName(@PathVariable("name") String name){
         return ResponseEntity.ok(activityService.findInMarketByName(name));
     }
 
@@ -68,9 +65,9 @@ public class ActivityController {
     }
 
     //TODO
-    @PutMapping("/add-to-group")
-    public ResponseEntity<String> addToGroup(@RequestBody String group, Authentication user){
-        return ResponseEntity.accepted().body(activityService.addToGroup(group, user));
+    @PutMapping("/add-to-group/{activity-id}")
+    public ResponseEntity<String> addToGroup(@RequestBody String group, @PathVariable("activity-id")Integer activityId, Authentication user){
+        return ResponseEntity.accepted().body(activityService.addToGroup(group, activityId, user));
     }
 
     @PutMapping("/copy-activity/{activity-id}")
@@ -83,7 +80,7 @@ public class ActivityController {
         return activityService.deleteOriginalActivityById(activityId, user);
     }
 
-    @DeleteMapping("remove/{activity-id}")
+    @DeleteMapping("/remove/{activity-id}")
     public ResponseEntity removeFromUserLibrary(@PathVariable("activity-id") Integer activityId, Authentication user){
         return activityService.removeFromUserLibrary(activityId, user);
     }

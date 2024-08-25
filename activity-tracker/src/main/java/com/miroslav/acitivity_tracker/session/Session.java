@@ -6,7 +6,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +21,7 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "_session")
+@EntityListeners(AuditingEntityListener.class)
 public class Session {
 
     @Id
@@ -26,7 +30,9 @@ public class Session {
     private String name;
     private String info;
     private ArrayList<String> notes;
-    private LocalTime duration;
+    private LocalDateTime start;
+    private LocalDateTime finish;
+    private Timestamp duration;
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private Date createdAt;
@@ -34,7 +40,7 @@ public class Session {
     @Column(updatable = false, nullable = false)
     private Date updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "activityId")
-    private Activity activity;
+//    @ManyToOne
+//    @JoinColumn(name = "activityId")
+//    private Activity activity;
 }

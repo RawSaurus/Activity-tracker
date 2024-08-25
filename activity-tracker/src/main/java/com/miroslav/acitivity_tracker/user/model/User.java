@@ -53,8 +53,7 @@ public class User implements UserDetails, Principal {
     private List<Role> roles;
 
 
-    @OneToOne(cascade = {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.REFRESH},
-    fetch = FetchType.LAZY)
+    @OneToOne
     private Profile profile;
 
 

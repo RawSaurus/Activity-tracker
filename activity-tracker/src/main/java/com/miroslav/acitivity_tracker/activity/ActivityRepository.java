@@ -17,7 +17,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
             FROM Activity activity
             WHERE activity.name = name
             """)
-    Optional<Activity> findByName(String name);
+    Optional<List<Activity>> findAllByName(String name);
 
     @Query("""
             SELECT activity
