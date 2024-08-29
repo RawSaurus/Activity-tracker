@@ -35,9 +35,12 @@ public class Achievement {
     @Column(updatable = false,nullable = false)
     private Date updatedAt;
 
-//    @ManyToOne(cascade = CascadeType.PERSIST)
-//    @JoinColumn(name = "activityId", referencedColumnName = "activityId")
-//    private Activity activity;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "_activity_achievements",
+            joinColumns = {@JoinColumn(name = "achievementId")},
+            inverseJoinColumns = {@JoinColumn(name = "activityId")}
+    )
+    private Activity activity;
 
 
 }

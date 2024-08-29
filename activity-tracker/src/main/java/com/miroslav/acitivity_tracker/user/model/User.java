@@ -1,9 +1,6 @@
 package com.miroslav.acitivity_tracker.user.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.miroslav.acitivity_tracker.activity.model.Activity;
-import com.miroslav.acitivity_tracker.role.Role;
+import com.miroslav.acitivity_tracker.role.model.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

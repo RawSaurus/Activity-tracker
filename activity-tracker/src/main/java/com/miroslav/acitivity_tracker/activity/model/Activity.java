@@ -2,10 +2,9 @@ package com.miroslav.acitivity_tracker.activity.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.miroslav.acitivity_tracker.achievement.model.Achievement;
-import com.miroslav.acitivity_tracker.comment.Comment;
-import com.miroslav.acitivity_tracker.session.Session;
+import com.miroslav.acitivity_tracker.comment.model.Comment;
+import com.miroslav.acitivity_tracker.session.model.Session;
 import com.miroslav.acitivity_tracker.user.model.Profile;
-import com.miroslav.acitivity_tracker.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -50,15 +49,20 @@ public class Activity {
     private Integer creatorId;
     @Column(name = "creator_name")
     private String creator;
-    @OneToOne
-    @JsonManagedReference
-    private Activity originalActivity;
-    @ManyToOne
-    @JoinColumn(name = "userId")
+    private Integer originalActivity;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "_profile_activities",
+            joinColumns = {@JoinColumn(name = "activityId")},
+            inverseJoinColumns = {@JoinColumn(name = "profileId")}
+    )
     private Profile profile;
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = LAZY
+    )
+    @JoinTable(name = "_activity_achievements",
+            joinColumns = {@JoinColumn(name = "activityId")},
+            inverseJoinColumns = {@JoinColumn(name = "achievementId")}
     )
     @JsonManagedReference
 //  cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
@@ -67,6 +71,11 @@ public class Activity {
             cascade = CascadeType.ALL,
             fetch = LAZY
     )
+    @JoinTable(name = "_activity_sessions",
+            joinColumns = {@JoinColumn(name = "activityId")},
+            inverseJoinColumns = {@JoinColumn(name = "sessionId")}
+    )
+    @JsonManagedReference
     private List<Session> sessions;
     @OneToMany(
             cascade = CascadeType.ALL,
