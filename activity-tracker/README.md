@@ -1,7 +1,6 @@
 # Activity tracker 
 
 
-## Branch Development
 
 ## Backend
 
