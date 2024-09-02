@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-26T17:43:23+0200",
+    date = "2024-08-29T16:51:43+0200",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.8 (Oracle Corporation)"
 )
 @Component
@@ -150,15 +150,7 @@ public class ActivityMapperImpl implements ActivityMapper {
         copy.setUpdatedAt( original.getUpdatedAt() );
         copy.setCreatorId( original.getCreatorId() );
         copy.setCreator( original.getCreator() );
-        if ( original.getOriginalActivity() != null ) {
-            if ( copy.getOriginalActivity() == null ) {
-                copy.setOriginalActivity( Activity.builder().build() );
-            }
-            updateToEntity( original.getOriginalActivity(), copy.getOriginalActivity() );
-        }
-        else {
-            copy.setOriginalActivity( null );
-        }
+        copy.setOriginalActivity( original.getOriginalActivity() );
         copy.setProfile( original.getProfile() );
         if ( copy.getAchievements() != null ) {
             List<Achievement> list = original.getAchievements();
