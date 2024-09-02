@@ -46,6 +46,8 @@ public class AuthenticationService {
     @Value("{application.mailing.frontend.activation-url}")
     private String activationUrl;
 
+
+    //TODO profile not saved in user table
     public void register(RegistrationRequest request) throws MessagingException{
         Role userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new IllegalStateException("USER was not initialized"));
@@ -111,7 +113,7 @@ public class AuthenticationService {
     }
 
     private String generateAndSaveActivationToken(User user){
-        String generatedToken = generatedActivationCode(6);
+        String generatedToken = generatedActivationCode();
         Token token = Token.builder()
                 .token(generatedToken)
                 .createdAt(LocalDateTime.now())
@@ -122,11 +124,11 @@ public class AuthenticationService {
         return generatedToken;
     }
 
-    private String generatedActivationCode(int length){
+    private String generatedActivationCode(){
         String characters = "0123456789";
         StringBuilder sBuilder = new StringBuilder();
         SecureRandom secureRandom = new SecureRandom();
-        for(int i = 0; i<length; i++){
+        for(int i = 0; i<6; i++){
             int randomIndex = secureRandom.nextInt(characters.length());
             sBuilder.append(characters.charAt(randomIndex));
         }
