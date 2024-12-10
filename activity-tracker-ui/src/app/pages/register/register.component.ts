@@ -2,11 +2,15 @@ import { Component } from '@angular/core';
 import {RegistrationRequest} from '../../services/models';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../../services/services';
+import {NgFor, NgIf} from '@angular/common';
+import {FormsModule, NgModel} from '@angular/forms';
 
 @Component({
+  standalone: true,
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: './register.component.scss',
+  imports: [NgIf, NgFor, FormsModule]
 })
 export class RegisterComponent {
 

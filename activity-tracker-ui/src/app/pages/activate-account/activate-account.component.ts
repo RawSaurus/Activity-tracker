@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../../services/services';
+import {NgIf} from '@angular/common';
+import {CodeInputModule} from 'angular-code-input';
 
 @Component({
+  standalone: true,
   selector: 'app-activate-account',
   templateUrl: './activate-account.component.html',
-  styleUrl: './activate-account.component.scss'
+  styleUrl: './activate-account.component.scss',
+  imports: [NgIf, CodeInputModule]
 })
 export class ActivateAccountComponent {
 

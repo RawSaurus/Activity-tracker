@@ -3,11 +3,15 @@ import {AuthenticationRequest, AuthenticationResponse} from '../../services/mode
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../../services/services';
 import {TokenService} from '../../services/token/token.service';
+import {NgFor, NgIf} from '@angular/common';
+import {FormsModule, NgModel} from '@angular/forms';
 
 @Component({
+  standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
+  imports: [NgIf, NgFor, FormsModule]
 })
 export class LoginComponent {
 
