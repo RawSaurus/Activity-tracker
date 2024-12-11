@@ -6,6 +6,7 @@ import com.miroslav.acitivity_tracker.activity.repository.ActivityRepository;
 import com.miroslav.acitivity_tracker.activity.dto.ActivityRequest;
 import com.miroslav.acitivity_tracker.activity.dto.ActivityResponse;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
+import com.miroslav.acitivity_tracker.security.UserContext;
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.model.User;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class ActivityService {
 
+    private final UserContext userContext;
     private final ProfileRepository profileRepository;
     private final ActivityRepository activityRepository;
     private final ActivityMapper activityMapper;
@@ -43,7 +45,7 @@ public class ActivityService {
 
 
     //TODO test - need to create addToLibraryFirst
-    public ActivityResponse findInUserLibrary(Integer activityId, Authentication user) {
+    public ActivityResponse findInUserLibrary(Integer activityId) {
 ////        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
 ////                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
 //        return activityMapper.toResponse(profile.getActivities()
@@ -51,7 +53,7 @@ public class ActivityService {
 //                .filter((Activity a) -> a.getActivityId().equals(activityId))
 //                .findFirst()
 //                .orElseThrow(() -> new EntityNotFoundException("Activity not found")));
-        return activityRepository.findActivityByActivityIdAndProfileProfileId(activityId, (((User) user.getPrincipal()).getUserId()))
+        return activityRepository.findActivityByActivityIdAndProfileProfileId(activityId, userContext.getAuthenticatedUser().getUserId())
                 .map(activityMapper::toResponse)
                 .orElse(null);
 
@@ -100,12 +102,12 @@ public class ActivityService {
     }
 
     //TODO works, give option to set isPrivate and add to user library in both cases
-    public Integer createActivity(ActivityRequest request, Authentication user) {
-        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
+    public Integer createActivity(ActivityRequest request) {
+        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
         Activity activity = activityMapper.toEntity(request);
-        activity.setCreator(((User) user.getPrincipal()).getUsername());
-        activity.setCreatorId((((User) user.getPrincipal()).getUserId()));
+        activity.setCreator(userContext.getAuthenticatedUser().getUsername());
+        activity.setCreatorId((userContext.getAuthenticatedUser().getUserId()));
         activity.setOriginal(true);
 
         //TODO if not private post to market

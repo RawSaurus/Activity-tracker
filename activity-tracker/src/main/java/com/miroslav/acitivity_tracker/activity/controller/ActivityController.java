@@ -24,8 +24,8 @@ public class ActivityController {
     }
 
     @GetMapping("/library/{activity-id}")//TODO
-    public ResponseEntity<ActivityResponse> findInUserLibrary(@PathVariable("activity-id") Integer activityId, Authentication user){
-        return ResponseEntity.ok(activityService.findInUserLibrary(activityId, user));
+    public ResponseEntity<ActivityResponse> findInUserLibrary(@PathVariable("activity-id") Integer activityId){
+        return ResponseEntity.ok(activityService.findInUserLibrary(activityId));
     }
     @GetMapping("/library/name/{name}")//TODO
     public ResponseEntity<ActivityResponse> findInUserLibraryByName(@PathVariable("name") String name, Authentication user){
@@ -48,8 +48,8 @@ public class ActivityController {
     }
 
     @PostMapping
-    public ResponseEntity<Integer> createActivity(@RequestBody ActivityRequest request, Authentication user){
-        return ResponseEntity.ok(activityService.createActivity(request, user));
+    public ResponseEntity<Integer> createActivity(@RequestBody ActivityRequest request){
+        return ResponseEntity.ok(activityService.createActivity(request));
     }
 
     @PutMapping("/{activity-id}")
