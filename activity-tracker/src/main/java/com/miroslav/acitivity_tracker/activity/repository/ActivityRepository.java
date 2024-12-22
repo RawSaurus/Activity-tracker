@@ -1,6 +1,7 @@
 package com.miroslav.acitivity_tracker.activity.repository;
 
 import com.miroslav.acitivity_tracker.activity.model.Activity;
+import com.miroslav.acitivity_tracker.activity.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -11,7 +12,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
 
     List<Activity> findAllByName(String name);
 
-    List<Activity> findAllByCategory(String category);
+    List<Activity> findAllByCategory(Category category);
 
     Optional<Activity> findActivityByActivityIdAndProfileProfileId(Integer activityId, Integer profileId);
 

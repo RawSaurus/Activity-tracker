@@ -41,6 +41,4 @@ public class Achievement {
             inverseJoinColumns = {@JoinColumn(name = "activityId")}
     )
     private Activity activity;
-
-
 }

@@ -42,22 +42,20 @@ public class AchievementController {
     }
 
     @PostMapping("/{activity-id}")
-    public ResponseEntity<Integer> createAchievement(@RequestBody AchievementRequest request, @PathVariable("activity-id")Integer activityId, Authentication user){
-        return ResponseEntity.accepted().body(achievementService.createAchievement(request, activityId, user));
+    public ResponseEntity<Integer> createAchievement(@RequestBody AchievementRequest request, @PathVariable("activity-id")Integer activityId){
+        return ResponseEntity.accepted().body(achievementService.createAchievement(request, activityId));
     }
 
     @PutMapping("/{activity-id}/{achievement-id}")
     public ResponseEntity<Integer> updateAchievement(@PathVariable("activity-id") Integer activityId,
                                                      @PathVariable("achievement-id") Integer achievementId,
-                                                     @RequestBody AchievementRequest request,
-                                                     Authentication user){
-        return ResponseEntity.accepted().body(achievementService.updateAchievement(activityId, achievementId, request, user));
+                                                     @RequestBody AchievementRequest request){
+        return ResponseEntity.accepted().body(achievementService.updateAchievement(activityId, achievementId, request));
     }
 
     @DeleteMapping("/{activity-id}/{achievement-id}")
     public ResponseEntity deleteAchievement(@PathVariable("activity-id") Integer activityId,
-                                            @PathVariable("achievement-id") Integer achievementId,
-                                            Authentication user){
-        return achievementService.deleteAchievement(activityId, achievementId, user);
+                                            @PathVariable("achievement-id") Integer achievementId){
+        return achievementService.deleteAchievement(activityId, achievementId);
     }
 }

@@ -1,5 +1,6 @@
 package com.miroslav.acitivity_tracker;
 
+import com.miroslav.acitivity_tracker.activity.ActivityRepositoryTest;
 import com.miroslav.acitivity_tracker.auth.dto.AuthenticationRequest;
 import com.miroslav.acitivity_tracker.auth.dto.RegistrationRequest;
 import com.miroslav.acitivity_tracker.auth.service.AuthenticationService;

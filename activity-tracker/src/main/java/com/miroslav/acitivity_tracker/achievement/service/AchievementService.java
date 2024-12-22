@@ -7,6 +7,7 @@ import com.miroslav.acitivity_tracker.achievement.model.Achievement;
 import com.miroslav.acitivity_tracker.achievement.repository.AchievementRepository;
 import com.miroslav.acitivity_tracker.activity.repository.ActivityRepository;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
+import com.miroslav.acitivity_tracker.security.UserContext;
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.model.User;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AchievementService {
 
+    private final UserContext userContext;
     private final ProfileRepository profileRepository;
     private final AchievementRepository achievementRepository;
     private final AchievementMapper achievementMapper;
@@ -79,8 +81,8 @@ public class AchievementService {
     //-------------------------------------------------------------------------------------------------------------------------------------------------//
 
     //TODO works/ create checks if activity public if creator == user, or if private if activity is in user library
-    public Integer createAchievement(AchievementRequest request, Integer activityId, Authentication user) {
-        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
+    public Integer createAchievement(AchievementRequest request, Integer activityId) {
+        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
         Activity activity = profile.getActivities()
                         .stream()
@@ -99,7 +101,7 @@ public class AchievementService {
     }
 
     //works create checks
-    public Integer updateAchievement(Integer activityId, Integer achievementId, AchievementRequest request, Authentication user) {
+    public Integer updateAchievement(Integer activityId, Integer achievementId, AchievementRequest request) {
 //        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
 //                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
 //        Achievement achievement = profile.getActivities()
@@ -120,7 +122,7 @@ public class AchievementService {
         Achievement achievement = achievementRepository.findFromProfile(
                 achievementId,
                 activityId,
-                (((User) user.getPrincipal()).getUserId())
+                (userContext.getAuthenticatedUser().getUserId())
                 )
                 .orElseThrow(() -> new EntityNotFoundException("Achievement not found"));
 
@@ -130,7 +132,7 @@ public class AchievementService {
     }
 
     //TODO works/ add checks
-    public ResponseEntity deleteAchievement(Integer activityId, Integer achievementId, Authentication user) {
+    public ResponseEntity deleteAchievement(Integer activityId, Integer achievementId) {
 
         Activity activity = activityRepository.findById(activityId)
                         .orElseThrow(() -> new EntityNotFoundException("Activity not found"));

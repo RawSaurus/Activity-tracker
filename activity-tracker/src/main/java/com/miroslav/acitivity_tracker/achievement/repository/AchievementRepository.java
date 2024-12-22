@@ -36,7 +36,4 @@ public interface AchievementRepository extends JpaRepository<Achievement, Intege
             AND achievement.achievementId = :achievementId
             """)
     Optional<Achievement> findFromProfile(Integer achievementId, Integer activityId, Integer profileId);
-
-
-
 }

@@ -26,60 +26,52 @@ public class SessionController {
 
     @GetMapping("/{activity-id}/{session-id}")
     public ResponseEntity<SessionResponse> findSession(@PathVariable("session-id") Integer sessionId,
-                                                       @PathVariable("activity-id") Integer activityId,
-                                                       Authentication user){
-        return ResponseEntity.ok(sessionService.findSessionFromProfile(sessionId, activityId, user));
+                                                       @PathVariable("activity-id") Integer activityId){
+        return ResponseEntity.ok(sessionService.findSessionFromProfile(sessionId, activityId));
     }
 
     @GetMapping("/all/{activity-id}")
-    public ResponseEntity<List<SessionResponse>> findAllSessions(@PathVariable("activity-id") Integer activityId,
-                                                                 Authentication user){
-        return ResponseEntity.ok(sessionService.findAllSessions(activityId, user));
+    public ResponseEntity<List<SessionResponse>> findAllSessions(@PathVariable("activity-id") Integer activityId){
+        return ResponseEntity.ok(sessionService.findAllSessions(activityId));
     }
 
     @PostMapping("/{activity-id}")
     public ResponseEntity<Integer> createSession(@PathVariable("activity-id") Integer activityId,
-                                                 @RequestBody SessionRequest request,
-                                                 Authentication user){
-        return ResponseEntity.accepted().body(sessionService.createSession(activityId, request, user));
+                                                 @RequestBody SessionRequest request){
+        return ResponseEntity.accepted().body(sessionService.createSession(activityId, request));
     }
 
     @PostMapping("/input-time/{activity-id}")
     public ResponseEntity<Integer> createSessionWithTime(@PathVariable("activity-id") Integer activityId,
                                                  @RequestBody SessionRequest request,
-                                                 @RequestBody Timestamp duration,
-                                                 Authentication user){
-        return ResponseEntity.accepted().body(sessionService.createSessionWithTime(activityId, request, duration, user));
+                                                 @RequestBody Timestamp duration){
+        return ResponseEntity.accepted().body(sessionService.createSessionWithTime(activityId, request, duration));
     }
 
     @PutMapping("/{activity-id}/end-session/{session-id}")
     public ResponseEntity<Integer> endSession(@PathVariable("activity-id") Integer activityId,
-                                              @PathVariable("session-id") Integer sessionId,
-                                              Authentication user){
-        return ResponseEntity.ok(sessionService.endSession(activityId, sessionId, user));
+                                              @PathVariable("session-id") Integer sessionId){
+        return ResponseEntity.ok(sessionService.endSession(activityId, sessionId));
     }
 
     @PutMapping("/{activity-id}/{session-id}")
     public ResponseEntity<Integer> updateSession(@PathVariable("activity-id") Integer activityId,
                                                  @PathVariable("session-id") Integer sessionId,
-                                                 @RequestBody SessionRequest request,
-                                                 Authentication user){
-        return ResponseEntity.ok(sessionService.updateSession(activityId, sessionId, request, user));
+                                                 @RequestBody SessionRequest request){
+        return ResponseEntity.ok(sessionService.updateSession(activityId, sessionId, request));
     }
 
     @PutMapping("/add-note/{activity-id}/{session-id}")
     public ResponseEntity<Integer> addNote(@PathVariable("activity-id") Integer activityId,
                                            @PathVariable("session-id") Integer sessionId,
-                                           @RequestBody String note,
-                                           Authentication user){
-        return ResponseEntity.ok(sessionService.addNote(activityId, sessionId, note, user));
+                                           @RequestBody String note){
+        return ResponseEntity.ok(sessionService.addNote(activityId, sessionId, note));
     }
 
     @DeleteMapping("/{activity-id}/{session-id}")
     public ResponseEntity deleteSession(@PathVariable("activity-id") Integer activityId,
-                                        @PathVariable("session-id") Integer sessionId,
-                                        Authentication user){
-        return sessionService.deleteSession(activityId, sessionId, user);
+                                        @PathVariable("session-id") Integer sessionId){
+        return sessionService.deleteSession(activityId, sessionId);
     }
 
 }

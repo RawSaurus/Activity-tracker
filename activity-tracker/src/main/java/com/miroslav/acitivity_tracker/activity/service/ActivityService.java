@@ -2,6 +2,7 @@ package com.miroslav.acitivity_tracker.activity.service;
 
 import com.miroslav.acitivity_tracker.achievement.model.Achievement;
 import com.miroslav.acitivity_tracker.activity.mapper.ActivityMapper;
+import com.miroslav.acitivity_tracker.activity.model.Category;
 import com.miroslav.acitivity_tracker.activity.repository.ActivityRepository;
 import com.miroslav.acitivity_tracker.activity.dto.ActivityRequest;
 import com.miroslav.acitivity_tracker.activity.dto.ActivityResponse;
@@ -36,7 +37,7 @@ public class ActivityService {
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
     }
 
-    public List<ActivityResponse> findAllByCategory(String activityCategory) {
+    public List<ActivityResponse> findAllByCategory(Category activityCategory) {
         return activityRepository.findAllByCategory(activityCategory)
                 .stream()
                 .map(activityMapper::toResponse)
@@ -60,7 +61,7 @@ public class ActivityService {
     }
 
     //TODO test - need to create addToLibraryFirst
-    public ActivityResponse findInUserLibraryByName(String name, Authentication user) {
+    public ActivityResponse findInUserLibraryByName(String name) {
 //        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
 //                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
 //        return activityMapper.toResponse(profile.getActivities()
@@ -68,7 +69,7 @@ public class ActivityService {
 //                .filter((Activity a) -> a.getName().equals(name))
 //                .findFirst()
 //                .orElseThrow(() -> new EntityNotFoundException("Activity not found")));
-        return activityRepository.findActivityByNameAndCreatorId(name, (((User) user.getPrincipal()).getUserId()))
+        return activityRepository.findActivityByNameAndCreatorId(name, (userContext.getAuthenticatedUser().getUserId()))
                 .map(activityMapper::toResponse)
                 .orElse(null);
     }
@@ -117,10 +118,10 @@ public class ActivityService {
     }
 
     //works but improve it
-    public ActivityResponse copyActivityToUser(Integer activityId, Authentication user) {
+    public ActivityResponse copyActivityToUser(Integer activityId) {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
-        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
+        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
 
 
@@ -153,11 +154,11 @@ public class ActivityService {
         return activityMapper.toResponse(copiedActivity);
     }
 
-    public ActivityResponse updateActivity(Integer activityId, ActivityRequest request, Authentication user) {
+    public ActivityResponse updateActivity(Integer activityId, ActivityRequest request) {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
-        if(activity.getCreatorId().equals(((User)user.getPrincipal()).getUserId())){ //TODO isPrivate not working
+        if(activity.getCreatorId().equals(userContext.getAuthenticatedUser().getUserId())){ //TODO isPrivate not working
             activityMapper.updateToEntity(request, activity);
             activityRepository.save(activity);
         }
@@ -165,8 +166,8 @@ public class ActivityService {
     }
 
     //TODO test
-    public String createGroup(String group, Authentication user) {
-        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
+    public String createGroup(String group) {
+        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
 
         if(!profile.getGroups().containsKey(group))
@@ -178,8 +179,8 @@ public class ActivityService {
 
 
     //TODO test
-    public String addToGroup(String group, Integer activityId, Authentication user) {
-        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
+    public String addToGroup(String group, Integer activityId) {
+        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
 
         Activity activity = profile.getActivities()
@@ -199,11 +200,11 @@ public class ActivityService {
 
 
     //works
-    public ResponseEntity deleteOriginalActivityById(Integer activityId, Authentication user) {
+    public ResponseEntity deleteOriginalActivityById(Integer activityId) {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
-        if(activity.getCreatorId().equals(((User)user.getPrincipal()).getUserId())){
+        if(activity.getCreatorId().equals(userContext.getAuthenticatedUser().getUserId())){
             activityRepository.delete(activity);
             return ResponseEntity.ok("Deleted successfully");
         }else
@@ -212,8 +213,8 @@ public class ActivityService {
     }
 
     //works
-    public ResponseEntity removeFromUserLibrary(Integer activityId, Authentication user){
-        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
+    public ResponseEntity removeFromUserLibrary(Integer activityId){
+        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
 
         profile.getActivities()
