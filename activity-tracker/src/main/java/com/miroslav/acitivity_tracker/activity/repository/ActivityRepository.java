@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface ActivityRepository extends JpaRepository<Activity, Integer> {
 
+    Optional<Activity> findByName(String name);
     List<Activity> findAllByName(String name);
 
     List<Activity> findAllByCategory(Category category);

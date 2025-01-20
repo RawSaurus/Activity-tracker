@@ -17,6 +17,7 @@ import java.util.Date;
 @Table(name = "_comment")
 public class Comment {
 
+    //TODO build comment service, dtos, controller
     @Id
     @GeneratedValue
     private Integer commentId;
@@ -26,8 +27,9 @@ public class Comment {
     @Column(updatable = false, nullable = false)
     private Integer createdBy;
     @CreatedDate
-    @Column(updatable = false, nullable = false)
+    @Column(nullable = false)
     private Date postedAt;
+    //TODO add connection to activity, profile
 
 //    @ManyToOne
 //    @JoinColumn(name = "activityId")

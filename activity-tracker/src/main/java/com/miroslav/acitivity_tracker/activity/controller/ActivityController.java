@@ -4,8 +4,10 @@ import com.miroslav.acitivity_tracker.activity.dto.ActivityRequest;
 import com.miroslav.acitivity_tracker.activity.dto.ActivityResponse;
 import com.miroslav.acitivity_tracker.activity.model.Category;
 import com.miroslav.acitivity_tracker.activity.service.ActivityService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +21,15 @@ public class ActivityController {
     private final ActivityService activityService;
 
 
+    //TODO add authorization
+    //TODO create tests
+
     @GetMapping("/{activity-id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ActivityResponse> findById(@PathVariable("activity-id") Integer activityId){
         return ResponseEntity.ok(activityService.findById(activityId));
     }
+    //TODO create findByName
 
     @GetMapping("/library/{activity-id}")//TODO
     public ResponseEntity<ActivityResponse> findInUserLibrary(@PathVariable("activity-id") Integer activityId){
@@ -49,7 +56,7 @@ public class ActivityController {
     }
 
     @PostMapping
-    public ResponseEntity<Integer> createActivity(@RequestBody ActivityRequest request){
+    public ResponseEntity<Integer> createActivity(@RequestBody @Valid ActivityRequest request){
         return ResponseEntity.ok(activityService.createActivity(request));
     }
 

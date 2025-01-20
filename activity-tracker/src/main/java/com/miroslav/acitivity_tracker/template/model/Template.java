@@ -1,10 +1,11 @@
-package com.miroslav.acitivity_tracker.activity.model;
+package com.miroslav.acitivity_tracker.template.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.miroslav.acitivity_tracker.achievement.model.Achievement;
+import com.miroslav.acitivity_tracker.activity.model.Activity;
+import com.miroslav.acitivity_tracker.activity.model.Category;
 import com.miroslav.acitivity_tracker.comment.model.Comment;
 import com.miroslav.acitivity_tracker.session.model.Session;
-import com.miroslav.acitivity_tracker.template.model.Template;
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,53 +20,48 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
-@Table(name = "_activity")
+@Table(name = "_template")
 @EntityListeners(AuditingEntityListener.class)
-public class Activity {
+public class Template {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer activityId;
+    private Integer templateId;
     @Column(unique = true)
     private String name;
-    //TODO figure out group situation
-//    private String group;
     private String info;
     private String type;
     @Enumerated(value = EnumType.STRING)
     private Category category;
     //TODO make module for handling pictures
     private byte[] picture;
-//    private double rating;
-//    private int downloads;
-    private boolean isOriginal;
-    private boolean isPrivate;
+    private double rating;
+    private int downloads;
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private Date createdAt;
     @LastModifiedDate
     @Column(nullable = false)
     private Date updatedAt;
-    private Integer creatorId;
     @Column(name = "creator_name")
     private String creator;
-    private Integer originalActivity;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinTable(name = "_profile_activities",
-            joinColumns = {@JoinColumn(name = "activityId")},
-            inverseJoinColumns = {@JoinColumn(name = "profileId")}
-    )
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+//    @JoinTable(name = "_profile_templates",
+//            joinColumns = {@JoinColumn(name = "templateId")},
+//            inverseJoinColumns = {@JoinColumn(name = "profileId")}
+//    )
+    @JoinColumn(name = "profileId", referencedColumnName = "profileId")
     private Profile profile;
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = LAZY
     )
-    @JoinTable(name = "_activity_achievements",
-            joinColumns = {@JoinColumn(name = "activityId")},
+    @JoinTable(name = "_template_achievements",
+            joinColumns = {@JoinColumn(name = "templateId")},
             inverseJoinColumns = {@JoinColumn(name = "achievementId")}
     )
     @JsonManagedReference
@@ -75,20 +71,5 @@ public class Activity {
             cascade = CascadeType.ALL,
             fetch = LAZY
     )
-    @JoinTable(name = "_activity_sessions",
-            joinColumns = {@JoinColumn(name = "activityId")},
-            inverseJoinColumns = {@JoinColumn(name = "sessionId")}
-    )
-    @JsonManagedReference
-    private List<Session> sessions;
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            fetch = LAZY
-    )
     private List<Comment> comments;
-
-    //TODO create market module ??
-
-    //process: create activity (created by = creator, isOriginal = true) -> post activity (isPrivate = false)
-    //-> download activity(create new activity, set originalActivity, isOriginal = false)
 }

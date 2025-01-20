@@ -11,10 +11,12 @@ import com.miroslav.acitivity_tracker.security.UserContext;
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.model.User;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -48,24 +50,19 @@ public class ActivityServiceTest {
     @Spy
     private ActivityMapper activityMapper = new ActivityMapperImpl();
 
-//    @BeforeEach
-//    public void setUp(){
-//        MockitoAnnotations.openMocks(this);
-//    }
-
-    @Test
-    public void should_find_by_id(){
-
-        Activity activity = Activity.builder()
+    private Activity activity;
+    @BeforeEach
+    public void setUp(){
+        activity = Activity.builder()
                 .name("activity")
                 .info("short info")
                 .type("type")
                 .category(Category.SPORT)
-                .rating(2.0)
-                .downloads(20)
                 .build();
+    }
 
-
+    @Test
+    public void should_find_by_id(){
         when(activityRepository.findById(1)).thenReturn(Optional.of(activity));
 
         ActivityResponse response = activityService.findById(1);
@@ -87,7 +84,7 @@ public class ActivityServiceTest {
 //        when(activityRepository.findAllByCategory("sport")).thenReturn(List.of(activity));
 //
 //        List<Activity> list = activityService.findAllByCategory("sport").stream().map(activityMapper::toEntity).toList();
-
+//
 //        assertEquals(activity.getName(), list.get(0).getName());
     }
 
@@ -95,6 +92,11 @@ public class ActivityServiceTest {
 //    public void should_succesfully_find_private_activity(){
 //
 //    }
+
+    @Test
+    public void should_find_activity_in_user_library(){
+//        when(activityRepository.findActivityByActivityIdAndProfileProfileId(activity.))
+    }
 
 
     @Test
@@ -111,12 +113,6 @@ public class ActivityServiceTest {
                         .firstName("test")
                         .lastName("user")
                         .build();
-        Activity activity = Activity.builder()
-                .name("activity")
-                .info("short info")
-                .type("type")
-                .category(Category.SPORT)
-                .build();
 
         when(userContext.getAuthenticatedUser()).thenReturn(authUser);
         when(profileRepository.findById(userContext.getAuthenticatedUser().getUserId()))

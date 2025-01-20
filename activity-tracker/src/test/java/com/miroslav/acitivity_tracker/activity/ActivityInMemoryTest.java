@@ -29,6 +29,8 @@ import org.springframework.test.context.TestPropertySource;
 public class ActivityInMemoryTest {
 
 
+    //TODO in memory db not working, figure out what is the problem
+    //can do only integration test for now with real db but that must be fixed
     @Autowired
     private ActivityRepository activityRepository;
 

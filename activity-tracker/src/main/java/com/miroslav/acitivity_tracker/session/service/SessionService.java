@@ -33,32 +33,15 @@ public class SessionService {
     private final ProfileRepository profileRepository;
     private final SessionMapper sessionMapper;
 
-
-
-    //TODO
-
-
-//    TODO test
-//    TODO recursive
+    //TODO test
+    //TODO recursive
+    //TODO create tests
     public Session findById(Integer sessionId){
         return sessionRepository.findById(sessionId)
                 .orElse(null);
     }
     //works
     public SessionResponse findSessionFromProfile(Integer sessionId, Integer activityId) {
-//        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
-//                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-//
-//        return sessionMapper.toResponse(profile.getActivities()
-//                .stream()
-//                .filter(activity -> activity.getActivityId().equals(activityId))
-//                .findAny()
-//                .orElseThrow(() -> new EntityNotFoundException("Activity not found"))
-//                .getSessions()
-//                .stream()
-//                .filter(session -> session.getSessionId().equals(sessionId))
-//                .findAny()
-//                .orElseThrow(() -> new EntityNotFoundException("Session not found")));
         return sessionRepository.findFromProfile(
                 sessionId,
                 activityId,
@@ -70,19 +53,6 @@ public class SessionService {
 
 //    works
     public List<SessionResponse> findAllSessions(Integer activityId) {
-//        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
-//                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-//
-//        return profile.getActivities()
-//                .stream()
-//                .filter(activity -> activity.getActivityId().equals(activityId))
-//                .findAny()
-//                .orElseThrow(() -> new EntityNotFoundException("Activity not found"))
-//                .getSessions()
-//                .stream()
-//                .map(sessionMapper::toResponse)
-//                .collect(Collectors.toList());
-
         return sessionRepository.findAllSessions(
                 activityId,
                 (userContext.getAuthenticatedUser().getUserId())
@@ -93,6 +63,7 @@ public class SessionService {
     }
 
 //    works
+    //TODO if name is empty put time as name
     public Integer createSession(Integer activityId, SessionRequest request) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
@@ -106,8 +77,6 @@ public class SessionService {
         session.setStart(LocalDateTime.now());
         activity.getSessions().add(session);
 
-//        profileRepository.save(profile);
-//        activityRepository.save(activity);
         return sessionRepository.save(session).getSessionId();
     }
 
@@ -125,26 +94,11 @@ public class SessionService {
         session.setDuration(duration);
         activity.getSessions().add(session);
 
-//        profileRepository.save(profile);
-//        activityRepository.save(activity);
         return sessionRepository.save(session).getSessionId();
     }
 
     //works
     public Integer endSession(Integer activityId, Integer sessionId) {
-//        Session session = profileRepository.findById(((User) user.getPrincipal()).getUserId())
-//                .orElseThrow(() -> new EntityNotFoundException("Profile not found"))
-//                .getActivities()
-//                .stream()
-//                .filter(a -> a.getActivityId().equals(activityId))
-//                .findAny()
-//                .orElseThrow(() -> new EntityNotFoundException("Activity not found"))
-//                .getSessions()
-//                .stream()
-//                .filter(s -> s.getSessionId().equals(sessionId))
-//                .findAny()
-//                .orElseThrow(() -> new EntityNotFoundException("Session not found"));
-
         Session session = sessionRepository.findFromProfile(sessionId, activityId, (userContext.getAuthenticatedUser().getUserId()))
                         .orElseThrow(() -> new EntityNotFoundException("Session not found"));
 
@@ -154,19 +108,6 @@ public class SessionService {
 
     //works
     public Integer updateSession(Integer activityId, Integer sessionId, SessionRequest request) {
-//        Session session = profileRepository.findById(((User) user.getPrincipal()).getUserId())
-//                .orElseThrow(() -> new EntityNotFoundException("Profile not found"))
-//                .getActivities()
-//                .stream()
-//                .filter(a -> a.getActivityId().equals(activityId))
-//                .findAny()
-//                .orElseThrow(() -> new EntityNotFoundException("Activity not found"))
-//                .getSessions()
-//                .stream()
-//                .filter(s -> s.getSessionId().equals(sessionId))
-//                .findAny()
-//                .orElseThrow(() -> new EntityNotFoundException("Session not found"));
-
         Session session = sessionRepository.findFromProfile(sessionId, activityId, (userContext.getAuthenticatedUser().getUserId()))
                 .orElseThrow(() -> new EntityNotFoundException("Session not found"));
 
@@ -177,19 +118,6 @@ public class SessionService {
 
 //    works
     public Integer addNote(Integer activityId, Integer sessionId, String note) {
-//        Session session = profileRepository.findById(((User) user.getPrincipal()).getUserId())
-//                .orElseThrow(() -> new EntityNotFoundException("Profile not found"))
-//                .getActivities()
-//                .stream()
-//                .filter(a -> a.getActivityId().equals(activityId))
-//                .findAny()
-//                .orElseThrow(() -> new EntityNotFoundException("Activity not found"))
-//                .getSessions()
-//                .stream()
-//                .filter(s -> s.getSessionId().equals(sessionId))
-//                .findAny()
-//                .orElseThrow(() -> new EntityNotFoundException("Session not found"));
-
         Session session = sessionRepository.findFromProfile(sessionId, activityId, (userContext.getAuthenticatedUser().getUserId()))
                 .orElseThrow(() -> new EntityNotFoundException("Session not found"));
 
@@ -200,19 +128,6 @@ public class SessionService {
 
 //    works
     public ResponseEntity deleteSession(Integer activityId, Integer sessionId) {
-//        Session session = profileRepository.findById(((User) user.getPrincipal()).getUserId())
-//                .orElseThrow(() -> new EntityNotFoundException("Profile not found"))
-//                .getActivities()
-//                .stream()
-//                .filter(a -> a.getActivityId().equals(activityId))
-//                .findAny()
-//                .orElseThrow(() -> new EntityNotFoundException("Activity not found"))
-//                .getSessions()
-//                .stream()
-//                .filter(s -> s.getSessionId().equals(sessionId))
-//                .findAny()
-//                .orElseThrow(() -> new EntityNotFoundException("Session not found"));
-
         Session session = sessionRepository.findFromProfile(sessionId, activityId, (userContext.getAuthenticatedUser().getUserId()))
                 .orElseThrow(() -> new EntityNotFoundException("Session not found"));
 

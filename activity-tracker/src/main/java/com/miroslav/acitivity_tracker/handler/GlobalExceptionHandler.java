@@ -1,11 +1,15 @@
 package com.miroslav.acitivity_tracker.handler;
 
+import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
 import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -29,6 +33,52 @@ public class GlobalExceptionHandler {
                                 .build()
                 );
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ExceptionResponse> handleException(DataIntegrityViolationException exp){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(ITEM_ALREADY_EXISTS.getCode())
+                                .businessErrorDescription(ITEM_ALREADY_EXISTS.getDescription())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ExceptionResponse> handleException(AuthorizationDeniedException exp){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(ACCESS_DENIED.getCode())
+                                .businessErrorDescription(ACCESS_DENIED.getDescription())
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(ActionNotAllowed.class)
+    public ResponseEntity<ExceptionResponse> handleException(ActionNotAllowed exp){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionResponse.builder()
+                        .businessErrorCode(ACTION_NOT_ALLOWED.getCode())
+                        .businessErrorDescription(ACTION_NOT_ALLOWED.getDescription())
+                        .error(exp.getMessage())
+                        .build()
+                );
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleException(EntityNotFoundException exp){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(ENTITY_NOT_FOUND.getCode())
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<ExceptionResponse> handleException(DisabledException exp){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

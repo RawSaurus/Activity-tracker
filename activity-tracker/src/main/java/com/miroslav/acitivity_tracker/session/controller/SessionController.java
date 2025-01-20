@@ -19,6 +19,11 @@ public class SessionController {
 
     private final SessionService sessionService;
 
+    //TODO create tests
+    //TODO add authorization
+
+    //TODO make into response
+    //TODO always returns 1
     @GetMapping("/{session-id}")
     public ResponseEntity<Session> findById(@PathVariable("session-id")Integer sessionId){
         return ResponseEntity.ok(sessionService.findById(sessionId));

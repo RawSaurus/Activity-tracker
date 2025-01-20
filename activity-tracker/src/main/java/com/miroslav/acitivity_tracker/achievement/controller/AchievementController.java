@@ -3,8 +3,10 @@ package com.miroslav.acitivity_tracker.achievement.controller;
 import com.miroslav.acitivity_tracker.achievement.dto.AchievementRequest;
 import com.miroslav.acitivity_tracker.achievement.dto.AchievementResponse;
 import com.miroslav.acitivity_tracker.achievement.service.AchievementService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +19,10 @@ public class AchievementController {
 
     private final AchievementService achievementService;
 
-    //TODO find achievement
     //TODO find all achievements by name
-    //TODO create achievement
-    //TODO update achievement
-    //TODO delete achievement
     //TODO copy achievement to another activity
     //TODO create group -> group entity
+    //TODO add authorization
 
 
     @GetMapping("/{activity-id}/{achievement-id}")
@@ -42,14 +41,14 @@ public class AchievementController {
     }
 
     @PostMapping("/{activity-id}")
-    public ResponseEntity<Integer> createAchievement(@RequestBody AchievementRequest request, @PathVariable("activity-id")Integer activityId){
+    public ResponseEntity<Integer> createAchievement(@RequestBody @Valid AchievementRequest request, @PathVariable("activity-id")Integer activityId){
         return ResponseEntity.accepted().body(achievementService.createAchievement(request, activityId));
     }
 
     @PutMapping("/{activity-id}/{achievement-id}")
     public ResponseEntity<Integer> updateAchievement(@PathVariable("activity-id") Integer activityId,
                                                      @PathVariable("achievement-id") Integer achievementId,
-                                                     @RequestBody AchievementRequest request){
+                                                     @RequestBody @Valid AchievementRequest request){
         return ResponseEntity.accepted().body(achievementService.updateAchievement(activityId, achievementId, request));
     }
 

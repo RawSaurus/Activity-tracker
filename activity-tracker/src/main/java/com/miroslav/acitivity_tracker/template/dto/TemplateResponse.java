@@ -1,11 +1,10 @@
-package com.miroslav.acitivity_tracker.activity.dto;
+package com.miroslav.acitivity_tracker.template.dto;
 
 import com.miroslav.acitivity_tracker.activity.model.Category;
-import lombok.Builder;
 
-public record ActivityResponse(
+public record TemplateResponse(
+
         String name,
-//        String group,
         String info,
         String type,
         Category category

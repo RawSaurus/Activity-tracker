@@ -33,30 +33,32 @@ public class ActivityTrackerApplication {
 			UserRepository userRepository,
 			AuthenticationService service){
 		return args -> {
-			Role role = roleRepository.save(Role.builder()
-					.name("USER")
-					.build());
-			Role adm = roleRepository.save(Role.builder()
-					.name("ADMIN")
-					.build());
+			if(!roleRepository.existsById(1) && !roleRepository.existsById(2)) {
+				Role role = roleRepository.save(Role.builder()
+						.name("USER")
+						.build());
+				Role adm = roleRepository.save(Role.builder()
+						.name("ADMIN")
+						.build());
 
-			RegistrationRequest administrator = RegistrationRequest.builder()
-					.firstname("admin")
-					.lastname("admin")
-					.email("admin@gmail.com")
-					.password("asdfasdf")
-					.build();
-			service.register(administrator);
-			User user = userRepository.findById(1)
-					.orElseThrow(() -> new RuntimeException("User not found"));
-			user.setEnabled(true);
-			user.setRoles(List.of(adm));
-			userRepository.save(user);
-			var admin = AuthenticationRequest.builder()
-					.email("admin@gmail.com")
-					.password("asdfasdf")
-					.build();
-			System.out.println("Token :" + service.authenticate(admin).getToken());
+				RegistrationRequest administrator = RegistrationRequest.builder()
+						.firstname("admin")
+						.lastname("admin")
+						.email("admin@gmail.com")
+						.password("asdfasdf")
+						.build();
+				service.register(administrator);
+				User user = userRepository.findById(1)
+						.orElseThrow(() -> new RuntimeException("User not found"));
+				user.setEnabled(true);
+				user.setRoles(List.of(adm));
+				userRepository.save(user);
+				var admin = AuthenticationRequest.builder()
+						.email("admin@gmail.com")
+						.password("asdfasdf")
+						.build();
+				System.out.println("Token :" + service.authenticate(admin).getToken());
+			}
 		};
 	}
 

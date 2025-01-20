@@ -18,6 +18,7 @@ import java.util.Map;
 @Table(name = "_profile")
 public class Profile {
 
+    //TODO clean up
     @Id
     private Integer profileId;
     @OneToOne(//cascade = {CascadeType.MERGE, CascadeType.REFRESH},
@@ -41,5 +42,8 @@ public class Profile {
 //    cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @JsonBackReference
     private List<Activity> activities;
+
+    //TODO figure out how to connect activities
+    // create two connections ? library and created ones ?
 
 }

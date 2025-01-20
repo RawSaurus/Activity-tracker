@@ -13,6 +13,7 @@ import com.miroslav.acitivity_tracker.user.model.User;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
     private final ActivityMapper activityMapper;
 
+    //TODO error handling
+    //TODO create unit tests
     public ActivityResponse findById(Integer activityId) {
         return activityRepository.findById(activityId)
                 .map(activityMapper::toResponse)
@@ -47,13 +50,6 @@ public class ActivityService {
 
     //TODO test - need to create addToLibraryFirst
     public ActivityResponse findInUserLibrary(Integer activityId) {
-////        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
-////                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-//        return activityMapper.toResponse(profile.getActivities()
-//                .stream()
-//                .filter((Activity a) -> a.getActivityId().equals(activityId))
-//                .findFirst()
-//                .orElseThrow(() -> new EntityNotFoundException("Activity not found")));
         return activityRepository.findActivityByActivityIdAndProfileProfileId(activityId, userContext.getAuthenticatedUser().getUserId())
                 .map(activityMapper::toResponse)
                 .orElse(null);
@@ -62,13 +58,6 @@ public class ActivityService {
 
     //TODO test - need to create addToLibraryFirst
     public ActivityResponse findInUserLibraryByName(String name) {
-//        Profile profile = profileRepository.findById(((User) user.getPrincipal()).getUserId())
-//                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-//        return activityMapper.toResponse(profile.getActivities()
-//                .stream()
-//                .filter((Activity a) -> a.getName().equals(name))
-//                .findFirst()
-//                .orElseThrow(() -> new EntityNotFoundException("Activity not found")));
         return activityRepository.findActivityByNameAndCreatorId(name, (userContext.getAuthenticatedUser().getUserId()))
                 .map(activityMapper::toResponse)
                 .orElse(null);
@@ -76,13 +65,6 @@ public class ActivityService {
 
     //works
     public ActivityResponse findInMarket(Integer activityId) {
-//        Activity activity = activityRepository.findById(activityId)
-//                .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
-//
-//        if(!activity.isPrivate())
-//            return activityMapper.toResponse(activity);
-//        else
-//            throw new EntityNotFoundException("Activity is not public");
         return activityRepository.findActivityByActivityIdAndIsPrivate(activityId, false)
                 .map(activityMapper::toResponse)
                 .orElse(null);
@@ -90,22 +72,19 @@ public class ActivityService {
 
     //works
     public List<ActivityResponse> findInMarketByName(String name) {
-//        return activityRepository.findAllByName(name)
-//                .stream()
-//                .filter((Activity a) -> !a.isPrivate())
-//                .map(activityMapper::toResponse)
-//                .collect(Collectors.toList());
         return activityRepository.findInMarketByName(name)
                 .stream()
                 .map(activityMapper::toResponse)
                 .collect(Collectors.toList());
-
     }
 
     //TODO works, give option to set isPrivate and add to user library in both cases
     public Integer createActivity(ActivityRequest request) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
+//        if(activityRepository.findByName(request.name()).isPresent()){
+//            throw new DataIntegrityViolationException("This activity already has achievement with same name");
+//        }
         Activity activity = activityMapper.toEntity(request);
         activity.setCreator(userContext.getAuthenticatedUser().getUsername());
         activity.setCreatorId((userContext.getAuthenticatedUser().getUserId()));
@@ -124,13 +103,9 @@ public class ActivityService {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
 
-
         //TODO check if - already in library
 
         Activity copiedActivity = new Activity();
-
-        //doesnt work
-//        activityMapper.updateToEntity(activity, copiedActivity);
 
         copiedActivity.setName(activity.getName());
         copiedActivity.setInfo(activity.getInfo());
@@ -139,12 +114,11 @@ public class ActivityService {
         copiedActivity.setPicture(activity.getPicture());
 //        copiedActivity.setAchievements(activity.getAchievements()); //TODO fix
         copiedActivity.setOriginal(false);
-        copiedActivity.setPrivate(true);
+    copiedActivity.setPrivate(true);
         copiedActivity.setCreator(activity.getCreator());
         copiedActivity.setOriginalActivity(activity.getActivityId());
         copiedActivity.setCreatorId(activity.getCreatorId());
 
-        activity.setDownloads(activity.getDownloads() + 1);
         profile.getActivities().add(copiedActivity);
 
         activityRepository.save(activity);
@@ -177,7 +151,6 @@ public class ActivityService {
         return group;
     }
 
-
     //TODO test
     public String addToGroup(String group, Integer activityId) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
@@ -196,8 +169,6 @@ public class ActivityService {
         profileRepository.save(profile);
         return group;
     }
-
-
 
     //works
     public ResponseEntity deleteOriginalActivityById(Integer activityId) {
@@ -224,5 +195,4 @@ public class ActivityService {
                 .ifPresent(activityRepository::delete);
         return ResponseEntity.ok("Removed from library");
     }
-
 }

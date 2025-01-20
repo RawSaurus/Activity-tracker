@@ -23,5 +23,7 @@ public class ProfileController {
     *       preferences ? (for later)
     *
     *       */
+    //TODO create tests
+    //TODO add authorization
 
 }

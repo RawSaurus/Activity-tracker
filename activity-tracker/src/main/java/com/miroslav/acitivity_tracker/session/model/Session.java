@@ -40,7 +40,7 @@ public class Session {
     @Column(updatable = false, nullable = false)
     private Date createdAt;
     @LastModifiedDate
-    @Column(updatable = false, nullable = false)
+    @Column(nullable = false)
     private Date updatedAt;
 
     @ManyToOne(cascade = CascadeType.ALL)

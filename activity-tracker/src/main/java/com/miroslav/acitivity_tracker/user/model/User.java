@@ -43,7 +43,7 @@ public class User implements UserDetails, Principal {
     @Column(updatable = false, nullable = false)
     private Date createdAt;
     @LastModifiedDate
-    @Column(updatable = false, nullable = false)
+    @Column(nullable = false)
     private Date updatedAt;
 
     @ManyToMany(fetch = FetchType.EAGER)

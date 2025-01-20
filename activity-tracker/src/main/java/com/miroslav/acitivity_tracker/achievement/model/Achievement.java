@@ -27,15 +27,16 @@ public class Achievement {
     @Enumerated(value = EnumType.STRING)
     private Type type;
     private byte[] picture;
+    //TODO make an enum
     private String typeCheckmark; //enum
     @CreatedDate
     @Column(updatable = false,nullable = false)
     private Date createdAt;
     @LastModifiedDate
-    @Column(updatable = false,nullable = false)
+    @Column(nullable = false)
     private Date updatedAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "_activity_achievements",
             joinColumns = {@JoinColumn(name = "achievementId")},
             inverseJoinColumns = {@JoinColumn(name = "activityId")}

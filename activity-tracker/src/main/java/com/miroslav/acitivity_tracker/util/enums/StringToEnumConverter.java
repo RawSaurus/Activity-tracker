@@ -1,4 +1,4 @@
-package com.miroslav.acitivity_tracker.config;
+package com.miroslav.acitivity_tracker.util.enums;
 
 import com.miroslav.acitivity_tracker.activity.model.Activity;
 import com.miroslav.acitivity_tracker.activity.model.Category;
