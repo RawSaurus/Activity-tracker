@@ -30,8 +30,8 @@ public class Profile {
 
 //    @JoinColumn(name = "username", referencedColumnName = "username")
     private String username;
-    @ElementCollection
-    private Map<String, List<Integer>> groups;
+//    @ElementCollection
+//    private Map<String, List<Integer>> groups;
 
     @OneToMany(cascade = CascadeType.ALL)//(mappedBy = "profile")//changed from creatorId
     @JoinTable(name = "_profile_activities",
@@ -43,7 +43,5 @@ public class Profile {
     @JsonBackReference
     private List<Activity> activities;
 
-    //TODO figure out how to connect activities
-    // create two connections ? library and created ones ?
 
 }

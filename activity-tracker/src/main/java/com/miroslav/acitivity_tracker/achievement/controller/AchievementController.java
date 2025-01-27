@@ -19,8 +19,6 @@ public class AchievementController {
 
     private final AchievementService achievementService;
 
-    //TODO find all achievements by name
-    //TODO copy achievement to another activity
     //TODO create group -> group entity
     //TODO add authorization
 

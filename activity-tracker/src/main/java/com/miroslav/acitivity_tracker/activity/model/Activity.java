@@ -30,19 +30,13 @@ public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer activityId;
-    @Column(unique = true)
     private String name;
-    //TODO figure out group situation
-//    private String group;
     private String info;
     private String type;
     @Enumerated(value = EnumType.STRING)
     private Category category;
     //TODO make module for handling pictures
     private byte[] picture;
-//    private double rating;
-//    private int downloads;
-    private boolean isOriginal;
     private boolean isPrivate;
     @CreatedDate
     @Column(updatable = false, nullable = false)
@@ -50,10 +44,10 @@ public class Activity {
     @LastModifiedDate
     @Column(nullable = false)
     private Date updatedAt;
-    private Integer creatorId;
+//    private Integer creatorId;
     @Column(name = "creator_name")
     private String creator;
-    private Integer originalActivity;
+//    private Integer originalActivity;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "_profile_activities",
             joinColumns = {@JoinColumn(name = "activityId")},
@@ -86,9 +80,4 @@ public class Activity {
             fetch = LAZY
     )
     private List<Comment> comments;
-
-    //TODO create market module ??
-
-    //process: create activity (created by = creator, isOriginal = true) -> post activity (isPrivate = false)
-    //-> download activity(create new activity, set originalActivity, isOriginal = false)
 }

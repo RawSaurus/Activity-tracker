@@ -14,12 +14,9 @@ public interface ActivityMapper {
     ActivityRequest toRequest(Activity activity);
     ActivityResponse toResponse(Activity activity);
     @Mapping(target = "profile", ignore = true)
-    @Mapping(target = "creatorId", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "sessions", ignore = true)
     @Mapping(target = "picture", ignore = true)
-    @Mapping(target = "originalActivity", ignore = true)
-    @Mapping(target = "isOriginal", ignore = true)
     @Mapping(target = "creator", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "comments", ignore = true)
@@ -27,13 +24,10 @@ public interface ActivityMapper {
     @Mapping(target = "achievements", ignore = true)
     Activity toEntity(ActivityRequest request);
     @Mapping(target = "profile", ignore = true)
-    @Mapping(target = "creatorId", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "sessions", ignore = true)
     @Mapping(target = "picture", ignore = true)
-    @Mapping(target = "originalActivity", ignore = true)
     @Mapping(target = "isPrivate", ignore = true)
-    @Mapping(target = "isOriginal", ignore = true)
     @Mapping(target = "creator", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "comments", ignore = true)
@@ -42,12 +36,9 @@ public interface ActivityMapper {
     Activity toEntity(ActivityResponse response);
 
     @Mapping(target = "profile", ignore = true)
-    @Mapping(target = "creatorId", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "sessions", ignore = true)
     @Mapping(target = "picture", ignore = true)
-    @Mapping(target = "originalActivity", ignore = true)
-    @Mapping(target = "original", ignore = true)
     @Mapping(target = "creator", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "comments", ignore = true)

@@ -15,9 +15,10 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
 
     List<Activity> findAllByCategory(Category category);
 
+    Optional<Activity> findByProfileProfileIdAndName(Integer profileId, String name);
+
     Optional<Activity> findActivityByActivityIdAndProfileProfileId(Integer activityId, Integer profileId);
 
-    Optional<Activity> findActivityByNameAndCreatorId(String name, Integer creatorId);
 
 //    @Query("""
 //            Select activity

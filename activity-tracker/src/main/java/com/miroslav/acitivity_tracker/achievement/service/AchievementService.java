@@ -7,6 +7,7 @@ import com.miroslav.acitivity_tracker.achievement.model.Achievement;
 import com.miroslav.acitivity_tracker.achievement.repository.AchievementRepository;
 import com.miroslav.acitivity_tracker.activity.repository.ActivityRepository;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
+import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
 import com.miroslav.acitivity_tracker.security.UserContext;
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.model.User;
@@ -32,7 +33,6 @@ public class AchievementService {
     private final ActivityRepository activityRepository;
 
 
-    //TODO error handling
 
     public AchievementResponse findById(Integer activityId, Integer achievementId) {
         return achievementMapper.toResponse(achievementRepository.findById(achievementId)
@@ -65,7 +65,7 @@ public class AchievementService {
                         .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
         if(activity.getAchievements().stream().anyMatch(a -> a.getName().equals(request.name()))){
-            throw new DataIntegrityViolationException("This activity already has achievement with same name");
+            throw new ActionNotAllowed("This activity already has achievement with same name");
         }
 
         //TODO test how to persist/ change cascades in entities
