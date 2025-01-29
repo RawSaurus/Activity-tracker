@@ -13,7 +13,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
     Optional<Activity> findByName(String name);
     List<Activity> findAllByName(String name);
 
-    List<Activity> findAllByCategory(Category category);
+//    List<Activity> findAllByCategory(Category category);
 
     Optional<Activity> findByProfileProfileIdAndName(Integer profileId, String name);
 

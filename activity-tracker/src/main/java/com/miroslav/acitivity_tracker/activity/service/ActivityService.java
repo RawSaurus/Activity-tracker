@@ -37,42 +37,26 @@ public class ActivityService {
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
     }
 
-    public List<ActivityResponse> findAllByCategory(Category activityCategory) {
-        return activityRepository.findAllByCategory(activityCategory)
-                .stream()
-                .map(activityMapper::toResponse)
-                .collect(Collectors.toList());
-    }
-
-    //TODO refactor - check if userContext == activity.profileId
-    public ActivityResponse findInUserLibrary(Integer activityId) {
-        return activityRepository.findActivityByActivityIdAndProfileProfileId(activityId, userContext.getAuthenticatedUser().getUserId())
-                .map(activityMapper::toResponse)
-                .orElse(null);
-
-    }
-
-    //TODO refactor - check if userContext == activity.profileId
-//    public ActivityResponse findInUserLibraryByName(String name) {
-//        return activityRepository.findActivityByNameAndCreatorId(name, (userContext.getAuthenticatedUser().getUserId()))
-//                .map(activityMapper::toResponse)
-//                .orElse(null);
-//    }
-
-    //TODO not needed anymore - keep to next commit
-//    public ActivityResponse findInMarket(Integer activityId) {
-//        return activityRepository.findActivityByActivityIdAndIsPrivate(activityId, false)
-//                .map(activityMapper::toResponse)
-//                .orElse(null);
-//    }
-
-    //TODO not needed anymore - keep to next commit
-//    public List<ActivityResponse> findInMarketByName(String name) {
-//        return activityRepository.findInMarketByName(name)
+//    public List<ActivityResponse> findAllByCategory(Category activityCategory) {
+//        return activityRepository.findAllByCategory(activityCategory)
 //                .stream()
 //                .map(activityMapper::toResponse)
 //                .collect(Collectors.toList());
 //    }
+
+    //TODO test
+    public ActivityResponse findInUserLibrary(Integer activityId) {
+        return activityRepository.findActivityByActivityIdAndProfileProfileId(activityId, userContext.getAuthenticatedUser().getUserId())
+                .map(activityMapper::toResponse)
+                .orElse(null);
+    }
+
+    //TODO test
+    public ActivityResponse findInUserLibraryByName(String name){
+        return activityRepository.findByProfileProfileIdAndName(userContext.getAuthenticatedUser().getUserId(), name)
+                .map(activityMapper::toResponse)
+                .orElseThrow(() -> new EntityNotFoundException("Activity with name" + name + "not found"));
+    }
 
     //TODO test
     public Integer createActivity(ActivityRequest request) {
@@ -91,35 +75,6 @@ public class ActivityService {
     }
 
     //works but improve it
-    //TODO not needed anymore ? keep it - if !isPrivate other users can see it and copy it
-//    public ActivityResponse copyActivityToUser(Integer activityId) {
-//        Activity activity = activityRepository.findById(activityId)
-//                .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
-//        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
-//                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-//
-//        //TODO check if - already in library
-//
-//        Activity copiedActivity = new Activity();
-//
-//        copiedActivity.setName(activity.getName());
-//        copiedActivity.setInfo(activity.getInfo());
-//        copiedActivity.setType(activity.getType());
-//        copiedActivity.setCategory(activity.getCategory());
-//        copiedActivity.setPicture(activity.getPicture());
-//        copiedActivity.setAchievements(activity.getAchievements()); //TODO fix - need to iterate through all of them and create new ones
-//        copiedActivity.setPrivate(true);
-//        copiedActivity.setCreator(activity.getCreator());
-//
-//        profile.getActivities().add(copiedActivity);
-//
-//        activityRepository.save(activity);
-//        activityRepository.save(copiedActivity);
-//        profileRepository.save(profile);
-//
-//        return activityMapper.toResponse(copiedActivity);
-//    }
-
     public ActivityResponse updateActivity(Integer activityId, ActivityRequest request) {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
@@ -131,12 +86,6 @@ public class ActivityService {
         return activityMapper.toResponse(activity);
     }
 
-//    -------------------------------------------------------------------------------------------------------------------------
-
-
-//    -------------------------------------------------------------------------------------------------------------------------
-
-    //works
     public ResponseEntity deleteActivityById(Integer activityId) {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
@@ -148,18 +97,4 @@ public class ActivityService {
             return ResponseEntity.badRequest().body("You are not creator of this activity");
 
     }
-
-
-    //TODO not needed
-//    public ResponseEntity removeFromUserLibrary(Integer activityId){
-//        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
-//                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-//
-//        profile.getActivities()
-//                .stream()
-//                .filter((Activity a) -> a.getActivityId().equals(activityId))
-//                .findFirst()
-//                .ifPresent(activityRepository::delete);
-//        return ResponseEntity.ok("Removed from library");
-//    }
 }
