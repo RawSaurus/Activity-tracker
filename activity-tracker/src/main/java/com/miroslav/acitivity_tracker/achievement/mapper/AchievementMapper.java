@@ -16,7 +16,6 @@ public interface AchievementMapper {
 
 
     @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "typeCheckmark", ignore = true)
     @Mapping(target = "picture", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
 //    @Mapping(target = "activity", ignore = true)
@@ -24,7 +23,6 @@ public interface AchievementMapper {
     Achievement toEntity(AchievementRequest request);
 
     @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "typeCheckmark", ignore = true)
     @Mapping(target = "picture", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
 //    @Mapping(target = "activity", ignore = true)
@@ -32,7 +30,6 @@ public interface AchievementMapper {
     Achievement toEntity(AchievementResponse response);
 
     @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "typeCheckmark", ignore = true)
     @Mapping(target = "picture", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
 //    @Mapping(target = "activity", ignore = true)

@@ -27,8 +27,6 @@ public class Achievement {
     @Enumerated(value = EnumType.STRING)
     private Type type;
     private byte[] picture;
-    //TODO make an enum
-    private String typeCheckmark; //enum
     @CreatedDate
     @Column(updatable = false,nullable = false)
     private Date createdAt;
@@ -42,4 +40,9 @@ public class Achievement {
             inverseJoinColumns = {@JoinColumn(name = "activityId")}
     )
     private Activity activity;
+
+    private Integer typeSuperclass;
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "typeId", referencedColumnName = "typeAchievementId")
+//    private TypeSuperclass typeSuperclass;
 }

@@ -45,7 +45,6 @@ public class TemplateService {
                     .type(a.getType())
                     .info(a.getInfo())
                     .picture(a.getPicture())
-                    .typeCheckmark(a.getTypeCheckmark())
                     .build();
             template.getAchievements().add(achievement);
         }
