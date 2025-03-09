@@ -24,7 +24,6 @@ public class DailyAchievement extends TypeSuperclass{
 //    private int setXPGain;
     private int currentStreak;
     private int biggestStreak;
-    private boolean finished;
 //    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
 //    @JoinColumn(name = "achievement_id", referencedColumnName = "achievementId")
 //    private Achievement achievement;

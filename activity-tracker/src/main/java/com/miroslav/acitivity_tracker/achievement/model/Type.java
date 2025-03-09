@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public enum Type {
 
-    ONE_TIME("one-time"),
+    GOAL("goal"),
     DAILY("daily"),
     AMOUNT("amount");
 

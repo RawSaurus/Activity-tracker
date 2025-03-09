@@ -1,14 +1,15 @@
 package com.miroslav.acitivity_tracker.achievement.dto;
 
 import com.miroslav.acitivity_tracker.achievement.model.Type;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
+import java.util.Date;
 
-public record AchievementResponse(
+public record AchievementResponseWType(
         String name,
         String info,
         Type type,
-        int xp
+        int xp,
+        String unit,
+        Date deadline
 ) {
 }

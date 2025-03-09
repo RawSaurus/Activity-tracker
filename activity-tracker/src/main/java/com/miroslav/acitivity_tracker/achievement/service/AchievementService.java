@@ -4,6 +4,7 @@ import com.miroslav.acitivity_tracker.achievement.dto.AchievementRequest;
 import com.miroslav.acitivity_tracker.achievement.dto.AchievementResponse;
 import com.miroslav.acitivity_tracker.achievement.mapper.AchievementMapper;
 import com.miroslav.acitivity_tracker.achievement.model.Achievement;
+import com.miroslav.acitivity_tracker.achievement.model.Type;
 import com.miroslav.acitivity_tracker.achievement.repository.AchievementRepository;
 import com.miroslav.acitivity_tracker.activity.repository.ActivityRepository;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +55,13 @@ public class AchievementService {
                 .map(achievementMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+//    public AchievementResponse createTypeAchievement(AchievementRequest request){
+//        Achievement achievement = achievementMapper.toEntity(request);
+//        if(achievement.getType().equals(Type.DAILY)) {
+//          something
+//        }
+//    }
 
     //TODO works/ create checks if activity public if creator == user, or if private if activity is in user library
     public Integer createAchievement(AchievementRequest request, Integer activityId) {
@@ -108,4 +117,5 @@ public class AchievementService {
 
         return ResponseEntity.ok("Achievement deleted");
     }
+
 }

@@ -20,8 +20,6 @@ public class GoalAchievement extends TypeSuperclass {
 //    private Integer goalAchievementId;
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date deadline;
-    private int xpForFinishing;
-    private boolean finished;
 //    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
 //    @JoinColumn(name = "achievement_id", referencedColumnName = "achievementId")
 //    private Achievement achievement;

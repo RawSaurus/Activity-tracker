@@ -2,6 +2,7 @@ package com.miroslav.acitivity_tracker.achievement.mapper;
 
 import com.miroslav.acitivity_tracker.achievement.dto.AchievementRequest;
 import com.miroslav.acitivity_tracker.achievement.dto.AchievementResponse;
+import com.miroslav.acitivity_tracker.achievement.dto.AchievementResponseWType;
 import com.miroslav.acitivity_tracker.achievement.model.Achievement;
 import org.mapstruct.*;
 
@@ -13,6 +14,10 @@ public interface AchievementMapper {
     AchievementRequest toRequest(Achievement achievement);
 
     AchievementResponse toResponse(Achievement achievement);
+
+    @Mapping(target = "unit", ignore = true)
+    @Mapping(target = "deadline", ignore = true)
+    AchievementResponseWType toResponseWType(Achievement achievement);
 
 
     @Mapping(target = "updatedAt", ignore = true)
