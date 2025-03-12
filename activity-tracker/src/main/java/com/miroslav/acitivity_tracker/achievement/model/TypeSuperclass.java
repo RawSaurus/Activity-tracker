@@ -14,7 +14,6 @@ import lombok.experimental.SuperBuilder;
 public abstract class TypeSuperclass {
 
     @Id
-    @GeneratedValue
     private Integer typeAchievementId;
     @Column(name="set_xp_gain_for_one_unit")
     private int setXPGain;

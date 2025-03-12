@@ -2,12 +2,15 @@ package com.miroslav.acitivity_tracker.achievement.controller;
 
 import com.miroslav.acitivity_tracker.achievement.dto.AchievementRequest;
 import com.miroslav.acitivity_tracker.achievement.dto.AchievementResponse;
+import com.miroslav.acitivity_tracker.achievement.dto.AchievementResponseV2;
 import com.miroslav.acitivity_tracker.achievement.model.Type;
 import com.miroslav.acitivity_tracker.achievement.service.AchievementService;
+import com.miroslav.acitivity_tracker.achievement.service.AchievementTypeService;
 import com.miroslav.acitivity_tracker.util.enums.EnumValidator;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +30,9 @@ import java.util.List;
 public class AchievementController {
 
     private final AchievementService achievementService;
+    private final AchievementTypeService achievementTypeService;
 
-    //TODO create group -> group entity
     //TODO add authorization
-
 
     @GetMapping("/{activity-id}/{achievement-id}")
     public ResponseEntity<AchievementResponse> findById(@PathVariable("activity-id") Integer activityId, @PathVariable("achievement-id") Integer achievementId){
@@ -46,6 +48,47 @@ public class AchievementController {
     public ResponseEntity<List<AchievementResponse>> findAllById(@PathVariable("activity-id") Integer activityId){
         return ResponseEntity.ok(achievementService.findAllPublicById(activityId));
     }
+
+    @GetMapping("/get-from-activity/{activity-id}/{achievement-id}")
+    public ResponseEntity<AchievementResponseV2> getFromActivity(@PathVariable("activity-id") Integer activityId, @PathVariable("achievement-id") Integer achievementId){
+        return ResponseEntity.ok(achievementTypeService.getFromActivity(activityId, achievementId));
+    }
+
+    @GetMapping("/get-all-from-activity/{activity-id}")
+    public ResponseEntity<List<AchievementResponseV2>> getAllFromActivity(@PathVariable("activity-id")Integer activityId){
+        return ResponseEntity.ok(achievementTypeService.getAllFromActivity(activityId));
+    }
+
+    @PostMapping("/goal-achievement/{activity-id}")
+    public ResponseEntity<Integer> createGoalAchievement(@RequestBody AchievementRequest request,
+                                                         @PathVariable("activity-id")Integer activityId,
+                                                         @RequestParam("deadline") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date deadline,
+                                                         @RequestParam("setXpGain") int setXpGain
+                                                         ){
+        return ResponseEntity.ok(achievementTypeService.createGoalAchievement(request, activityId, deadline, setXpGain));
+    }
+    @PostMapping("/daily-achievement/{activity-id}")
+    public ResponseEntity<Integer> createDailyAchievement(@RequestBody AchievementRequest request,
+                                                         @PathVariable("activity-id")Integer activityId,
+                                                         @RequestParam int setXpGain
+    ){
+        return ResponseEntity.ok(achievementTypeService.createDailyAchievement(request, activityId, setXpGain));
+    }
+    @PostMapping("/amount-achievement/{activity-id}")
+    public ResponseEntity<Integer> createAmountAchievement(@RequestBody AchievementRequest request,
+                                                        @PathVariable("activity-id")Integer activityId,
+                                                        @RequestParam int setXpGain,
+                                                        @RequestParam String unit
+    ){
+        return ResponseEntity.ok(achievementTypeService.createAmountAchievement(request, activityId, setXpGain, unit));
+    }
+
+    @DeleteMapping("/delete-achievement/{achievement-id}")
+    public ResponseEntity deleteAchievement(@PathVariable("achievement-id")Integer achievementId){
+        achievementTypeService.deleteAchievement(achievementId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 
 //    @PostMapping("/type")
 //    public ResponseEntity<Void> chooseType(@RequestParam("type") @EnumValidator(enumClass = Type.class) String type) throws IOException {

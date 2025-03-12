@@ -10,6 +10,8 @@ public record AchievementResponseWType(
         Type type,
         int xp,
         String unit,
-        Date deadline
+        Date deadline,
+        int currentStreak,
+        int biggestStreak
 ) {
 }

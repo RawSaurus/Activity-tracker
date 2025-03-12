@@ -15,12 +15,6 @@ import java.util.Date;
 @Entity(name = "_goal_achievement")
 public class GoalAchievement extends TypeSuperclass {
 
-//    @Id
-//    @GeneratedValue
-//    private Integer goalAchievementId;
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date deadline;
-//    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
-//    @JoinColumn(name = "achievement_id", referencedColumnName = "achievementId")
-//    private Achievement achievement;
 }

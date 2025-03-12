@@ -15,16 +15,6 @@ import java.util.Date;
 @Entity(name = "_daily_achievement")
 public class DailyAchievement extends TypeSuperclass{
 
-//    @Id
-//    @GeneratedValue
-//    private Integer dailyAchievementId;
-//    @Column(name="total_xp")
-//    private int totalXP;
-//    @Column(name="set_xp_gain")
-//    private int setXPGain;
     private int currentStreak;
     private int biggestStreak;
-//    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
-//    @JoinColumn(name = "achievement_id", referencedColumnName = "achievementId")
-//    private Achievement achievement;
 }
