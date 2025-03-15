@@ -50,7 +50,7 @@ public class User implements UserDetails, Principal {
     private List<Role> roles;
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Profile profile;
 
 

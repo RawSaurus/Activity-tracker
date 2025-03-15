@@ -30,18 +30,15 @@ public class Profile {
 
 //    @JoinColumn(name = "username", referencedColumnName = "username")
     private String username;
-//    @ElementCollection
-//    private Map<String, List<Integer>> groups;
-
     @OneToMany(cascade = CascadeType.ALL)//(mappedBy = "profile")//changed from creatorId
     @JoinTable(name = "_profile_activities",
             joinColumns = {@JoinColumn(name = "profileId")},
             inverseJoinColumns = {@JoinColumn(name = "activityId")}
     )
-    //TODO untested cascade/ wont compile with MERGE
-//    cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @JsonBackReference
     private List<Activity> activities;
+
+    //TODO stat properties
 
 
 }

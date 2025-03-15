@@ -51,7 +51,7 @@ public class ActivityTrackerApplication {
 				User user = userRepository.findById(1)
 						.orElseThrow(() -> new RuntimeException("User not found"));
 				user.setEnabled(true);
-				user.setRoles(List.of(adm));
+				user.setRoles(List.of(adm, role));
 				userRepository.save(user);
 				var admin = AuthenticationRequest.builder()
 						.email("admin@gmail.com")
