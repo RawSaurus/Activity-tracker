@@ -8,6 +8,11 @@ import org.springframework.stereotype.Service;
 public class UserContext {
 
     public User getAuthenticatedUser(){
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if(user.isAccountNonLocked() && user.isEnabled())
+//            return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        else
+//            return null;
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

@@ -14,7 +14,7 @@ public record TemplateRequest(
         String info,
         @NotEmpty(message = "Choose a type for template")
         String type,
-        @EnumValidator(enumClass = Category.class)
+        @EnumValidator(enumClazz = Category.class)
         String category
 ) {
 }

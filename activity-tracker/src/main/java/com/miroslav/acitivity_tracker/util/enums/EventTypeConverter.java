@@ -1,11 +1,11 @@
 package com.miroslav.acitivity_tracker.util.enums;
 
-import com.miroslav.acitivity_tracker.activity.model.Activity;
-import com.miroslav.acitivity_tracker.activity.model.Category;
 import com.miroslav.acitivity_tracker.calendar.module.EventType;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
-public class StringToEnumConverter implements Converter<String, EventType> {
+@Component
+public class EventTypeConverter implements Converter<String, EventType> {
 
     @Override
     public EventType convert(String source) {

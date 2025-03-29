@@ -11,7 +11,7 @@ public record AchievementRequest(
         String name,
         @NotEmpty(message = "Write some info about achievement")
         String info,
-        @EnumValidator(enumClass = Type.class)
+        @EnumValidator(enumClazz = Type.class)
         String type
 
 ) {

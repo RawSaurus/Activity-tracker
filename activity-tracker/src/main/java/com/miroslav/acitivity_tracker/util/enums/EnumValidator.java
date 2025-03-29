@@ -12,8 +12,8 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @NotNull
 public @interface EnumValidator {
-    Class<? extends Enum<?>> enumClass();
-    String message() default "must be any of enum {enumClass}";
+    Class<? extends Enum<?>> enumClazz();
+    String message() default "must be any of enum {enumClazz}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

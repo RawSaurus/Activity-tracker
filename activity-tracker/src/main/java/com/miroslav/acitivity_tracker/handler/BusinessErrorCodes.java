@@ -14,8 +14,9 @@ public enum BusinessErrorCodes {
     BAD_CREDENTIALS(304, FORBIDDEN, "Login and / or password is incorrect"),
     ITEM_ALREADY_EXISTS(400, BAD_REQUEST, "Item already exists" ),
     ACTION_NOT_ALLOWED(400, BAD_REQUEST, "Action is not allowed"),
+    VALIDATION_FAILURE(400, BAD_REQUEST, "Validation failure"),
     ACCESS_DENIED(401, UNAUTHORIZED, "You do not have permission for this action"),
-    ENTITY_NOT_FOUND(404, NOT_FOUND, "entity not found")
+    ENTITY_NOT_FOUND(404, NOT_FOUND, "Entity not found")
     ;
 
     @Getter

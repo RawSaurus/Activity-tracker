@@ -13,7 +13,7 @@ public record ActivityRequest(
         String info,
         @NotEmpty(message = "Choose a type for activity")
         String type,
-        @EnumValidator(enumClass = Category.class)
+        @EnumValidator(enumClazz = Category.class)
         String category,
         boolean isPrivate
 ) {

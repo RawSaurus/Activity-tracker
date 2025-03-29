@@ -2,6 +2,7 @@ package com.miroslav.acitivity_tracker.user.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
+import com.miroslav.acitivity_tracker.calendar.module.Event;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.web.bind.annotation.Mapping;
@@ -37,6 +38,8 @@ public class Profile {
     )
     @JsonBackReference
     private List<Activity> activities;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Event> events;
 
     //TODO stat properties
 

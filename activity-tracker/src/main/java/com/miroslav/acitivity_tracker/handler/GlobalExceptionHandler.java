@@ -13,6 +13,7 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -53,6 +54,17 @@ public class GlobalExceptionHandler {
                                 .businessErrorCode(ACCESS_DENIED.getCode())
                                 .businessErrorDescription(ACCESS_DENIED.getDescription())
                                 .error(exp.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ExceptionResponse> handleException(HandlerMethodValidationException exp){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(VALIDATION_FAILURE.getCode())
+                                .businessErrorDescription(VALIDATION_FAILURE.getDescription())
                                 .build()
                 );
     }
@@ -121,6 +133,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(
                         ExceptionResponse.builder()
+                                .businessErrorCode(VALIDATION_FAILURE.getCode())
+                                .businessErrorDescription(VALIDATION_FAILURE.getDescription())
                                 .validationErrors(errors)
                                 .build()
                 );

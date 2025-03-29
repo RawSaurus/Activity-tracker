@@ -25,7 +25,7 @@ public class SessionController {
     //TODO make into response
     //TODO always returns 1
     @GetMapping("/{session-id}")
-    public ResponseEntity<Session> findById(@PathVariable("session-id")Integer sessionId){
+    public ResponseEntity<SessionResponse> findById(@PathVariable("session-id")Integer sessionId){
         return ResponseEntity.ok(sessionService.findById(sessionId));
     }
 
@@ -48,9 +48,8 @@ public class SessionController {
 
     @PostMapping("/input-time/{activity-id}")
     public ResponseEntity<Integer> createSessionWithTime(@PathVariable("activity-id") Integer activityId,
-                                                 @RequestBody SessionRequest request,
-                                                 @RequestBody Timestamp duration){
-        return ResponseEntity.accepted().body(sessionService.createSessionWithTime(activityId, request, duration));
+                                                 @RequestBody SessionRequest request){
+        return ResponseEntity.accepted().body(sessionService.createSessionWithTime(activityId, request));
     }
 
     @PutMapping("/{activity-id}/end-session/{session-id}")

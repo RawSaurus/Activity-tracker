@@ -39,6 +39,12 @@ public class AchievementController {
         return ResponseEntity.ok(achievementService.findById(activityId, achievementId));
     }
 
+    // new
+    @GetMapping("/find-one/{achievement-id}")
+    public ResponseEntity<AchievementResponseV2> findById(@PathVariable("achievement-id")Integer achievementId){
+        return ResponseEntity.ok(achievementTypeService.findById(achievementId));
+    }
+
     @GetMapping("/market/{activity-id}/{achievement-id}")
     public ResponseEntity<AchievementResponse> findPublicById(@PathVariable("activity-id") Integer activityId, @PathVariable("achievement-id") Integer achievementId){
         return ResponseEntity.ok(achievementService.findPublicById(activityId, achievementId));
@@ -133,6 +139,12 @@ public class AchievementController {
                                                      @PathVariable("achievement-id") Integer achievementId,
                                                      @RequestBody @Valid AchievementRequest request){
         return ResponseEntity.accepted().body(achievementService.updateAchievement(activityId, achievementId, request));
+    }
+
+    @PatchMapping("/{achievement-id}")
+    public ResponseEntity markFinished(@PathVariable("achievement-id")Integer achievementId){
+        achievementService.markFinished(achievementId);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{activity-id}/{achievement-id}")

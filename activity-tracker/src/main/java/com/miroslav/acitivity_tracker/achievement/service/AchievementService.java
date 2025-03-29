@@ -8,6 +8,9 @@ import com.miroslav.acitivity_tracker.achievement.model.Type;
 import com.miroslav.acitivity_tracker.achievement.repository.AchievementRepository;
 import com.miroslav.acitivity_tracker.activity.repository.ActivityRepository;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
+import com.miroslav.acitivity_tracker.calendar.module.Event;
+import com.miroslav.acitivity_tracker.calendar.module.EventType;
+import com.miroslav.acitivity_tracker.calendar.repository.EventRepository;
 import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
 import com.miroslav.acitivity_tracker.security.UserContext;
 import com.miroslav.acitivity_tracker.user.model.Profile;
@@ -20,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +34,7 @@ public class AchievementService {
 
     private final UserContext userContext;
     private final ProfileRepository profileRepository;
+    private final EventRepository eventRepository;
     private final AchievementRepository achievementRepository;
     private final AchievementMapper achievementMapper;
     private final ActivityRepository activityRepository;
@@ -99,6 +104,28 @@ public class AchievementService {
         achievementMapper.updateToEntity(request, achievement);
 
         return achievementRepository.save(achievement).getAchievementId();
+    }
+
+    // new
+    // TODO in query check first if finished == true already
+    public void markFinished(Integer achievementId){
+        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
+        Achievement achievement = achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new EntityNotFoundException("Achievement not found"));
+
+        Event event = Event.builder()
+                .name(achievement.getName() + " finished")
+                .type(EventType.ACHIEVEMENT_DONE)
+                .linkId(achievementId)
+                .start(LocalDateTime.now())
+                .end(LocalDateTime.now())
+                .profile(profile)
+                .build();
+        eventRepository.save(event);
+
+
+        achievementRepository.updateFinished(achievementId);
     }
 
     //TODO works/ add checks

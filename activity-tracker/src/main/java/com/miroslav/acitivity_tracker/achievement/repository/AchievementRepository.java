@@ -2,7 +2,9 @@ package com.miroslav.acitivity_tracker.achievement.repository;
 
 import com.miroslav.acitivity_tracker.achievement.model.Achievement;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,4 +38,9 @@ public interface AchievementRepository extends JpaRepository<Achievement, Intege
             AND achievement.achievementId = :achievementId
             """)
     Optional<Achievement> findFromProfile(Integer achievementId, Integer activityId, Integer profileId);
+
+    @Transactional
+    @Modifying
+    @Query("update Achievement a set a.finished = true where a.achievementId = :achievementId")
+    int updateFinished(Integer achievementId);
 }

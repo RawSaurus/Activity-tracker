@@ -59,7 +59,6 @@ public class AchievementRepositoryTest {
         achievement2 = Achievement.builder()
                 .name("another a")
                 .info("other info")
-                .type(Type.ONE_TIME)
                 .build();
 
         activity1.getAchievements().add(achievement1);

@@ -8,6 +8,7 @@ import com.miroslav.acitivity_tracker.achievement.mapper.AchievementMapper;
 import com.miroslav.acitivity_tracker.achievement.model.*;
 import com.miroslav.acitivity_tracker.achievement.repository.*;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
+import com.miroslav.acitivity_tracker.calendar.repository.EventRepository;
 import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
 import com.miroslav.acitivity_tracker.security.UserContext;
 import com.miroslav.acitivity_tracker.user.model.Profile;
@@ -26,16 +27,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AchievementTypeService {
 
-    //TODO move finished field straight to achievement
-
     private final UserContext userContext;
+
     private final ProfileRepository profileRepository;
     private final AchievementRepository achievementRepository;
-    private final AchievementMapper achievementMapper;
+
     private final AmountAchievementRepository amountARepository;
     private final DailyAchievementRepository dailyARepository;
     private final DailyAchievementCalendarRepository dailyCalendar;
     private final GoalAchievementRepository goalARepository;
+
+    private final AchievementMapper achievementMapper;
 
 //    public AchievementResponse createDailyAchievement(AchievementRequest request, Integer activityId) {
 //        DailyAchievement achievement = achievementMapper.toDailyEntity(request);
@@ -53,6 +55,32 @@ public class AchievementTypeService {
         return null;
     }
 
+    // new
+    public AchievementResponseV2 findById(Integer achievementId){
+        Achievement achievement = achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new EntityNotFoundException("Achievement not found"));
+        AchievementResponseV2 responseV2 = new AchievementResponseV2(
+                achievement.getName(),
+                achievement.getInfo(),
+                achievement.getType(),
+                achievement.getXp()
+        );
+        if(achievement.getType() == Type.GOAL){
+            GoalAchievement g = goalARepository.findById(achievementId)
+                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
+            responseV2.setTypeData(g);
+        }else if(achievement.getType() == Type.DAILY){
+            DailyAchievement d = dailyARepository.findById(achievementId)
+                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
+            responseV2.setTypeData(d);
+        }else if(achievement.getType() == Type.AMOUNT){
+            AmountAchievement a = amountARepository.findById(achievementId)
+                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
+            responseV2.setTypeData(a);
+        }
+        return responseV2;
+    }
+
     public AchievementResponseV2 getFromActivity(Integer activityId, Integer achievementId){
         //find achievement
         Achievement achievement = achievementRepository.findPublicById(achievementId, activityId)
@@ -66,7 +94,7 @@ public class AchievementTypeService {
                 achievement.getType(),
                 achievement.getXp()
         );
-        AchievementResponseWType response = achievementMapper.toResponseWType(achievement);
+//        AchievementResponseWType response = achievementMapper.toResponseWType(achievement);
         if(achievement.getType() == Type.GOAL){
             GoalAchievement g = goalARepository.findById(achievementId)
                             .orElseThrow(() -> new EntityNotFoundException("Type not found"));
