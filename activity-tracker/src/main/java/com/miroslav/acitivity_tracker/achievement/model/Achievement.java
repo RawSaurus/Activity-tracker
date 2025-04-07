@@ -1,6 +1,7 @@
 package com.miroslav.acitivity_tracker.achievement.model;
 
 import com.miroslav.acitivity_tracker.activity.model.Activity;
+import com.miroslav.acitivity_tracker.file.model.File;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Setter
@@ -26,7 +29,8 @@ public class Achievement {
     private String info;
     @Enumerated(value = EnumType.STRING)
     private Type type;
-    private byte[] picture;
+    @OneToOne(cascade = CascadeType.ALL, fetch = LAZY)
+    private File picture;
     private int xp;
     private boolean finished;
     @CreatedDate

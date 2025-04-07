@@ -1,9 +1,11 @@
 package com.miroslav.acitivity_tracker.user.service;
 
+import com.miroslav.acitivity_tracker.file.assembler.FileAssembler;
+import com.miroslav.acitivity_tracker.file.service.FileService;
 import com.miroslav.acitivity_tracker.role.model.Role;
 import com.miroslav.acitivity_tracker.role.repository.RoleRepository;
 import com.miroslav.acitivity_tracker.security.UserContext;
-import com.miroslav.acitivity_tracker.user.ProfileMapper;
+import com.miroslav.acitivity_tracker.user.mapper.ProfileMapper;
 import com.miroslav.acitivity_tracker.user.dto.ProfileResponse;
 import com.miroslav.acitivity_tracker.user.dto.UserRequest;
 import com.miroslav.acitivity_tracker.user.model.Profile;
@@ -12,8 +14,10 @@ import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import com.miroslav.acitivity_tracker.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,12 +31,23 @@ public class ProfileService {
     private final ProfileMapper profileMapper;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FileService fileService;
+    private final FileAssembler<ProfileResponse> fileAssembler;
     //TODO create methods
     //TODO create tests
 
     public Profile getProfile(Integer profileId){
         return profileRepository.findById(profileId)
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
+    }
+
+    //new
+    public EntityModel<ProfileResponse> getProfileWithLinks(Integer profileId){
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
+        EntityModel<ProfileResponse> model = EntityModel.of(profileMapper.toResponse(profile));
+        fileAssembler.addLinks(model, profile.getPicture().getFileCode());
+        return model;
     }
 
     public Profile getProfileByMail(String email){
@@ -90,19 +105,40 @@ public class ProfileService {
 //        return
 //    }
 
+    public void addImage(MultipartFile file){
+        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
+
+        profile.setPicture(fileService.uploadFile(file));
+
+        profileRepository.save(profile);
+    }
+
     //TODO test
     public String deleteAccount(Integer profileId){
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
+
+        if(profile.getPicture() != null) {
+            fileService.deleteFile(profile.getPicture().getFilePath());
+        }
         profileRepository.deleteById(profileId);
         userRepository.deleteById(profileId);
 
         return "User deleted successfully";
     }
 
+    //new
     public String deleteOwnAccount(){
+        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
+
+        if(profile.getPicture() != null) {
+            fileService.deleteFile(profile.getPicture().getFilePath());
+        }
+
         userRepository.deleteById(userContext.getAuthenticatedUser().getUserId());
 
         return "User deleted successfully";
     }
-
-
 }

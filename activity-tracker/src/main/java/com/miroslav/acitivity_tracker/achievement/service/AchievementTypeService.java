@@ -10,13 +10,17 @@ import com.miroslav.acitivity_tracker.achievement.repository.*;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
 import com.miroslav.acitivity_tracker.calendar.repository.EventRepository;
 import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
+import com.miroslav.acitivity_tracker.file.assembler.FileAssembler;
+import com.miroslav.acitivity_tracker.file.service.FileService;
 import com.miroslav.acitivity_tracker.security.UserContext;
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.loadtime.Aj;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,6 +40,8 @@ public class AchievementTypeService {
     private final DailyAchievementRepository dailyARepository;
     private final DailyAchievementCalendarRepository dailyCalendar;
     private final GoalAchievementRepository goalARepository;
+    private final FileService fileService;
+    private final FileAssembler<AchievementResponseV2> fileAssembler;
 
     private final AchievementMapper achievementMapper;
 
@@ -55,6 +61,34 @@ public class AchievementTypeService {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
+    private <T extends TypeSuperclass> T returnType(Achievement achievement){
+        if(achievement.getType() == Type.GOAL){
+            return (T)goalARepository.findById(achievement.getAchievementId())
+                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
+        }else if(achievement.getType() == Type.DAILY){
+            return (T)dailyARepository.findById(achievement.getAchievementId())
+                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
+        }else if(achievement.getType() == Type.AMOUNT){
+            return (T)amountARepository.findById(achievement.getAchievementId())
+                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
+        }
+        return null;
+    }
+
+    private TypeSuperclassRepository getType(Type type){
+        if(type == Type.GOAL){
+            return goalARepository;
+        }else if(type == Type.DAILY){
+            return dailyARepository;
+        }else if(type == Type.AMOUNT){
+            return amountARepository;
+        }
+        return null;
+    }
+
+
+
     // new
     public AchievementResponseV2 findById(Integer achievementId){
         Achievement achievement = achievementRepository.findById(achievementId)
@@ -65,20 +99,46 @@ public class AchievementTypeService {
                 achievement.getType(),
                 achievement.getXp()
         );
-        if(achievement.getType() == Type.GOAL){
-            GoalAchievement g = goalARepository.findById(achievementId)
-                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
-            responseV2.setTypeData(g);
-        }else if(achievement.getType() == Type.DAILY){
-            DailyAchievement d = dailyARepository.findById(achievementId)
-                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
-            responseV2.setTypeData(d);
-        }else if(achievement.getType() == Type.AMOUNT){
-            AmountAchievement a = amountARepository.findById(achievementId)
-                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
-            responseV2.setTypeData(a);
+        try {
+            responseV2.setTypeData((TypeSuperclass) getType(achievement.getType()).findById(achievementId)
+                    .orElseThrow(() -> new EntityNotFoundException("Type not found")));
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
         }
+//        if(achievement.getType() == Type.GOAL){
+//            GoalAchievement g = goalARepository.findById(achievementId)
+//                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
+//            responseV2.setTypeData(g);
+//        }else if(achievement.getType() == Type.DAILY){
+//            DailyAchievement d = dailyARepository.findById(achievementId)
+//                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
+//            responseV2.setTypeData(d);
+//        }else if(achievement.getType() == Type.AMOUNT){
+//            AmountAchievement a = amountARepository.findById(achievementId)
+//                    .orElseThrow(() -> new EntityNotFoundException("Type not found"));
+//            responseV2.setTypeData(a);
+//        }
         return responseV2;
+    }
+    public EntityModel<AchievementResponseV2> findByIdWithLinks(Integer achievementId){
+        Achievement achievement = achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new EntityNotFoundException("Achievement not found"));
+        AchievementResponseV2 responseV2 = new AchievementResponseV2(
+                achievement.getName(),
+                achievement.getInfo(),
+                achievement.getType(),
+                achievement.getXp()
+        );
+        try {
+            responseV2.setTypeData((TypeSuperclass) getType(achievement.getType()).findById(achievementId)
+                    .orElseThrow(() -> new EntityNotFoundException("Type not found")));
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+
+        EntityModel<AchievementResponseV2> model = EntityModel.of(responseV2);
+        fileAssembler.addLinks(model, achievement.getPicture().getFileCode());
+        return model;
     }
 
     public AchievementResponseV2 getFromActivity(Integer activityId, Integer achievementId){
@@ -122,7 +182,7 @@ public class AchievementTypeService {
         // check user
         //map to AchievementResponse
         for(Achievement a : achievements){
-            AchievementResponseV2 res = new AchievementResponseV2<>(
+            AchievementResponseV2 res = new AchievementResponseV2(
                     a.getName(),
                     a.getInfo(),
                     a.getType(),
@@ -242,12 +302,31 @@ public class AchievementTypeService {
 //        return achievementRepository.save(achievement).getAchievementId();
 //    }
 
+    //new
+    public void addImage(Integer achievementId, MultipartFile file){
+        Achievement achievement = achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new EntityNotFoundException("Achievement not found"));
+        achievement.setPicture(fileService.uploadFile(file));
 
+        achievementRepository.save(achievement);
+    }
+
+    //new
     public void deleteAchievement(Integer achievementId){
+        Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
         Achievement achievement = achievementRepository.findById(achievementId)
                 .orElseThrow(() -> new EntityNotFoundException("achievement not found"));
 
         getType(achievement).deleteById(achievementId);
+
+        if(!achievement.getActivity().getProfile().getProfileId().equals(profile.getProfileId())){
+            throw new ActionNotAllowed("You are not allowed to change this template");
+        }
+
+        if(achievement.getPicture() != null) {
+            fileService.deleteFile(achievement.getPicture().getFilePath());
+        }
 
 //        if(achievement.getType() == Type.GOAL){
 //            goalARepository.deleteById(achievement.getTypeSuperclass());

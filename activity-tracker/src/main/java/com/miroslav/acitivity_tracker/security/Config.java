@@ -39,7 +39,8 @@ public class Config {
                                 "/configuration/security",
                                 "/swagger-ui/**",
                                 "/webjars/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/h2-console"
                         ).permitAll()
                                 .anyRequest()
                                 .authenticated()

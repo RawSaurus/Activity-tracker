@@ -11,10 +11,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import org.springframework.web.servlet.view.RedirectView;
@@ -63,6 +65,11 @@ public class AchievementController {
     @GetMapping("/get-all-from-activity/{activity-id}")
     public ResponseEntity<List<AchievementResponseV2>> getAllFromActivity(@PathVariable("activity-id")Integer activityId){
         return ResponseEntity.ok(achievementTypeService.getAllFromActivity(activityId));
+    }
+
+    @GetMapping("/links/{achievement-id}")
+    public ResponseEntity<EntityModel<AchievementResponseV2>> findByIdWithLinks(@PathVariable("achievement-id") Integer achievementId){
+        return ResponseEntity.ok(achievementTypeService.findByIdWithLinks(achievementId));
     }
 
     @PostMapping("/goal-achievement/{activity-id}")
@@ -145,6 +152,12 @@ public class AchievementController {
     public ResponseEntity markFinished(@PathVariable("achievement-id")Integer achievementId){
         achievementService.markFinished(achievementId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/image/{achievement-id}")
+    public ResponseEntity<?> addImage(@PathVariable("achievement-id") Integer achievementId, @RequestParam MultipartFile file){
+        achievementTypeService.addImage(achievementId, file);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{activity-id}/{achievement-id}")

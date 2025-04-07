@@ -1,5 +1,8 @@
 package com.miroslav.acitivity_tracker.activity.service;
 
+import com.miroslav.acitivity_tracker.achievement.model.Achievement;
+import com.miroslav.acitivity_tracker.file.assembler.FileAssembler;
+import com.miroslav.acitivity_tracker.file.service.FileService;
 import com.miroslav.acitivity_tracker.group.dto.GroupRequest;
 import com.miroslav.acitivity_tracker.activity.mapper.ActivityMapper;
 import com.miroslav.acitivity_tracker.activity.model.Category;
@@ -11,12 +14,16 @@ import com.miroslav.acitivity_tracker.activity.model.Activity;
 import com.miroslav.acitivity_tracker.group.repository.GroupRepository;
 import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
 import com.miroslav.acitivity_tracker.security.UserContext;
+import com.miroslav.acitivity_tracker.template.dto.TemplateResponse;
+import com.miroslav.acitivity_tracker.template.model.Template;
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,12 +36,22 @@ public class ActivityService {
     private final ProfileRepository profileRepository;
     private final ActivityRepository activityRepository;
     private final ActivityMapper activityMapper;
+    private final FileService fileService;
+    private final FileAssembler<ActivityResponse> fileAssembler;
 
     //TODO create unit tests
     public ActivityResponse findById(Integer activityId) {
         return activityRepository.findById(activityId)
                 .map(activityMapper::toResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
+    }
+
+    //new
+    public EntityModel<ActivityResponse> findByIdWithLinks(Integer activityId){
+        Activity activity = activityRepository.findById(activityId).orElseThrow(()-> new EntityNotFoundException("Activity not found"));
+        EntityModel<ActivityResponse> model = EntityModel.of(activityMapper.toResponse(activity));
+        fileAssembler.addLinks(model, activity.getPicture().getFileCode());
+        return model;
     }
 
 //    public List<ActivityResponse> findAllByCategory(Category activityCategory) {
@@ -86,11 +103,29 @@ public class ActivityService {
         return activityMapper.toResponse(activity);
     }
 
-    public ResponseEntity deleteActivityById(Integer activityId) {
+    //new
+    public void addImage(Integer activityId, MultipartFile file){
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
+        activity.setPicture(fileService.uploadFile(file));
+
+        activityRepository.save(activity);
+    }
+
+    //new
+    public ResponseEntity<?> deleteActivityById(Integer activityId) {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
         if(activity.getProfile().getProfileId().equals(userContext.getAuthenticatedUser().getUserId())){
+            if(activity.getPicture() != null) {
+                fileService.deleteFile(activity.getPicture().getFilePath());
+            }
+            for(Achievement a : activity.getAchievements()){
+                if(a.getPicture() != null) {
+                    fileService.deleteFile(a.getPicture().getFilePath());
+                }
+            }
             activityRepository.delete(activity);
             return ResponseEntity.ok("Deleted successfully");
         }else

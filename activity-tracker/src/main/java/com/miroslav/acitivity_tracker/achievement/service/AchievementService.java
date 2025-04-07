@@ -2,6 +2,7 @@ package com.miroslav.acitivity_tracker.achievement.service;
 
 import com.miroslav.acitivity_tracker.achievement.dto.AchievementRequest;
 import com.miroslav.acitivity_tracker.achievement.dto.AchievementResponse;
+import com.miroslav.acitivity_tracker.achievement.dto.AchievementResponseWType;
 import com.miroslav.acitivity_tracker.achievement.mapper.AchievementMapper;
 import com.miroslav.acitivity_tracker.achievement.model.Achievement;
 import com.miroslav.acitivity_tracker.achievement.model.Type;
@@ -12,16 +13,21 @@ import com.miroslav.acitivity_tracker.calendar.module.Event;
 import com.miroslav.acitivity_tracker.calendar.module.EventType;
 import com.miroslav.acitivity_tracker.calendar.repository.EventRepository;
 import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
+import com.miroslav.acitivity_tracker.file.assembler.FileAssembler;
+import com.miroslav.acitivity_tracker.file.service.FileService;
 import com.miroslav.acitivity_tracker.security.UserContext;
+import com.miroslav.acitivity_tracker.template.dto.TemplateResponse;
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.model.User;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -38,6 +44,8 @@ public class AchievementService {
     private final AchievementRepository achievementRepository;
     private final AchievementMapper achievementMapper;
     private final ActivityRepository activityRepository;
+    private final FileService fileService;
+    private final FileAssembler<AchievementResponseWType> fileAssembler;
 
 
 
@@ -60,6 +68,14 @@ public class AchievementService {
                 .map(achievementMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+//    public EntityModel<AchievementResponseWType> findByIdWithLinks(Integer activityId, Integer achievementId) {
+//        Achievement achievement = achievementRepository.findById(achievementId)
+//                .orElseThrow(() -> new EntityNotFoundException("Achievement not found"));
+//        EntityModel<AchievementResponseWType> model = EntityModel.of(achievementMapper.toResponse(achievement));
+//        fileAssembler.addLinks(model, achievement.getPicture().getFileCode());
+//        return model;
+//    }
 
 //    public AchievementResponse createTypeAchievement(AchievementRequest request){
 //        Achievement achievement = achievementMapper.toEntity(request);
@@ -127,6 +143,7 @@ public class AchievementService {
 
         achievementRepository.updateFinished(achievementId);
     }
+
 
     //TODO works/ add checks
     public ResponseEntity deleteAchievement(Integer activityId, Integer achievementId) {

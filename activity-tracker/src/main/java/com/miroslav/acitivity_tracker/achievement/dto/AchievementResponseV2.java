@@ -13,7 +13,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AchievementResponseV2<T extends TypeSuperclass> {
+public class AchievementResponseV2 {
 
     private String name;
     private String info;
@@ -25,7 +25,7 @@ public class AchievementResponseV2<T extends TypeSuperclass> {
     private int currentStreak;
     private int biggestStreak;
 
-    public AchievementResponseV2(String name, String info, Type type, int xp, T typeClass){
+    public AchievementResponseV2(String name, String info, Type type, int xp, TypeSuperclass typeClass){
         this.name = name;
         this.info = info;
         this.type = type;
@@ -39,7 +39,7 @@ public class AchievementResponseV2<T extends TypeSuperclass> {
         this.xp = xp;
     }
 
-    public AchievementResponseV2 toResponse(Achievement achievement, T typeClass){
+    public AchievementResponseV2 toResponse(Achievement achievement, TypeSuperclass typeClass){
         return new AchievementResponseV2(
                 achievement.getName(),
                 achievement.getInfo(),
@@ -49,7 +49,7 @@ public class AchievementResponseV2<T extends TypeSuperclass> {
                 );
     }
 
-    public void setTypeData(T typeClass){
+    public void setTypeData(TypeSuperclass typeClass){
         if(typeClass.getClass().equals(AmountAchievement.class)){
             this.unit = ((AmountAchievement) typeClass).getUnit();
         }else if(typeClass.getClass().equals(GoalAchievement.class)){

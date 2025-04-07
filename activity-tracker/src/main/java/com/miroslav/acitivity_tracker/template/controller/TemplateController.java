@@ -7,8 +7,11 @@ import com.miroslav.acitivity_tracker.template.dto.TemplateResponse;
 import com.miroslav.acitivity_tracker.template.service.TemplateService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +23,11 @@ public class TemplateController {
     @GetMapping("/{template-id}")
     public ResponseEntity<TemplateResponse> findTemplateById(@PathVariable("template-id") Integer templateId){
         return ResponseEntity.ok(templateService.findById(templateId));
+    }
+
+    @GetMapping("/links/{template-id}")
+    public ResponseEntity<EntityModel<TemplateResponse>> findTemplateWithLinks(@PathVariable("template-id") Integer templateId){
+        return ResponseEntity.ok(templateService.findByIdWithLinks(templateId));
     }
 
     @PostMapping
@@ -37,7 +45,13 @@ public class TemplateController {
         return ResponseEntity.ok(templateService.updateTemplate(templateId, request));
     }
 
-    @DeleteMapping("/{template-id}")
+    @PatchMapping("/{template-id}")
+    public ResponseEntity<?> addImage(@PathVariable("template-id") Integer templateId, @RequestParam MultipartFile file){
+        templateService.addImage(templateId, file);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/delete/{template-id}")
     public ResponseEntity<String> deleteTemplate(@PathVariable("template-id") Integer templateId){
         return ResponseEntity.ok(templateService.deleteTemplate(templateId));
     }

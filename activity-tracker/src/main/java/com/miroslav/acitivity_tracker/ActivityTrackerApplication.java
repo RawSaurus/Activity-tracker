@@ -16,6 +16,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+import java.io.File;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @SpringBootApplication

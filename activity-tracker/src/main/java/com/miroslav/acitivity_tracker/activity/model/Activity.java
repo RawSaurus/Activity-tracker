@@ -3,6 +3,7 @@ package com.miroslav.acitivity_tracker.activity.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.miroslav.acitivity_tracker.achievement.model.Achievement;
 import com.miroslav.acitivity_tracker.comment.model.Comment;
+import com.miroslav.acitivity_tracker.file.model.File;
 import com.miroslav.acitivity_tracker.session.model.Session;
 import com.miroslav.acitivity_tracker.template.model.Template;
 import com.miroslav.acitivity_tracker.user.model.Profile;
@@ -36,8 +37,8 @@ public class Activity {
     private String type;
     @Enumerated(value = EnumType.STRING)
     private Category category;
-    //TODO make module for handling pictures
-    private byte[] picture;
+    @OneToOne(cascade = CascadeType.ALL, fetch = LAZY)
+    private File picture;
     private boolean isPrivate;
     @CreatedDate
     @Column(updatable = false, nullable = false)

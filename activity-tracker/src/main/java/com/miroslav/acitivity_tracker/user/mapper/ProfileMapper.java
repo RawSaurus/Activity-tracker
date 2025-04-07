@@ -1,4 +1,4 @@
-package com.miroslav.acitivity_tracker.user;
+package com.miroslav.acitivity_tracker.user.mapper;
 
 import com.miroslav.acitivity_tracker.user.dto.ProfileResponse;
 import com.miroslav.acitivity_tracker.user.dto.UserRequest;

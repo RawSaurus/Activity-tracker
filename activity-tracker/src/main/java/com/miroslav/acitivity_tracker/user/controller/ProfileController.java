@@ -5,9 +5,11 @@ import com.miroslav.acitivity_tracker.user.dto.UserRequest;
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,6 +52,12 @@ public class ProfileController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/links/{profile-id}")
+    public ResponseEntity<EntityModel<ProfileResponse>> getProfileWithLinks(@PathVariable("profile-id")Integer profileId){
+        return ResponseEntity.ok(profileService.getProfileWithLinks(profileId));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<Integer> createProfile(@RequestBody UserRequest request){
         return ResponseEntity.ok(profileService.createProfile(request));
@@ -66,6 +74,13 @@ public class ProfileController {
 //    public ResponseEntity<ProfileResponse> updateAccount(@PathVariable("profile-id") Integer profileId, @RequestBody UserRequest request){
 //        return ResponseEntity.ok(profileService.updateAccount(profileId, request));
 //    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @PatchMapping
+    public ResponseEntity<?> addImage(@RequestParam MultipartFile file){
+        profileService.addImage(file);
+        return ResponseEntity.accepted().build();
+    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{profile-id}")

@@ -7,10 +7,12 @@ import com.miroslav.acitivity_tracker.activity.model.Category;
 import com.miroslav.acitivity_tracker.activity.service.ActivityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -41,6 +43,12 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.findInUserLibraryByName(name));
     }
 
+    //new
+    @GetMapping("/links/{activity-id}")
+    public ResponseEntity<EntityModel<ActivityResponse>> findByIdWithLinks(@PathVariable("activity-id") Integer activityId){
+        return ResponseEntity.ok(activityService.findByIdWithLinks(activityId));
+    }
+
 //    @GetMapping("/category/{category}")
 //    public ResponseEntity<List<ActivityResponse>> findAllByCategory(@PathVariable("category") Category activityCategory){
 //        return ResponseEntity.ok(activityService.findAllByCategory(activityCategory));
@@ -57,8 +65,14 @@ public class ActivityController {
         return ResponseEntity.accepted().body(activityService.updateActivity(activityId, request));
     }
 
+    @PatchMapping("/{activity-id}")
+    public ResponseEntity<?> addImage(@PathVariable("activity-id") Integer activityId, @RequestParam MultipartFile file){
+        activityService.addImage(activityId, file);
+        return ResponseEntity.accepted().build();
+    }
+
     @DeleteMapping("/{activity-id}")
-    public ResponseEntity deleteActivityById(@PathVariable("activity-id") Integer activityId){
+    public ResponseEntity<?> deleteActivityById(@PathVariable("activity-id") Integer activityId){
         return activityService.deleteActivityById(activityId);
     }
 
