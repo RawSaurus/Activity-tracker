@@ -32,6 +32,6 @@ public class EventAssembler implements SimpleRepresentationModelAssembler<EventR
     @Override
     public void addLinks(CollectionModel<EntityModel<EventResponse>> resources) {
 
-        resources.add(linkTo(methodOn(CalendarController.class).findAll()).withSelfRel());
+        resources.add(linkTo(methodOn(CalendarController.class).findAll(null, null, null, null)).withSelfRel());
     }
 }

@@ -19,6 +19,8 @@ import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.*;
 import org.springframework.hateoas.server.core.UriTemplateFactory;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -48,19 +50,25 @@ public class CalendarService {
                 .orElseThrow(() -> new EntityNotFoundException("Event not found")));
     }
 
-    public List<EntityModel<EventResponse>> findAll(){
-        List<EntityModel<EventResponse>> list = new ArrayList<>();
-//        System.out.println(eventRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId()).size());
-        for(Event e : eventRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId())){
-            Integer id = e.getEventId();
-            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(e));
+    public Page<EntityModel<EventResponse>> findAll(Pageable pageable){
+        Page<Event> events = eventRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId(), pageable);
+        return events.map(event -> {
+            Integer id = event.getEventId();
+            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(event));
             model.add(linkTo(methodOn(CalendarController.class).getEvent(id)).withSelfRel());
             eventAssembler.addLinks(model);
-            list.add(model);
-        }
-//        System.out.println(list.size());
-//        System.out.println(list.get(0));
-        return list;
+            return model;
+                }
+        );
+//        List<EntityModel<EventResponse>> list = new ArrayList<>();
+//        for(Event e : eventRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId())){
+//            Integer id = e.getEventId();
+//            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(e));
+//            model.add(linkTo(methodOn(CalendarController.class).getEvent(id)).withSelfRel());
+//            eventAssembler.addLinks(model);
+//            list.add(model);
+//        }
+//        return list;
 
 //        return eventRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId())
 //                .stream()
@@ -72,44 +80,66 @@ public class CalendarService {
 //                .collect(Collectors.toList());
     }
 
-    public List<EntityModel<EventResponse>> findAllInTimePeriod(LocalDateTime start, LocalDateTime end){
-        List<EntityModel<EventResponse>> list = new ArrayList<>();
-//        System.out.println(eventRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId()).size());
-        for(Event e : eventRepository.findAllByStartBetween(userContext.getAuthenticatedUser().getUserId(), start, end)){
-            Integer id = e.getEventId();
-            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(e));
+    public Page<EntityModel<EventResponse>> findAllInTimePeriod(LocalDateTime start, LocalDateTime end, Pageable pageable){
+        Page<Event> events = eventRepository.findAllByStartBetween(userContext.getAuthenticatedUser().getUserId(), start, end, pageable);
+
+        return events.map(event -> {
+            Integer id = event.getEventId();
+            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(event));
             model.add(linkTo(methodOn(CalendarController.class).getEvent(id)).withSelfRel());
             eventAssembler.addLinks(model);
-            list.add(model);
-        }
-//        System.out.println(list.size());
-//        System.out.println(list.get(0));
-        return list;
+            return model;
+        });
 
+//        List<EntityModel<EventResponse>> list = new ArrayList<>();
+//        for(Event e : eventRepository.findAllByStartBetween(userContext.getAuthenticatedUser().getUserId(), start, end)){
+//            Integer id = e.getEventId();
+//            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(e));
+//            model.add(linkTo(methodOn(CalendarController.class).getEvent(id)).withSelfRel());
+//            eventAssembler.addLinks(model);
+//            list.add(model);
+//        }
+//        return list;
     }
 
-    public List<EntityModel<EventResponse>> findAllByType(String type){
-        List<EntityModel<EventResponse>> list = new ArrayList<>();
-        for(Event e : eventRepository.findAllByProfileProfileIdAndType(userContext.getAuthenticatedUser().getUserId(), EventType.valueOf(type))){
-            Integer id = e.getEventId();
-            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(e));
+    public Page<EntityModel<EventResponse>> findAllByType(String type, Pageable pageable){
+        Page<Event> events = eventRepository.findAllByProfileProfileIdAndType(userContext.getAuthenticatedUser().getUserId(), EventType.valueOf(type), pageable);
+        return events.map(event -> {
+            Integer id = event.getEventId();
+            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(event));
             model.add(linkTo(methodOn(CalendarController.class).getEvent(id)).withSelfRel());
             eventAssembler.addLinks(model);
-            list.add(model);
-        }
-        return list;
+            return model;
+        });
+//        List<EntityModel<EventResponse>> list = new ArrayList<>();
+//        for(Event e : eventRepository.findAllByProfileProfileIdAndType(userContext.getAuthenticatedUser().getUserId(), EventType.valueOf(type))){
+//            Integer id = e.getEventId();
+//            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(e));
+//            model.add(linkTo(methodOn(CalendarController.class).getEvent(id)).withSelfRel());
+//            eventAssembler.addLinks(model);
+//            list.add(model);
+//        }
+//        return list;
     }
 
-    public List<EntityModel<EventResponse>> findAllInTimePeriodByType(LocalDateTime start, LocalDateTime end, String type){
-        List<EntityModel<EventResponse>> list = new ArrayList<>();
-        for(Event e : eventRepository.findAllByStartBetweenAndType(userContext.getAuthenticatedUser().getUserId(), start, end, EventType.valueOf(type))){
-            Integer id = e.getEventId();
-            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(e));
+    public Page<EntityModel<EventResponse>> findAllInTimePeriodByType(LocalDateTime start, LocalDateTime end, String type, Pageable pageable){
+        Page<Event> events = eventRepository.findAllByStartBetweenAndType(userContext.getAuthenticatedUser().getUserId(), start, end, EventType.valueOf(type), pageable);
+        return events.map(event -> {
+            Integer id = event.getEventId();
+            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(event));
             model.add(linkTo(methodOn(CalendarController.class).getEvent(id)).withSelfRel());
             eventAssembler.addLinks(model);
-            list.add(model);
-        }
-        return list;
+            return model;
+        });
+//        List<EntityModel<EventResponse>> list = new ArrayList<>();
+//        for(Event e : eventRepository.findAllByStartBetweenAndType(userContext.getAuthenticatedUser().getUserId(), start, end, EventType.valueOf(type))){
+//            Integer id = e.getEventId();
+//            EntityModel<EventResponse> model = EntityModel.of(eventMapper.toResponse(e));
+//            model.add(linkTo(methodOn(CalendarController.class).getEvent(id)).withSelfRel());
+//            eventAssembler.addLinks(model);
+//            list.add(model);
+//        }
+//        return list;
     }
 
     public Integer createPlan(EventRequest request){

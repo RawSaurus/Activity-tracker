@@ -12,6 +12,8 @@ import com.miroslav.acitivity_tracker.template.repository.TemplateRepository;
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +31,11 @@ public class CommentService {
                 commentRepository.findById(commentId)
                         .orElseThrow(() -> new EntityNotFoundException("Comment not found"))
         );
+    }
+
+    public Page<CommentResponse> findAllByTemplateId(Integer templateId, Pageable pageable) {
+        return commentRepository.findAllByTemplateTemplateId(templateId, pageable)
+                .map(commentMapper::toResponse);
     }
 
     public Integer createComment(CommentRequest request, Integer templateId) {

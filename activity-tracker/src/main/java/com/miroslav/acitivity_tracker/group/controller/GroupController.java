@@ -5,6 +5,10 @@ import com.miroslav.acitivity_tracker.group.dto.GroupRequest;
 import com.miroslav.acitivity_tracker.group.dto.GroupResponse;
 import com.miroslav.acitivity_tracker.group.service.GroupService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +27,15 @@ public class GroupController {
         return ResponseEntity.ok(groupService.findById(groupId));
     }
 
-    @GetMapping
-    public ResponseEntity<List<GroupResponse>> getAllGroups(){
-        return ResponseEntity.ok(groupService.getAllGroups());
+    @GetMapping("/all")
+    public ResponseEntity<Page<GroupResponse>> getAllGroups(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "sort", defaultValue = "name") String sortBy,
+            @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection
+    ){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+        return ResponseEntity.ok(groupService.getAllGroups(pageable));
     }
     @GetMapping("/{group-id}/activities")
     public ResponseEntity<List<ActivityResponse>> findAllActivitiesByGroup(@PathVariable("group-id") Integer groupId){

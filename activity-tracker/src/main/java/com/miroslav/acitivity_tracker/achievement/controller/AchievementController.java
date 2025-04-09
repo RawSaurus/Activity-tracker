@@ -10,6 +10,9 @@ import com.miroslav.acitivity_tracker.util.enums.EnumValidator;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpHeaders;
@@ -47,15 +50,15 @@ public class AchievementController {
         return ResponseEntity.ok(achievementTypeService.findById(achievementId));
     }
 
-    @GetMapping("/market/{activity-id}/{achievement-id}")
-    public ResponseEntity<AchievementResponse> findPublicById(@PathVariable("activity-id") Integer activityId, @PathVariable("achievement-id") Integer achievementId){
-        return ResponseEntity.ok(achievementService.findPublicById(activityId, achievementId));
-    }
-
-    @GetMapping("/{activity-id}")
-    public ResponseEntity<List<AchievementResponse>> findAllById(@PathVariable("activity-id") Integer activityId){
-        return ResponseEntity.ok(achievementService.findAllPublicById(activityId));
-    }
+//    @GetMapping("/market/{activity-id}/{achievement-id}")
+//    public ResponseEntity<AchievementResponse> findPublicById(@PathVariable("activity-id") Integer activityId, @PathVariable("achievement-id") Integer achievementId){
+//        return ResponseEntity.ok(achievementService.findPublicById(activityId, achievementId));
+//    }
+//
+//    @GetMapping("/{activity-id}")
+//    public ResponseEntity<List<AchievementResponse>> findAllById(@PathVariable("activity-id") Integer activityId){
+//        return ResponseEntity.ok(achievementService.findAllPublicById(activityId));
+//    }
 
     @GetMapping("/get-from-activity/{activity-id}/{achievement-id}")
     public ResponseEntity<AchievementResponseV2> getFromActivity(@PathVariable("activity-id") Integer activityId, @PathVariable("achievement-id") Integer achievementId){
@@ -65,6 +68,17 @@ public class AchievementController {
     @GetMapping("/get-all-from-activity/{activity-id}")
     public ResponseEntity<List<AchievementResponseV2>> getAllFromActivity(@PathVariable("activity-id")Integer activityId){
         return ResponseEntity.ok(achievementTypeService.getAllFromActivity(activityId));
+    }
+
+    //new
+    @GetMapping("all/{activity-id}")
+    public ResponseEntity<Page<AchievementResponseV2>> findAll(
+            @PathVariable("activity-id") Integer activityId,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "sort", defaultValue = "name") String sortBy,
+            @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection){
+        return ResponseEntity.ok(achievementTypeService.getAllFromActivityPage(activityId, PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy))));
     }
 
     @GetMapping("/links/{achievement-id}")

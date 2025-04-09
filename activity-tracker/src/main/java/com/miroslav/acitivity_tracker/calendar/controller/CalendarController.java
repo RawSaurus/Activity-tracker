@@ -10,6 +10,10 @@ import com.miroslav.acitivity_tracker.calendar.service.CalendarService;
 import com.miroslav.acitivity_tracker.util.enums.EnumValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -41,35 +45,52 @@ public class CalendarController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<EntityModel<EventResponse>>> findAll(){
-//        CollectionModel<EntityModel<EventResponse>> collection = CollectionModel.of(calendarService.findAll());
-//        eventAssembler.addLinks(collection);
-        return ResponseEntity.ok(calendarService.findAll());
+    public ResponseEntity<Page<EntityModel<EventResponse>>> findAll(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "sort", defaultValue = "startTime") String sortBy,
+            @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection
+    )
+    {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+        return ResponseEntity.ok(calendarService.findAll(pageable));
     }
 
     @GetMapping("/time-period")
-    public ResponseEntity<List<EntityModel<EventResponse>>> findAllInTimePeriod(@RequestParam LocalDateTime start, @RequestParam LocalDateTime end){
-//        CollectionModel<EntityModel<EventResponse>> collection = CollectionModel.of(calendarService.findAllInTimePeriod(start, end));
-//        eventAssembler.addLinks(collection);
-        return ResponseEntity.ok(calendarService.findAllInTimePeriod(start, end));
+    public ResponseEntity<Page<EntityModel<EventResponse>>> findAllInTimePeriod(@RequestParam LocalDateTime start,
+                                                                                @RequestParam LocalDateTime end,
+                                                                                @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                                @RequestParam(value = "size", defaultValue = "10") Integer size,
+                                                                                @RequestParam(value = "sort", defaultValue = "startTime") String sortBy,
+                                                                                @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection
+    ){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+        return ResponseEntity.ok(calendarService.findAllInTimePeriod(start, end, pageable));
     }
 
     @GetMapping("/type")
-    public ResponseEntity<List<EntityModel<EventResponse>>> findAllByType(@RequestParam("type") @Valid @EnumValidator(enumClazz = EventType.class) String type) {
-//        CollectionModel<EntityModel<EventResponse>> collection = CollectionModel.of(calendarService.findAllByType(type));
-//        eventAssembler.addLinks(collection);
-        return ResponseEntity.ok(calendarService.findAllByType(type));
+    public ResponseEntity<Page<EntityModel<EventResponse>>> findAllByType(@RequestParam("type") @Valid @EnumValidator(enumClazz = EventType.class) String type,
+                                                                          @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                          @RequestParam(value = "size", defaultValue = "10") Integer size,
+                                                                          @RequestParam(value = "sort", defaultValue = "startTime") String sortBy,
+                                                                          @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+        return ResponseEntity.ok(calendarService.findAllByType(type, pageable));
     }
 
     @GetMapping("/type-&-time-period")
-    public ResponseEntity<List<EntityModel<EventResponse>>> findAllInTimePeriodByType(
+    public ResponseEntity<Page<EntityModel<EventResponse>>> findAllInTimePeriodByType(
             @RequestParam("start") LocalDateTime start,
             @RequestParam("end") LocalDateTime end,
-            @RequestParam("type") @Valid @EnumValidator(enumClazz = EventType.class)String type
+            @RequestParam("type") @Valid @EnumValidator(enumClazz = EventType.class)String type,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "sort", defaultValue = "startTime") String sortBy,
+            @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection
     ){
-//        CollectionModel<EntityModel<EventResponse>> collection = CollectionModel.of(calendarService.findAllInTimePeriodByType(start, end, type));
-//        eventAssembler.addLinks(collection);
-        return ResponseEntity.ok(calendarService.findAllInTimePeriodByType(start, end, type));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+        return ResponseEntity.ok(calendarService.findAllInTimePeriodByType(start, end, type, pageable));
     }
 
 

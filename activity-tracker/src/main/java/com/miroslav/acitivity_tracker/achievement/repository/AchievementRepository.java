@@ -1,6 +1,8 @@
 package com.miroslav.acitivity_tracker.achievement.repository;
 
 import com.miroslav.acitivity_tracker.achievement.model.Achievement;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,6 +31,8 @@ public interface AchievementRepository extends JpaRepository<Achievement, Intege
             AND achievement.activity.isPrivate = false
             """)
     List<Achievement> findAllPublicById(Integer activityId);
+
+    Page<Achievement> findAllByActivityActivityId(Integer activityId, Pageable pageable);
 
     @Query("""
             SELECT achievement

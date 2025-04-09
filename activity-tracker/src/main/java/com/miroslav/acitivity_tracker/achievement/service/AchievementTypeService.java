@@ -18,6 +18,8 @@ import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.loadtime.Aj;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -192,6 +194,23 @@ public class AchievementTypeService {
             response.add(res);
         }
         return response;
+    }
+
+    //new
+    public Page<AchievementResponseV2> getAllFromActivityPage(Integer activityId, Pageable pageable){
+        Page<Achievement> achievements = achievementRepository.findAllByActivityActivityId(activityId, pageable);
+        return achievements.map(
+                achievement -> {
+                    AchievementResponseV2 res = new AchievementResponseV2(
+                            achievement.getName(),
+                            achievement.getInfo(),
+                            achievement.getType(),
+                            achievement.getXp()
+                    );
+                    res.setTypeData((TypeSuperclass) getType(achievement).findById(achievement.getAchievementId()).orElse(null));
+                    return res;
+                }
+        );
     }
 
     public Integer createGoalAchievement(AchievementRequest request, Integer activityId, Date deadline, int setXpGain) {

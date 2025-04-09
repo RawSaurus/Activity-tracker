@@ -5,6 +5,10 @@ import com.miroslav.acitivity_tracker.session.dto.SessionResponse;
 import com.miroslav.acitivity_tracker.session.model.Session;
 import com.miroslav.acitivity_tracker.session.service.SessionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +40,13 @@ public class SessionController {
     }
 
     @GetMapping("/all/{activity-id}")
-    public ResponseEntity<List<SessionResponse>> findAllSessions(@PathVariable("activity-id") Integer activityId){
-        return ResponseEntity.ok(sessionService.findAllSessions(activityId));
+    public ResponseEntity<Page<SessionResponse>> findAllSessions(@PathVariable("activity-id") Integer activityId,
+                                                                 @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                 @RequestParam(value = "size", defaultValue = "10") Integer size,
+                                                                 @RequestParam(value = "sort", defaultValue = "startTime") String sortBy,
+                                                                 @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+        return ResponseEntity.ok(sessionService.findAllSessions(activityId, pageable));
     }
 
     @PostMapping("/{activity-id}")

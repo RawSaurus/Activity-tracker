@@ -1,6 +1,7 @@
 package com.miroslav.acitivity_tracker.template.service;
 
 import com.miroslav.acitivity_tracker.achievement.model.Achievement;
+import com.miroslav.acitivity_tracker.activity.dto.ActivityResponse;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
 import com.miroslav.acitivity_tracker.activity.repository.ActivityRepository;
 import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
@@ -18,11 +19,14 @@ import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -42,6 +46,12 @@ public class TemplateService {
         return templateMapper.toResponse(templateRepository.findById(templateId).orElseThrow(()-> new EntityNotFoundException("Template not found")));
     }
 
+    //new
+    public Page<TemplateResponse> findAll(Pageable pageable){
+        return templateRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId(), pageable)
+                .map(templateMapper::toResponse);
+    }
+
     public EntityModel<TemplateResponse> findByIdWithLinks(Integer templateId){
         Template template = templateRepository.findById(templateId).orElseThrow(()-> new EntityNotFoundException("Template not found"));
         EntityModel<TemplateResponse> model = EntityModel.of(templateMapper.toResponse(template));
@@ -54,6 +64,19 @@ public class TemplateService {
 //        ).add(linkTo(methodOn(FileController.class).downloadFile(template.getPicture().getFileId())).withRel("get-picture"))
 //        .add(linkTo(methodOn(FileController.class).updateFile(template.getPicture().getFileCode(), null)).withRel("update-picture"))
 //        .add(linkTo(methodOn(FileController.class).deleteFile(template.getPicture().getFileCode())).withRel("delete-picture"));
+    }
+
+    //new
+    public Page<EntityModel<TemplateResponse>> findAllWithLinks(Pageable pageable) {
+        Page<Template> templates = templateRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId(), pageable);
+
+        return templates.map(template -> {
+            EntityModel<TemplateResponse> model = EntityModel.of(templateMapper.toResponse(template));
+            if(template.getPicture() != null) {
+                fileAssembler.addLinks(model, template.getPicture().getFileCode());
+            }
+            return model;
+        });
     }
 
     public Integer postTemplateFromExistingActivity(Integer activityId){

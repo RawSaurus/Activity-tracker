@@ -15,6 +15,8 @@ import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,12 +38,11 @@ public class GroupService {
                 .orElseThrow(() -> new EntityNotFoundException("Group not found")));
     }
 
-    public List<GroupResponse> getAllGroups() {
-        return groupRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId())
-                .stream()
-                .map(groupMapper::toResponse)
-                .collect(Collectors.toList());
+    public Page<GroupResponse> getAllGroups(Pageable pageable) {
+        return groupRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId(), pageable)
+                .map(groupMapper::toResponse);
     }
+
     public List<ActivityResponse> findAllActivitiesByGroup(Integer groupId) {
         return groupRepository.findById(groupId)
                 .orElseThrow(() -> new EntityNotFoundException("Group not found"))

@@ -17,6 +17,8 @@ import com.miroslav.acitivity_tracker.user.model.User;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -58,15 +60,21 @@ public class SessionService {
     }
 
 //    works
-    public List<SessionResponse> findAllSessions(Integer activityId) {
+    public Page<SessionResponse> findAllSessions(Integer activityId, Pageable pageable) {
         return sessionRepository.findAllSessions(
                 activityId,
-                (userContext.getAuthenticatedUser().getUserId())
-        )
-                .stream()
-                .map(sessionMapper::toResponse)
-                .collect(Collectors.toList());
+                (userContext.getAuthenticatedUser().getUserId()),
+                pageable
+        ).map(sessionMapper::toResponse);
     }
+//        return sessionRepository.findAllSessions(
+//                activityId,
+//                (userContext.getAuthenticatedUser().getUserId())
+//        )
+//                .stream()
+//                .map(sessionMapper::toResponse)
+//                .collect(Collectors.toList());
+//    }
 
 //    works
     //TODO if name is empty put time as name

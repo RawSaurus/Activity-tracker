@@ -2,6 +2,8 @@ package com.miroslav.acitivity_tracker.activity.repository;
 
 import com.miroslav.acitivity_tracker.activity.model.Activity;
 import com.miroslav.acitivity_tracker.activity.model.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,6 +14,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
 
     Optional<Activity> findByName(String name);
     List<Activity> findAllByName(String name);
+    Page<Activity> findAllByProfileProfileId(Integer profileId, Pageable pageable);
 
 //    List<Activity> findAllByCategory(Category category);
 

@@ -20,6 +20,8 @@ import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -73,6 +75,22 @@ public class ActivityService {
         return activityRepository.findByProfileProfileIdAndName(userContext.getAuthenticatedUser().getUserId(), name)
                 .map(activityMapper::toResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Activity with name" + name + "not found"));
+    }
+
+    public Page<ActivityResponse> findAll(Pageable pageable) {
+        return activityRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId(), pageable)
+                .map(activityMapper::toResponse);
+    }
+
+    public Page<EntityModel<ActivityResponse>> findAllWithLinks(Pageable pageable) {
+        Page<Activity> activities = activityRepository.findAllByProfileProfileId(userContext.getAuthenticatedUser().getUserId(), pageable);
+        return activities.map(activity -> {
+            EntityModel<ActivityResponse> model = EntityModel.of(activityMapper.toResponse(activity));
+            if(activity.getPicture() != null) {
+                fileAssembler.addLinks(model, activity.getPicture().getFileCode());
+            }
+            return model;
+        });
     }
 
     //TODO test
