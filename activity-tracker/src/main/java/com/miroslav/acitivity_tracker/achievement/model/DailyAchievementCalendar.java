@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -11,7 +12,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "_daily_achievement_calendar")
+@Entity
+@Table(name = "_daily_achievement_calendar")
 public class DailyAchievementCalendar {
 
     @Id
@@ -19,7 +21,7 @@ public class DailyAchievementCalendar {
     private Integer dailyAchievementCalendarId;
     private boolean checkmark;
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date day;
+    private LocalDate day;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "type_achievement_id", referencedColumnName = "typeAchievementId")
     private DailyAchievement dailyAchievement;

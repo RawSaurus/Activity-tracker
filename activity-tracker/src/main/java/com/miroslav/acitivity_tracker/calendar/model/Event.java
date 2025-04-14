@@ -1,4 +1,4 @@
-package com.miroslav.acitivity_tracker.calendar.module;
+package com.miroslav.acitivity_tracker.calendar.model;
 
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import jakarta.persistence.*;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "_event")
 public class Event {
 
     @Id

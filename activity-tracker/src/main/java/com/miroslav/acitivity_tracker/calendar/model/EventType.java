@@ -1,4 +1,4 @@
-package com.miroslav.acitivity_tracker.calendar.module;
+package com.miroslav.acitivity_tracker.calendar.model;
 
 import lombok.Getter;
 

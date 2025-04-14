@@ -1,20 +1,15 @@
 package com.miroslav.acitivity_tracker.calendar.service;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.miroslav.acitivity_tracker.achievement.controller.AchievementController;
-import com.miroslav.acitivity_tracker.achievement.model.Achievement;
-import com.miroslav.acitivity_tracker.activity.controller.ActivityController;
 import com.miroslav.acitivity_tracker.calendar.assembler.EventAssembler;
 import com.miroslav.acitivity_tracker.calendar.controller.CalendarController;
 import com.miroslav.acitivity_tracker.calendar.dto.EventRequest;
 import com.miroslav.acitivity_tracker.calendar.dto.EventResponse;
 import com.miroslav.acitivity_tracker.calendar.mapper.EventMapper;
-import com.miroslav.acitivity_tracker.calendar.module.Event;
-import com.miroslav.acitivity_tracker.calendar.module.EventType;
+import com.miroslav.acitivity_tracker.calendar.model.Event;
+import com.miroslav.acitivity_tracker.calendar.model.EventType;
 import com.miroslav.acitivity_tracker.calendar.repository.EventRepository;
 import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
 import com.miroslav.acitivity_tracker.security.UserContext;
-import com.miroslav.acitivity_tracker.session.repository.SessionRepository;
 import com.miroslav.acitivity_tracker.user.model.Profile;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,16 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.*;
-import org.springframework.hateoas.server.core.UriTemplateFactory;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 

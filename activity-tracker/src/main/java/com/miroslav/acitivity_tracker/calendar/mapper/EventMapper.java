@@ -2,7 +2,7 @@ package com.miroslav.acitivity_tracker.calendar.mapper;
 
 import com.miroslav.acitivity_tracker.calendar.dto.EventRequest;
 import com.miroslav.acitivity_tracker.calendar.dto.EventResponse;
-import com.miroslav.acitivity_tracker.calendar.module.Event;
+import com.miroslav.acitivity_tracker.calendar.model.Event;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")

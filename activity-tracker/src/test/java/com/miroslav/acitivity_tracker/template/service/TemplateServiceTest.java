@@ -1,4 +1,4 @@
-package com.miroslav.acitivity_tracker.template;
+package com.miroslav.acitivity_tracker.template.service;
 
 import com.miroslav.acitivity_tracker.achievement.model.Achievement;
 import com.miroslav.acitivity_tracker.activity.mapper.ActivityMapper;

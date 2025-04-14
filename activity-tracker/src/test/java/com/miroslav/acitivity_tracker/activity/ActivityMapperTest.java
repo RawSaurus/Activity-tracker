@@ -25,8 +25,6 @@ public class ActivityMapperTest {
                 .info("short info")
                 .type("type")
                 .category(Category.SPORT)
-                .rating(2.0)
-                .downloads(20)
                 .build();
 
         ActivityResponse response = activityMapper.toResponse(activity);

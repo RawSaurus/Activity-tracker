@@ -30,7 +30,7 @@ public class Config {
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(
                                 "/auth/**",
-                                "v2/api-docs",
+                                "/v2/api-docs",
                                 "/v3/api-docs",
                                 "/v3/api-docs/**",
                                 "/swagger-resources",
@@ -39,8 +39,7 @@ public class Config {
                                 "/configuration/security",
                                 "/swagger-ui/**",
                                 "/webjars/**",
-                                "/swagger-ui.html",
-                                "/h2-console"
+                                "/swagger-ui.html"
                         ).permitAll()
                                 .anyRequest()
                                 .authenticated()

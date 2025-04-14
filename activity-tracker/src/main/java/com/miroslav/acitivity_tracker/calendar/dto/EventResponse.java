@@ -1,6 +1,6 @@
 package com.miroslav.acitivity_tracker.calendar.dto;
 
-import com.miroslav.acitivity_tracker.calendar.module.EventType;
+import com.miroslav.acitivity_tracker.calendar.model.EventType;
 
 import java.time.LocalDateTime;
 

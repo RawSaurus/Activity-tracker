@@ -1,6 +1,6 @@
 package com.miroslav.acitivity_tracker.util.enums;
 
-import com.miroslav.acitivity_tracker.calendar.module.EventType;
+import com.miroslav.acitivity_tracker.calendar.model.EventType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: test
   datasource:
-    url: jdbc:h2:mem:public
+    url: jdbc:h2:mem:activity_tracker
     driverClassName: org.h2.Driver
     username: user
     password: password
@@ -16,3 +16,6 @@ spring:
   sql:
     init:
       mode: always
+  h2:
+    console:
+      enabled: true

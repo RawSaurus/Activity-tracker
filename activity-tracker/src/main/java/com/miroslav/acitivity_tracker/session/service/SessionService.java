@@ -1,10 +1,9 @@
 package com.miroslav.acitivity_tracker.session.service;
 
-import com.miroslav.acitivity_tracker.activity.controller.ActivityController;
 import com.miroslav.acitivity_tracker.activity.repository.ActivityRepository;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
-import com.miroslav.acitivity_tracker.calendar.module.Event;
-import com.miroslav.acitivity_tracker.calendar.module.EventType;
+import com.miroslav.acitivity_tracker.calendar.model.Event;
+import com.miroslav.acitivity_tracker.calendar.model.EventType;
 import com.miroslav.acitivity_tracker.calendar.repository.EventRepository;
 import com.miroslav.acitivity_tracker.security.UserContext;
 import com.miroslav.acitivity_tracker.session.dto.SessionRequest;
@@ -13,22 +12,15 @@ import com.miroslav.acitivity_tracker.session.mapper.SessionMapper;
 import com.miroslav.acitivity_tracker.session.model.Session;
 import com.miroslav.acitivity_tracker.session.repository.SessionRepository;
 import com.miroslav.acitivity_tracker.user.model.Profile;
-import com.miroslav.acitivity_tracker.user.model.User;
 import com.miroslav.acitivity_tracker.user.repository.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 

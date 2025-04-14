@@ -2,14 +2,12 @@ package com.miroslav.acitivity_tracker.user.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
-import com.miroslav.acitivity_tracker.calendar.module.Event;
+import com.miroslav.acitivity_tracker.calendar.model.Event;
 import com.miroslav.acitivity_tracker.file.model.File;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.bind.annotation.Mapping;
 
 import java.util.List;
-import java.util.Map;
 
 import static jakarta.persistence.FetchType.LAZY;
 

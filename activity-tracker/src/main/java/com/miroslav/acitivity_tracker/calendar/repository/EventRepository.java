@@ -1,7 +1,7 @@
 package com.miroslav.acitivity_tracker.calendar.repository;
 
-import com.miroslav.acitivity_tracker.calendar.module.Event;
-import com.miroslav.acitivity_tracker.calendar.module.EventType;
+import com.miroslav.acitivity_tracker.calendar.model.Event;
+import com.miroslav.acitivity_tracker.calendar.model.EventType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -24,6 +24,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -270,12 +271,19 @@ public class AchievementTypeService {
                 .setXPGain(setXpGain)
                 .build();
         //TODO DailyAchievementCalendar
+        var dailyToSave = dailyARepository.save(dailyAchievement);
+        DailyAchievementCalendar cal = DailyAchievementCalendar.builder()
+                .day(LocalDate.now())
+                .dailyAchievement(dailyToSave)
+                .build();
+
+        dailyCalendar.save(cal);
 
 //        achievement.setTypeSuperclass(dailyARepository.save(dailyAchievement).getTypeAchievementId());
 
 //        profileRepository.save(profile);
 //        activityRepository.save(activity);
-        return dailyARepository.save(dailyAchievement).getTypeAchievementId();
+        return dailyToSave.getTypeAchievementId();
     }
     public Integer createAmountAchievement(AchievementRequest request, Integer activityId, int setXpGain, String unit) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())

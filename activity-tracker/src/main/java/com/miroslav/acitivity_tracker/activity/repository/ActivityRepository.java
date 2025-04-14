@@ -29,13 +29,13 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
 //            WHERE activity.activityId = activityId
 //            AND activity.isPrivate = false
 //            """)
-    Optional<Activity> findActivityByActivityIdAndIsPrivate(Integer activityId, boolean isPrivate);
-    @Query("""
-            Select activity
-            FROM Activity activity
-            WHERE activity.name = name
-            AND activity.isPrivate = false
-            """)
-    List<Activity> findInMarketByName(String name);
+//    Optional<Activity> findActivityByActivityIdAndIsPrivate(Integer activityId, boolean isPrivate);
+//    @Query("""
+//            Select activity
+//            FROM Activity activity
+//            WHERE activity.name = name
+//            AND activity.isPrivate = false
+//            """)
+//    List<Activity> findInMarketByName(String name);
 
 }

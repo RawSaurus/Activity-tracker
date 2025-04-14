@@ -1,11 +1,9 @@
 package com.miroslav.acitivity_tracker.calendar.controller;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.miroslav.acitivity_tracker.calendar.assembler.EventAssembler;
 import com.miroslav.acitivity_tracker.calendar.dto.EventRequest;
 import com.miroslav.acitivity_tracker.calendar.dto.EventResponse;
-import com.miroslav.acitivity_tracker.calendar.module.Event;
-import com.miroslav.acitivity_tracker.calendar.module.EventType;
+import com.miroslav.acitivity_tracker.calendar.model.EventType;
 import com.miroslav.acitivity_tracker.calendar.service.CalendarService;
 import com.miroslav.acitivity_tracker.util.enums.EnumValidator;
 import jakarta.validation.Valid;
@@ -14,15 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
