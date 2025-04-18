@@ -15,7 +15,6 @@ public interface CommentMapper {
     @Mapping(target = "profile", ignore = true)
     @Mapping(target = "postedAt", ignore = true)
     @Mapping(target = "likes", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "commentId", ignore = true)
     Comment toEntity(CommentRequest request);
 
@@ -26,7 +25,6 @@ public interface CommentMapper {
     @Mapping(target = "profile", ignore = true)
     @Mapping(target = "postedAt", ignore = true)
     @Mapping(target = "likes", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "commentId", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
     void updateToEntity(@MappingTarget Comment comment, CommentRequest request);

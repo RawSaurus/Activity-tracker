@@ -115,7 +115,6 @@ public class FileService {
         return fileRepository.save(fileToSave);
     }
 
-    //TODO test
     public File updateFile(String fileCode, MultipartFile file){
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -160,7 +159,7 @@ public class FileService {
         fileRepository.deleteByFileCode(filePath.split("-")[0]);
     }
 
-    //works
+    // Deletes directory with File-Uploads
     public void deleteDir(java.io.File file) {
         java.io.File[] contents = file.listFiles();
         if (contents != null) {
@@ -173,7 +172,9 @@ public class FileService {
         file.delete();
     }
 
-    //TODO test
+    // Deletes all entities from DB, together with their file representation
+    // Files with no DB backing won't be deleted
+    // For full erasure use together with deleteDir()
     public void deleteAll(){
         List<File> list = fileRepository.findAll();
         for(File f : list){
@@ -181,7 +182,8 @@ public class FileService {
                 Path path = rootLocation.resolve(f.getFilePath());
                 Files.delete(path);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new StorageException("Could not delete file " + f.getFilePath());
+
             }
         }
         fileRepository.deleteAll();

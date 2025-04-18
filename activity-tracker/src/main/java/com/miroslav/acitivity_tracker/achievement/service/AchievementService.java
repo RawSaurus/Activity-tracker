@@ -76,27 +76,19 @@ public class AchievementService {
 //        }
 //    }
 
-    //TODO works/ create checks if activity public if creator == user, or if private if activity is in user library
     public Integer createAchievement(AchievementRequest request, Integer activityId) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-        Activity activity = profile.getActivities()
-                        .stream()
-                        .filter(a -> a.getActivityId().equals(activityId))
-                        .findFirst()
-                        .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
         if(activity.getAchievements().stream().anyMatch(a -> a.getName().equals(request.name()))){
             throw new ActionNotAllowed("This activity already has achievement with same name");
         }
 
-        //TODO test how to persist/ change cascades in entities
-
         Achievement achievement = achievementMapper.toEntity(request);
         activity.getAchievements().add(achievement);
 
-//        profileRepository.save(profile);
-//        activityRepository.save(activity);
         return achievementRepository.save(achievement).getAchievementId();
     }
 
@@ -138,6 +130,7 @@ public class AchievementService {
 
 
     //TODO works/ add checks
+    //TODO not needed since AchievementTypeService, if kept change to just delete by repo method
     public ResponseEntity deleteAchievement(Integer activityId, Integer achievementId) {
 
         Activity activity = activityRepository.findById(activityId)

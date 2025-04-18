@@ -8,6 +8,7 @@ import com.miroslav.acitivity_tracker.achievement.mapper.AchievementMapper;
 import com.miroslav.acitivity_tracker.achievement.model.*;
 import com.miroslav.acitivity_tracker.achievement.repository.*;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
+import com.miroslav.acitivity_tracker.activity.repository.ActivityRepository;
 import com.miroslav.acitivity_tracker.calendar.repository.EventRepository;
 import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
 import com.miroslav.acitivity_tracker.file.assembler.FileAssembler;
@@ -38,6 +39,7 @@ public class AchievementTypeService {
 
     private final ProfileRepository profileRepository;
     private final AchievementRepository achievementRepository;
+    private final ActivityRepository activityRepository;
 
     private final AmountAchievementRepository amountARepository;
     private final DailyAchievementRepository dailyARepository;
@@ -217,10 +219,7 @@ public class AchievementTypeService {
     public Integer createGoalAchievement(AchievementRequest request, Integer activityId, Date deadline, int setXpGain) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-        Activity activity = profile.getActivities()
-                .stream()
-                .filter(a -> a.getActivityId().equals(activityId))
-                .findFirst()
+        Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
         if(activity.getAchievements().stream().anyMatch(a -> a.getName().equals(request.name()))){
@@ -240,19 +239,12 @@ public class AchievementTypeService {
                 .setXPGain(setXpGain)
                 .build();
 
-//        achievement.setTypeSuperclass(goalARepository.save(goalAchievement).getTypeAchievementId());
-
-//        profileRepository.save(profile);
-//        activityRepository.save(activity);
         return goalARepository.save(goalAchievement).getTypeAchievementId();
     }
     public Integer createDailyAchievement(AchievementRequest request, Integer activityId, int setXpGain) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-        Activity activity = profile.getActivities()
-                .stream()
-                .filter(a -> a.getActivityId().equals(activityId))
-                .findFirst()
+        Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
         if(activity.getAchievements().stream().anyMatch(a -> a.getName().equals(request.name()))){
@@ -288,10 +280,7 @@ public class AchievementTypeService {
     public Integer createAmountAchievement(AchievementRequest request, Integer activityId, int setXpGain, String unit) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-        Activity activity = profile.getActivities()
-                .stream()
-                .filter(a -> a.getActivityId().equals(activityId))
-                .findFirst()
+        Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
         if(activity.getAchievements().stream().anyMatch(a -> a.getName().equals(request.name()))){
