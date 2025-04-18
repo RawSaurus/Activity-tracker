@@ -50,6 +50,10 @@ public class CommentService {
          Comment comment = commentRepository.findById(commentId)
                  .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
 
+        if(!comment.getProfile().getProfileId().equals(userContext.getAuthenticatedUser().getUserId())){
+            throw new ActionNotAllowed("You are not allowed to update this comment");
+        }
+
          commentMapper.updateToEntity(comment, request);
 
          return commentMapper.toResponse(commentRepository.save(comment));
@@ -60,7 +64,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
 
-        if(!comment.getCreatedBy().equals(userContext.getAuthenticatedUser().getUserId())){
+        if(!comment.getProfile().getProfileId().equals(userContext.getAuthenticatedUser().getUserId())){
             throw new ActionNotAllowed("You are not allowed to delete this comment");
         }
         commentRepository.delete(comment);

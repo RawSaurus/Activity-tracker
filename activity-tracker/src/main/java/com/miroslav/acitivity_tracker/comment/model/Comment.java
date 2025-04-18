@@ -32,9 +32,6 @@ public class Comment {
     private String header;
     private String text;
     private int likes;
-    @CreatedBy
-    @Column(updatable = false, nullable = false)
-    private Integer createdBy;
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private Date postedAt;

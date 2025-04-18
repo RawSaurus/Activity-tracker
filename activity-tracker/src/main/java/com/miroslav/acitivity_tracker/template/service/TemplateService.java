@@ -57,13 +57,6 @@ public class TemplateService {
         EntityModel<TemplateResponse> model = EntityModel.of(templateMapper.toResponse(template));
         fileAssembler.addLinks(model, template.getPicture().getFileCode());
         return model;
-//        return EntityModel.of(
-//            templateMapper.toResponse(
-//                template
-//            )
-//        ).add(linkTo(methodOn(FileController.class).downloadFile(template.getPicture().getFileId())).withRel("get-picture"))
-//        .add(linkTo(methodOn(FileController.class).updateFile(template.getPicture().getFileCode(), null)).withRel("update-picture"))
-//        .add(linkTo(methodOn(FileController.class).deleteFile(template.getPicture().getFileCode())).withRel("delete-picture"));
     }
 
     //new

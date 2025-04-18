@@ -33,8 +33,6 @@ public class ProfileService {
     private final PasswordEncoder passwordEncoder;
     private final FileService fileService;
     private final FileAssembler<ProfileResponse> fileAssembler;
-    //TODO create methods
-    //TODO create tests
 
     public Profile getProfile(Integer profileId){
         return profileRepository.findById(profileId)
@@ -125,7 +123,7 @@ public class ProfileService {
         profileRepository.deleteById(profileId);
         userRepository.deleteById(profileId);
 
-        return "User deleted successfully";
+        return "Account deleted successfully";
     }
 
     //new
@@ -139,6 +137,6 @@ public class ProfileService {
 
         userRepository.deleteById(userContext.getAuthenticatedUser().getUserId());
 
-        return "User deleted successfully";
+        return "Account deleted successfully";
     }
 }

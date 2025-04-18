@@ -1,4 +1,4 @@
-package com.miroslav.acitivity_tracker.activity;
+package com.miroslav.acitivity_tracker.activity.repository;
 
 import com.miroslav.acitivity_tracker.RepositoryTestConfig;
 import com.miroslav.acitivity_tracker.activity.model.Activity;
@@ -12,6 +12,10 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
@@ -38,12 +42,12 @@ public class ActivityRepositoryTest {
         user.setFirstName("first");
         user.setLastName("last");
         User savedUser = testEntityManager.persist(user);
-        Profile profile = Profile.builder()
+        Profile profileToSave = Profile.builder()
                 .profileId(savedUser.getUserId())
                 .user(savedUser)
                 .username("username")
                 .build();
-        profile = testEntityManager.persist(profile);
+        profile = testEntityManager.persist(profileToSave);
         activity = Activity.builder()
                 .name("activity")
                 .info("info")
@@ -73,12 +77,32 @@ public class ActivityRepositoryTest {
     }
 
     @Test
+    public void should_find_activity_by_name(){
+        Optional<Activity> foundActivity = activityRepository.findByName("activity");
+
+        assertNotNull(foundActivity.get());
+        assertEquals(activity.getName(), foundActivity.get().getName());
+    }
+
+    @Test
     public void should_successfully_find_activity_list_by_name(){
         List<Activity> foundList = activityRepository.findAllByName("activity");
 
         assertNotNull(foundList);
         assertEquals(activity.getName(), foundList.get(0).getName());
         assertThrows(IndexOutOfBoundsException.class, ()->foundList.get(1));
+    }
+
+    @Test
+    public void should_find_page_by_profile_id(){
+
+        Pageable pageable = PageRequest.of(0, 2, Sort.Direction.ASC, "name");
+
+        Page<Activity> foundPage = activityRepository.findAllByProfileProfileId(profile.getProfileId(), pageable);
+
+        assertNotNull(foundPage.getContent());
+        assertEquals(2, foundPage.getContent().size());
+        assertEquals("activity", foundPage.getContent().get(0).getName());
     }
 
 //    @Test
@@ -90,18 +114,31 @@ public class ActivityRepositoryTest {
 //        assertThrows(IndexOutOfBoundsException.class, ()->foundList.get(1));
 //    }
 
-//    @Test
-//    public void should_find_activity_by_activityId_and_profileId(){
-//        //TODO duplicate key error when saving same profile to different activities - check connections between tables
-//
-//        Optional<Activity> foundActivity = activityRepository.findActivityByActivityIdAndProfileProfileId(
-//                1,  3
-//        );
-//        assertNotNull(foundActivity);
-//        assertTrue(foundActivity.isPresent());
-//        assertEquals(1, foundActivity.get().getActivityId());
-//        assertEquals(3, foundActivity.get().getProfile().getProfileId());
-//    }
+    @Test
+    public void should_find_by_profile_id_and_name(){
+
+        Optional<Activity> foundActivity = activityRepository.findByProfileProfileIdAndName(1, "activity");
+
+        assertNotNull(foundActivity);
+        assertTrue(foundActivity.isPresent());
+        assertEquals(1, foundActivity.get().getActivityId());
+        assertEquals(1, foundActivity.get().getProfile().getProfileId());
+        assertEquals("activity", foundActivity.get().getName());
+    }
+
+    @Test
+    public void should_find_activity_by_activityId_and_profileId(){
+
+        Optional<Activity> foundActivity = activityRepository.findActivityByActivityIdAndProfileProfileId(activity.getActivityId(),  profile.getProfileId());
+
+        System.out.println("____________");
+        System.out.println(activity.getActivityId());
+        System.out.println(activity.getProfile().getProfileId());
+
+        assertNotNull(foundActivity);
+        assertTrue(foundActivity.isPresent());
+        assertEquals("activity", foundActivity.get().getName());
+    }
 
 //    @Test
 //    public void should_find_successfully_activity_by_name_and_creatorId(){

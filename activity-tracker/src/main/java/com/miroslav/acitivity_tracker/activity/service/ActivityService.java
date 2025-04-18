@@ -41,14 +41,12 @@ public class ActivityService {
     private final FileService fileService;
     private final FileAssembler<ActivityResponse> fileAssembler;
 
-    //TODO create unit tests
     public ActivityResponse findById(Integer activityId) {
         return activityRepository.findById(activityId)
                 .map(activityMapper::toResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
     }
 
-    //new
     public EntityModel<ActivityResponse> findByIdWithLinks(Integer activityId){
         Activity activity = activityRepository.findById(activityId).orElseThrow(()-> new EntityNotFoundException("Activity not found"));
         EntityModel<ActivityResponse> model = EntityModel.of(activityMapper.toResponse(activity));
@@ -63,14 +61,12 @@ public class ActivityService {
 //                .collect(Collectors.toList());
 //    }
 
-    //TODO test
     public ActivityResponse findInUserLibrary(Integer activityId) {
         return activityRepository.findActivityByActivityIdAndProfileProfileId(activityId, userContext.getAuthenticatedUser().getUserId())
                 .map(activityMapper::toResponse)
                 .orElse(null);
     }
 
-    //TODO test
     public ActivityResponse findInUserLibraryByName(String name){
         return activityRepository.findByProfileProfileIdAndName(userContext.getAuthenticatedUser().getUserId(), name)
                 .map(activityMapper::toResponse)
@@ -93,7 +89,6 @@ public class ActivityService {
         });
     }
 
-    //TODO test
     public Integer createActivity(ActivityRequest request) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
@@ -114,7 +109,7 @@ public class ActivityService {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
-        if(activity.getProfile().getProfileId().equals(userContext.getAuthenticatedUser().getUserId())){ //TODO isPrivate not working
+        if(activity.getProfile().getProfileId().equals(userContext.getAuthenticatedUser().getUserId())){
             activityMapper.updateToEntity(request, activity);
             activityRepository.save(activity);
         }

@@ -52,13 +52,9 @@ public class GroupService {
                 .collect(Collectors.toList());
     }
 
-    //TODO test
     public String createGroup(GroupRequest request) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-//      check if profile already doesn't contain group with same name
-        //
-//      if yes throw action not allowed and if not create new one
         if(groupRepository.findGroupByProfileProfileIdAndName(profile.getProfileId(), request.name()).isPresent()){
             throw new ActionNotAllowed("Group with this name already exists");
         }
@@ -70,7 +66,6 @@ public class GroupService {
         return groupRepository.save(group).getName();
     }
 
-    //TODO test
     public GroupResponse addActivityToGroup(Integer groupId, Integer activityId) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
