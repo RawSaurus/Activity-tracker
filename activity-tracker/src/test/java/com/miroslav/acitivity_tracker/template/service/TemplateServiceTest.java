@@ -62,11 +62,6 @@ public class TemplateServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    /**
-     * findByIdWithLinks
-     * findAllByIdWithLinks
-     */
-
     User user;
     Profile profile;
     Template template1;
@@ -261,22 +256,17 @@ public class TemplateServiceTest {
 
     @Test
     public void should_throw_exception_when_deleting_template_not_owned_by_user() {
-        User user = new User();
-        user.setUserId(1);
-        when(userContext.getAuthenticatedUser()).thenReturn(user);
-        Profile userProfile = Profile.builder()
-                .profileId(user.getUserId())
-                .user(user)
-                .build();
+        User otherUser = User.builder()
+                        .userId(3)
+                        .build();
+        Profile otherProfile = Profile.builder()
+                        .profileId(otherUser.getUserId())
+                        .user(user)
+                        .build();
 
-        Profile profile = new Profile();
-        profile.setProfileId(2);
-        when(profileRepository.findById(1)).thenReturn(Optional.of(profile));
-
-        Template template = new Template();
-        template.setTemplateId(1);
-        template.setProfile(profile);
-        when(templateRepository.findById(1)).thenReturn(Optional.of(template));
+        when(userContext.getAuthenticatedUser()).thenReturn(otherUser);
+        when(profileRepository.findById(otherUser.getUserId())).thenReturn(Optional.of(otherProfile));
+        when(templateRepository.findById(1)).thenReturn(Optional.of(template1));
 
         assertThrows(ActionNotAllowed.class, () -> templateService.deleteTemplate(1));
     }

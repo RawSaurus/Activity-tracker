@@ -1,7 +1,5 @@
 package com.miroslav.acitivity_tracker.template.controller;
 
-import com.miroslav.acitivity_tracker.activity.dto.ActivityRequest;
-import com.miroslav.acitivity_tracker.activity.dto.ActivityResponse;
 import com.miroslav.acitivity_tracker.template.dto.TemplateRequest;
 import com.miroslav.acitivity_tracker.template.dto.TemplateResponse;
 import com.miroslav.acitivity_tracker.template.service.TemplateService;
@@ -17,11 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("template")
+@RequestMapping("/template")
 public class TemplateController {
 
     private final TemplateService templateService;

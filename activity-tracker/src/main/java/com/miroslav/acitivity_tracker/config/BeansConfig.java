@@ -11,7 +11,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.JpaRepositoryConfigExtension;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -32,7 +34,9 @@ import static org.springframework.http.HttpHeaders.*;
 
 @Configuration
 @RequiredArgsConstructor
-@Profile("!test")
+//@Profile("!test")
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@EnableAsync
 public class BeansConfig {
 
     private final UserDetailsService userDetailsService;

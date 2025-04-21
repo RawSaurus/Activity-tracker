@@ -73,7 +73,6 @@ public class ActivityRepositoryTest {
     @AfterEach
     public void tearDown(){
         activityRepository.deleteAll();
-//        testEntityManager.remove(profile);
     }
 
     @Test
@@ -117,12 +116,12 @@ public class ActivityRepositoryTest {
     @Test
     public void should_find_by_profile_id_and_name(){
 
-        Optional<Activity> foundActivity = activityRepository.findByProfileProfileIdAndName(1, "activity");
+        Optional<Activity> foundActivity = activityRepository.findByProfileProfileIdAndName(profile.getProfileId(), "activity");
 
         assertNotNull(foundActivity);
         assertTrue(foundActivity.isPresent());
-        assertEquals(1, foundActivity.get().getActivityId());
-        assertEquals(1, foundActivity.get().getProfile().getProfileId());
+        assertEquals(activity.getActivityId(), foundActivity.get().getActivityId());
+        assertEquals(profile.getProfileId(), foundActivity.get().getProfile().getProfileId());
         assertEquals("activity", foundActivity.get().getName());
     }
 
@@ -130,10 +129,6 @@ public class ActivityRepositoryTest {
     public void should_find_activity_by_activityId_and_profileId(){
 
         Optional<Activity> foundActivity = activityRepository.findActivityByActivityIdAndProfileProfileId(activity.getActivityId(),  profile.getProfileId());
-
-        System.out.println("____________");
-        System.out.println(activity.getActivityId());
-        System.out.println(activity.getProfile().getProfileId());
 
         assertNotNull(foundActivity);
         assertTrue(foundActivity.isPresent());
