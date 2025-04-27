@@ -165,7 +165,7 @@ public class AchievementController {
     @PatchMapping("/{achievement-id}")
     public ResponseEntity markFinished(@PathVariable("achievement-id")Integer achievementId){
         achievementService.markFinished(achievementId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/image/{achievement-id}")
@@ -175,8 +175,8 @@ public class AchievementController {
     }
 
     @DeleteMapping("/{activity-id}/{achievement-id}")
-    public ResponseEntity deleteAchievement(@PathVariable("activity-id") Integer activityId,
+    public ResponseEntity<String> deleteAchievement(@PathVariable("activity-id") Integer activityId,
                                             @PathVariable("achievement-id") Integer achievementId){
-        return achievementService.deleteAchievement(activityId, achievementId);
+        return ResponseEntity.ok(achievementService.deleteAchievement(activityId, achievementId));
     }
 }

@@ -131,7 +131,7 @@ public class AchievementService {
 
     //TODO works/ add checks
     //TODO not needed since AchievementTypeService, if kept change to just delete by repo method
-    public ResponseEntity deleteAchievement(Integer activityId, Integer achievementId) {
+    public String deleteAchievement(Integer activityId, Integer achievementId) {
 
         Activity activity = activityRepository.findById(activityId)
                         .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
@@ -144,7 +144,7 @@ public class AchievementService {
         activityRepository.save(activity);
         achievementRepository.deleteById(achievementId);
 
-        return ResponseEntity.ok("Achievement deleted");
+        return "Achievement deleted successfully";
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("comment")
+@RequestMapping("/comment")
 public class CommentController {
 
     private final CommentService commentService;
@@ -52,6 +52,4 @@ public class CommentController {
     public ResponseEntity<String> deleteComment(@PathVariable("comment-id") Integer commentId){
         return ResponseEntity.ok(commentService.deleteComment(commentId));
     }
-
-
 }

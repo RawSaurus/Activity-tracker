@@ -23,11 +23,8 @@ public class SessionController {
 
     private final SessionService sessionService;
 
-    //TODO create tests
     //TODO add authorization
 
-    //TODO make into response
-    //TODO always returns 1
     @GetMapping("/{session-id}")
     public ResponseEntity<SessionResponse> findById(@PathVariable("session-id")Integer sessionId){
         return ResponseEntity.ok(sessionService.findById(sessionId));
@@ -82,9 +79,8 @@ public class SessionController {
     }
 
     @DeleteMapping("/{activity-id}/{session-id}")
-    public ResponseEntity deleteSession(@PathVariable("activity-id") Integer activityId,
+    public ResponseEntity<?> deleteSession(@PathVariable("activity-id") Integer activityId,
                                         @PathVariable("session-id") Integer sessionId){
-        return sessionService.deleteSession(activityId, sessionId);
+        return ResponseEntity.ok(sessionService.deleteSession(activityId, sessionId));
     }
-
 }

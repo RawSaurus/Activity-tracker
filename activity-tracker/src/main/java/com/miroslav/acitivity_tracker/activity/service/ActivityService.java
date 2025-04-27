@@ -126,7 +126,7 @@ public class ActivityService {
     }
 
     //new
-    public ResponseEntity<?> deleteActivityById(Integer activityId) {
+    public String deleteActivityById(Integer activityId) {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
@@ -140,9 +140,9 @@ public class ActivityService {
                 }
             }
             activityRepository.delete(activity);
-            return ResponseEntity.ok("Deleted successfully");
+            return "Activity deleted successfully";
         }else
-            return ResponseEntity.badRequest().body("You are not creator of this activity");
+            throw new ActionNotAllowed("You are not creator of this activity");
 
     }
 }

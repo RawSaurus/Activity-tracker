@@ -1,4 +1,4 @@
-package com.miroslav.acitivity_tracker.activity;
+package com.miroslav.acitivity_tracker.activity.service;
 
 import com.miroslav.acitivity_tracker.activity.dto.ActivityRequest;
 import com.miroslav.acitivity_tracker.activity.dto.ActivityResponse;
@@ -215,9 +215,9 @@ public class ActivityServiceTest {
 
         when(activityRepository.findById(activity.getActivityId())).thenReturn(Optional.of(activity));
 
-        String result = (String) activityService.deleteActivityById(activity.getActivityId()).getBody();
+        String result = activityService.deleteActivityById(activity.getActivityId());
 
-        assertEquals("Deleted successfully", result);
+        assertEquals("Activity deleted successfully", result);
         verify(activityRepository, times(1)).delete(activity);
     }
 }

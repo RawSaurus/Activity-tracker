@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("profile")
+@RequestMapping("/profile")
 public class ProfileController {
 
     private final ProfileService profileService;
@@ -93,5 +93,4 @@ public class ProfileController {
     public ResponseEntity<String> deleteOwnAccount(){
         return ResponseEntity.ok(profileService.deleteOwnAccount());
     }
-
 }

@@ -185,10 +185,10 @@ public class SessionServiceTest {
         when(userContext.getAuthenticatedUser()).thenReturn(user);
         doNothing().when(sessionRepository).delete(session1);
 
-        ResponseEntity response = sessionService.deleteSession(activity.getActivityId(), session1.getSessionId());
+        String response = sessionService.deleteSession(activity.getActivityId(), session1.getSessionId());
 
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody()).isEqualTo("Session deleted successfully");
+        assertThat(response).isNotNull();
+        assertThat(response).isEqualTo("Session deleted successfully");
     }
 
     @Test

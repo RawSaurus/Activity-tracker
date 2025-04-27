@@ -52,23 +52,25 @@ public class CalendarController {
     }
 
     @GetMapping("/time-period")
-    public ResponseEntity<Page<EntityModel<EventResponse>>> findAllInTimePeriod(@RequestParam LocalDateTime start,
-                                                                                @RequestParam LocalDateTime end,
-                                                                                @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                                                @RequestParam(value = "size", defaultValue = "10") Integer size,
-                                                                                @RequestParam(value = "sort", defaultValue = "startTime") String sortBy,
-                                                                                @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection
+    public ResponseEntity<Page<EntityModel<EventResponse>>> findAllInTimePeriod(
+            @RequestParam LocalDateTime start,
+            @RequestParam LocalDateTime end,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "sort", defaultValue = "startTime") String sortBy,
+            @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection
     ){
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
         return ResponseEntity.ok(calendarService.findAllInTimePeriod(start, end, pageable));
     }
 
     @GetMapping("/type")
-    public ResponseEntity<Page<EntityModel<EventResponse>>> findAllByType(@RequestParam("type") @Valid @EnumValidator(enumClazz = EventType.class) String type,
-                                                                          @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                                          @RequestParam(value = "size", defaultValue = "10") Integer size,
-                                                                          @RequestParam(value = "sort", defaultValue = "startTime") String sortBy,
-                                                                          @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection
+    public ResponseEntity<Page<EntityModel<EventResponse>>> findAllByType(
+            @RequestParam("type") @Valid @EnumValidator(enumClazz = EventType.class) String type,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "sort", defaultValue = "startTime") String sortBy,
+            @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
         return ResponseEntity.ok(calendarService.findAllByType(type, pageable));
@@ -102,6 +104,6 @@ public class CalendarController {
     @DeleteMapping("/{event-id}")
     public ResponseEntity deleteEvent(@PathVariable("event-id")Integer eventId){
         calendarService.deleteEvent(eventId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

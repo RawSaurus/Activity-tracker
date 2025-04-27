@@ -145,13 +145,13 @@ public class SessionService {
         return sessionRepository.save(session).getSessionId();
     }
 
-    public ResponseEntity deleteSession(Integer activityId, Integer sessionId) {
+    public String deleteSession(Integer activityId, Integer sessionId) {
         Session session = sessionRepository.findFromProfile(sessionId, activityId, (userContext.getAuthenticatedUser().getUserId()))
                 .orElseThrow(() -> new EntityNotFoundException("Session not found"));
 
         sessionRepository.delete(session);
 
-        return ResponseEntity.ok("Session deleted successfully");
+        return "Session deleted successfully";
     }
 }
 

@@ -29,7 +29,6 @@ public class ActivityController {
 
 
     //TODO add authorization
-    //TODO create tests
 
     @GetMapping("/{activity-id}")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -42,7 +41,7 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.findInUserLibrary(activityId));
     }
 
-    @GetMapping("name/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<ActivityResponse> findInUserLibraryByName(@PathVariable("name") String name){
         return ResponseEntity.ok(activityService.findInUserLibraryByName(name));
     }
@@ -63,7 +62,7 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.findByIdWithLinks(activityId));
     }
 
-    @GetMapping("all/links")
+    @GetMapping("/all/links")
     public ResponseEntity<Page<EntityModel<ActivityResponse>>> findAllWithLinks(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "10") Integer size,
@@ -84,8 +83,7 @@ public class ActivityController {
     }
 
     @PutMapping("/{activity-id}")
-    public ResponseEntity<ActivityResponse> updateActivity(@PathVariable("activity-id") Integer activityId, @RequestBody ActivityRequest request,
-                                                           Authentication user){
+    public ResponseEntity<ActivityResponse> updateActivity(@PathVariable("activity-id") Integer activityId, @RequestBody ActivityRequest request){
         return ResponseEntity.accepted().body(activityService.updateActivity(activityId, request));
     }
 
@@ -97,7 +95,6 @@ public class ActivityController {
 
     @DeleteMapping("/{activity-id}")
     public ResponseEntity<?> deleteActivityById(@PathVariable("activity-id") Integer activityId){
-        return activityService.deleteActivityById(activityId);
+        return ResponseEntity.ok(activityService.deleteActivityById(activityId));
     }
-
 }
