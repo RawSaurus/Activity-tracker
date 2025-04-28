@@ -50,7 +50,8 @@ public class ActivityService {
     public EntityModel<ActivityResponse> findByIdWithLinks(Integer activityId){
         Activity activity = activityRepository.findById(activityId).orElseThrow(()-> new EntityNotFoundException("Activity not found"));
         EntityModel<ActivityResponse> model = EntityModel.of(activityMapper.toResponse(activity));
-        fileAssembler.addLinks(model, activity.getPicture().getFileCode());
+        if(activity.getPicture() != null)
+            fileAssembler.addLinks(model, activity.getPicture().getFileCode());
         return model;
     }
 

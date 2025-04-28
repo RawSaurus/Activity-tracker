@@ -31,7 +31,7 @@ public class CommentController {
             @PathVariable("template-id") Integer templateId,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "10") Integer size,
-            @RequestParam(value = "sort", defaultValue = "createdAt") String sortBy,
+            @RequestParam(value = "sort", defaultValue = "postedAt") String sortBy,
             @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection
     ){
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));

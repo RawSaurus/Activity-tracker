@@ -1,6 +1,7 @@
 package com.miroslav.acitivity_tracker.handler;
 
 import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,6 +21,7 @@ import java.util.Set;
 
 import static com.miroslav.acitivity_tracker.handler.BusinessErrorCodes.*;
 
+@Hidden
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

@@ -142,7 +142,8 @@ public class AchievementTypeService {
         }
 
         EntityModel<AchievementResponseV2> model = EntityModel.of(responseV2);
-        fileAssembler.addLinks(model, achievement.getPicture().getFileCode());
+        if(achievement.getPicture() != null)
+            fileAssembler.addLinks(model, achievement.getPicture().getFileCode());
         return model;
     }
 

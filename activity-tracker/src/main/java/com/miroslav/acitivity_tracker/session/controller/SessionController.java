@@ -40,7 +40,7 @@ public class SessionController {
     public ResponseEntity<Page<SessionResponse>> findAllSessions(@PathVariable("activity-id") Integer activityId,
                                                                  @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                                  @RequestParam(value = "size", defaultValue = "10") Integer size,
-                                                                 @RequestParam(value = "sort", defaultValue = "startTime") String sortBy,
+                                                                 @RequestParam(value = "sort", defaultValue = "start") String sortBy,
                                                                  @RequestParam(value = "sort-direction", defaultValue = "asc") String sortDirection){
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
         return ResponseEntity.ok(sessionService.findAllSessions(activityId, pageable));

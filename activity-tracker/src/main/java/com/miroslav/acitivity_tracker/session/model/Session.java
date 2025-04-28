@@ -43,7 +43,7 @@ public class Session {
     @Column(nullable = false)
     private Date updatedAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(name = "_activity_sessions",
             joinColumns = {@JoinColumn(name = "sessionId")},
             inverseJoinColumns = {@JoinColumn(name = "activityId")}

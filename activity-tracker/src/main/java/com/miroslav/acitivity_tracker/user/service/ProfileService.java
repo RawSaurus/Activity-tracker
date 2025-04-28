@@ -44,7 +44,8 @@ public class ProfileService {
         Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
         EntityModel<ProfileResponse> model = EntityModel.of(profileMapper.toResponse(profile));
-        fileAssembler.addLinks(model, profile.getPicture().getFileCode());
+        if(profile.getPicture() != null)
+            fileAssembler.addLinks(model, profile.getPicture().getFileCode());
         return model;
     }
 

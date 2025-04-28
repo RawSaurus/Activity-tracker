@@ -55,7 +55,9 @@ public class TemplateService {
     public EntityModel<TemplateResponse> findByIdWithLinks(Integer templateId){
         Template template = templateRepository.findById(templateId).orElseThrow(()-> new EntityNotFoundException("Template not found"));
         EntityModel<TemplateResponse> model = EntityModel.of(templateMapper.toResponse(template));
-        fileAssembler.addLinks(model, template.getPicture().getFileCode());
+        if(template.getPicture() != null) {
+            fileAssembler.addLinks(model, template.getPicture().getFileCode());
+        }
         return model;
     }
 

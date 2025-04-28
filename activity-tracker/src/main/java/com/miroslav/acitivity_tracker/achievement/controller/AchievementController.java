@@ -110,12 +110,6 @@ public class AchievementController {
         return ResponseEntity.ok(achievementTypeService.createAmountAchievement(request, activityId, setXpGain, unit));
     }
 
-    @DeleteMapping("/delete-achievement/{achievement-id}")
-    public ResponseEntity deleteAchievement(@PathVariable("achievement-id")Integer achievementId){
-        achievementTypeService.deleteAchievement(achievementId);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
 
 //    @PostMapping("/type")
 //    public ResponseEntity<Void> chooseType(@RequestParam("type") @EnumValidator(enumClass = Type.class) String type) throws IOException {
@@ -163,7 +157,7 @@ public class AchievementController {
     }
 
     @PatchMapping("/{achievement-id}")
-    public ResponseEntity markFinished(@PathVariable("achievement-id")Integer achievementId){
+    public ResponseEntity<?> markFinished(@PathVariable("achievement-id")Integer achievementId){
         achievementService.markFinished(achievementId);
         return ResponseEntity.ok().build();
     }
@@ -174,9 +168,9 @@ public class AchievementController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping("/{activity-id}/{achievement-id}")
-    public ResponseEntity<String> deleteAchievement(@PathVariable("activity-id") Integer activityId,
-                                            @PathVariable("achievement-id") Integer achievementId){
-        return ResponseEntity.ok(achievementService.deleteAchievement(activityId, achievementId));
+    @DeleteMapping("/delete-achievement/{achievement-id}")
+    public ResponseEntity<?> deleteAchievement(@PathVariable("achievement-id")Integer achievementId){
+        achievementTypeService.deleteAchievement(achievementId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
