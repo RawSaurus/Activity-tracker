@@ -25,7 +25,7 @@ import { findById } from '../fn/session-controller/find-by-id';
 import { FindById$Params } from '../fn/session-controller/find-by-id';
 import { findSession } from '../fn/session-controller/find-session';
 import { FindSession$Params } from '../fn/session-controller/find-session';
-import { Session } from '../models/session';
+import { PageSessionResponse } from '../models/page-session-response';
 import { SessionResponse } from '../models/session-response';
 import { updateSession } from '../fn/session-controller/update-session';
 import { UpdateSession$Params } from '../fn/session-controller/update-session';
@@ -95,7 +95,8 @@ export class SessionControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteSession$Response(params: DeleteSession$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+  deleteSession$Response(params: DeleteSession$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
     return deleteSession(this.http, this.rootUrl, params, context);
   }
 
@@ -105,9 +106,12 @@ export class SessionControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteSession(params: DeleteSession$Params, context?: HttpContext): Observable<string> {
+  deleteSession(params: DeleteSession$Params, context?: HttpContext): Observable<{
+}> {
     return this.deleteSession$Response(params, context).pipe(
-      map((r: StrictHttpResponse<string>): string => r.body)
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
     );
   }
 
@@ -220,7 +224,7 @@ export class SessionControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findById$Response(params: FindById$Params, context?: HttpContext): Observable<StrictHttpResponse<Session>> {
+  findById$Response(params: FindById$Params, context?: HttpContext): Observable<StrictHttpResponse<SessionResponse>> {
     return findById(this.http, this.rootUrl, params, context);
   }
 
@@ -230,9 +234,9 @@ export class SessionControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findById(params: FindById$Params, context?: HttpContext): Observable<Session> {
+  findById(params: FindById$Params, context?: HttpContext): Observable<SessionResponse> {
     return this.findById$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Session>): Session => r.body)
+      map((r: StrictHttpResponse<SessionResponse>): SessionResponse => r.body)
     );
   }
 
@@ -245,7 +249,7 @@ export class SessionControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findAllSessions$Response(params: FindAllSessions$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<SessionResponse>>> {
+  findAllSessions$Response(params: FindAllSessions$Params, context?: HttpContext): Observable<StrictHttpResponse<PageSessionResponse>> {
     return findAllSessions(this.http, this.rootUrl, params, context);
   }
 
@@ -255,9 +259,9 @@ export class SessionControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findAllSessions(params: FindAllSessions$Params, context?: HttpContext): Observable<Array<SessionResponse>> {
+  findAllSessions(params: FindAllSessions$Params, context?: HttpContext): Observable<PageSessionResponse> {
     return this.findAllSessions$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<SessionResponse>>): Array<SessionResponse> => r.body)
+      map((r: StrictHttpResponse<PageSessionResponse>): PageSessionResponse => r.body)
     );
   }
 

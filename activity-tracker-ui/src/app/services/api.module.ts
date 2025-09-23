@@ -4,7 +4,13 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { TemplateControllerService } from './services/template-controller.service';
 import { SessionControllerService } from './services/session-controller.service';
+import { ProfileControllerService } from './services/profile-controller.service';
+import { GroupControllerService } from './services/group-controller.service';
+import { FileControllerService } from './services/file-controller.service';
+import { CommentControllerService } from './services/comment-controller.service';
+import { CalendarControllerService } from './services/calendar-controller.service';
 import { ActivityControllerService } from './services/activity-controller.service';
 import { AchievementControllerService } from './services/achievement-controller.service';
 import { AuthenticationService } from './services/authentication.service';
@@ -17,7 +23,13 @@ import { AuthenticationService } from './services/authentication.service';
   exports: [],
   declarations: [],
   providers: [
+    TemplateControllerService,
     SessionControllerService,
+    ProfileControllerService,
+    GroupControllerService,
+    FileControllerService,
+    CommentControllerService,
+    CalendarControllerService,
     ActivityControllerService,
     AchievementControllerService,
     AuthenticationService,

@@ -2,6 +2,7 @@
 /* eslint-disable */
 import { Achievement } from '../models/achievement';
 import { Comment } from '../models/comment';
+import { File } from '../models/file';
 import { Profile } from '../models/profile';
 import { Session } from '../models/session';
 export interface Activity {
@@ -11,16 +12,11 @@ export interface Activity {
   comments?: Array<Comment>;
   createdAt?: string;
   creator?: string;
-  creatorId?: number;
-  downloads?: number;
   info?: string;
   name?: string;
-  original?: boolean;
-  originalActivity?: number;
-  picture?: Array<string>;
+  picture?: File;
   private?: boolean;
   profile?: Profile;
-  rating?: number;
   sessions?: Array<Session>;
   type?: string;
   updatedAt?: string;

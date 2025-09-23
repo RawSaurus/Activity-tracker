@@ -1,4 +1,10 @@
+export { TemplateControllerService } from './services/template-controller.service';
 export { SessionControllerService } from './services/session-controller.service';
+export { ProfileControllerService } from './services/profile-controller.service';
+export { GroupControllerService } from './services/group-controller.service';
+export { FileControllerService } from './services/file-controller.service';
+export { CommentControllerService } from './services/comment-controller.service';
+export { CalendarControllerService } from './services/calendar-controller.service';
 export { ActivityControllerService } from './services/activity-controller.service';
 export { AchievementControllerService } from './services/achievement-controller.service';
 export { AuthenticationService } from './services/authentication.service';

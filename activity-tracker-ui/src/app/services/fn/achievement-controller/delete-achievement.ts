@@ -8,14 +8,13 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface DeleteAchievement$Params {
-  'activity-id': number;
   'achievement-id': number;
 }
 
-export function deleteAchievement(http: HttpClient, rootUrl: string, params: DeleteAchievement$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+export function deleteAchievement(http: HttpClient, rootUrl: string, params: DeleteAchievement$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
   const rb = new RequestBuilder(rootUrl, deleteAchievement.PATH, 'delete');
   if (params) {
-    rb.path('activity-id', params['activity-id'], {});
     rb.path('achievement-id', params['achievement-id'], {});
   }
 
@@ -24,9 +23,10 @@ export function deleteAchievement(http: HttpClient, rootUrl: string, params: Del
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<string>;
+      return r as StrictHttpResponse<{
+      }>;
     })
   );
 }
 
-deleteAchievement.PATH = '/achievement/{activity-id}/{achievement-id}';
+deleteAchievement.PATH = '/achievement/delete-achievement/{achievement-id}';

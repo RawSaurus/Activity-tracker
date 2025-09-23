@@ -10,10 +10,7 @@ import { SessionRequest } from '../../models/session-request';
 
 export interface CreateSessionWithTime$Params {
   'activity-id': number;
-      body: {
-'request'?: SessionRequest;
-'duration'?: string;
-}
+      body: SessionRequest
 }
 
 export function createSessionWithTime(http: HttpClient, rootUrl: string, params: CreateSessionWithTime$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {

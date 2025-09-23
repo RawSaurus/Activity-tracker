@@ -28,4 +28,4 @@ export function findInUserLibraryByName(http: HttpClient, rootUrl: string, param
   );
 }
 
-findInUserLibraryByName.PATH = '/activity/library/name/{name}';
+findInUserLibraryByName.PATH = '/activity/name/{name}';

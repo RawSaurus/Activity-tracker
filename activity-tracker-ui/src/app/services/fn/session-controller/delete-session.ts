@@ -12,7 +12,8 @@ export interface DeleteSession$Params {
   'session-id': number;
 }
 
-export function deleteSession(http: HttpClient, rootUrl: string, params: DeleteSession$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+export function deleteSession(http: HttpClient, rootUrl: string, params: DeleteSession$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
   const rb = new RequestBuilder(rootUrl, deleteSession.PATH, 'delete');
   if (params) {
     rb.path('activity-id', params['activity-id'], {});
@@ -24,7 +25,8 @@ export function deleteSession(http: HttpClient, rootUrl: string, params: DeleteS
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<string>;
+      return r as StrictHttpResponse<{
+      }>;
     })
   );
 }

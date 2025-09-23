@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export interface ActivityRequest {
-  category?: 'ACTIVITY' | 'SPORT';
-  info?: string;
+  category?: string;
+  info: string;
   isPrivate?: boolean;
-  name?: string;
-  type?: string;
+  name: string;
+  type: string;
 }

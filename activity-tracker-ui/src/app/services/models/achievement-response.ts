@@ -3,5 +3,6 @@
 export interface AchievementResponse {
   info?: string;
   name?: string;
-  type?: 'ONE_TIME' | 'DAILY' | 'AMOUNT';
+  type?: 'GOAL' | 'DAILY' | 'AMOUNT';
+  xp?: number;
 }
