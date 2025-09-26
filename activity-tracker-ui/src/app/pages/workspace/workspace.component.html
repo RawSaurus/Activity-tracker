@@ -1,0 +1,25 @@
+<div id="side-bar">
+  <ul>
+    @for(a of userActivities; track a.activityId){
+      <li>
+        <button (click)="onChooseActivity(a)">{{a.name}}</button>
+      </li>
+    }
+  </ul>
+</div>
+@if(chosenActivity().name){
+  <div id="activity-display">
+    <p>{{chosenActivity().name}}</p>
+    <img [src]="chosenActivity()?.picture?.filePath || 'default.jpg'" alt="Activity picture">
+    <button (click)="onChooseActivityOptions('ACHIEVEMENTS')">Achievements</button>
+    <button (click)="onChooseActivityOptions('SESSIONS')">Sessions</button>
+    <button (click)="onChooseActivityOptions('SETTINGS')">SETTINGS</button>
+  </div>
+  @if(activityOption() === "ACHIEVEMENTS"){
+    <app-achievements [achievements]="chosenActivity().achievements"/>
+  }@else if (activityOption() === 'SESSIONS'){
+    <p>Sessions</p>
+  }@else if (activityOption() === 'SETTINGS'){
+    <p>Settings</p>
+  }
+}

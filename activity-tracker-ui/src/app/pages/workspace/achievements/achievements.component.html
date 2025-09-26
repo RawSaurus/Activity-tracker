@@ -1,0 +1,6 @@
+<div>
+  @for(a of achievements(); track a.achievementId){
+  <app-achievement-display [achievement]="a"/>
+  }
+  <button (click)="onAddNewAchievement()">Add New Achievement</button>
+</div>

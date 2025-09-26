@@ -1,0 +1,28 @@
+<div id="ach-display">
+  <div class="ach-name">
+    <p>{{achievement().name}}</p>
+  </div>
+  <div class="ach-type">
+    <span>{{achievement().type}}</span>
+  </div>
+  <div class="ach-info">
+    <span>{{achievement().info}}</span>
+  </div>
+  <div class="ach-check">
+    @if(achievement().type=== 'GOAL'){
+    <span>Finished</span>
+    <div style="width:24px;height:24px;border:2px solid #fff;margin-top:8px;"></div>
+    }@else if(achievement().type === 'DAILY'){
+      <span>Today</span>
+      <div style="width:24px;height:24px;border:2px solid #fff;margin-top:8px;"></div>
+    } @else if (achievement().type === 'AMOUNT'){
+      <p>amount</p>
+    }
+  </div>
+  <div class="ach-picture">
+    <span>
+      <img [src]="achievement()?.picture?.filePath || 'default.jpg'" alt="Achievement picture">
+    </span>
+  </div>
+</div>
+

@@ -1,21 +1,7 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-
-import { provideClientHydration, BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { AppRoutingModule } from './app/app-routing.module';
-import { FormsModule } from '@angular/forms';
-import { CodeInputModule } from 'angular-code-input';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
-import { importProvidersFrom } from '@angular/core';
+import {appConfig} from "./app/app.config";
 
 
-bootstrapApplication(AppComponent, {
-    providers: [
-        importProvidersFrom(BrowserModule, AppRoutingModule, FormsModule, CodeInputModule),
-        provideClientHydration(),
-        HttpClient,
-        provideHttpClient(withInterceptorsFromDi())
-    ]
-})
+bootstrapApplication(AppComponent, appConfig)
   .catch(err => console.error(err));

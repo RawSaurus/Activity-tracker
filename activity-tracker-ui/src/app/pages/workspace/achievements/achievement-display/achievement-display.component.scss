@@ -1,0 +1,54 @@
+#ach-display {
+  display: grid;
+  grid-template-columns: 120px 120px 1fr 100px 80px;
+  background: #232f22;
+  color: #fff;
+  border: 1px solid #bfcdb7;
+  align-items: stretch;
+  min-height: 80px;
+}
+
+#ach-display > div {
+  border-right: 1px solid #bfcdb7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px;
+  min-height: 80px;
+}
+
+#ach-display > div:last-child {
+  border-right: none;
+}
+
+.ach-name {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+}
+
+.ach-type {
+  align-items: flex-start;
+  color: #bfcdb7;
+}
+
+.ach-info {
+  align-items: flex-start;
+}
+
+.ach-check {
+  align-items: flex-end;
+  color: #ffe082;
+  font-weight: bold;
+}
+
+.ach-picture {
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  background: #232f22;
+  min-width: 60px;
+  min-height: 60px;
+  text-align: center;
+}

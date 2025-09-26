@@ -1,0 +1,24 @@
+<div class="div">
+  <p>HOME</p>
+  <ul>
+    <li>
+      <a href="/workspace">Workspace</a>
+    </li>
+    <li>
+      <a href="/templates">Templates</a>
+    </li>
+    <li>
+      <a href="/profile">Profile</a>
+    </li>
+    <li>
+      <a href="/settings">Settings</a>
+    </li>
+  </ul>
+  @if (isLoggedIn()) {
+    <button>Log out</button>
+  } @else {
+    <button (click)="onClickLogin()">Log in</button>
+    <button (click)="onClickRegister()">Register</button>
+  }
+</div>
+<router-outlet/>
