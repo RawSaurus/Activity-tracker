@@ -1,12 +1,14 @@
 import {Component, input} from '@angular/core';
 import {AchievementDisplayComponent} from "./achievement-display/achievement-display.component";
 import {Achievement} from "../../../services/models/achievement";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-achievements',
   standalone: true,
   imports: [
-    AchievementDisplayComponent
+    AchievementDisplayComponent,
+    FormsModule
   ],
   templateUrl: './achievements.component.html',
   styleUrl: './achievements.component.scss'
@@ -14,8 +16,13 @@ import {Achievement} from "../../../services/models/achievement";
 export class AchievementsComponent {
 
   achievements = input.required<Achievement[] | undefined>();
+  toggleCreateNewAchievement = false;
+  newAchievement: Achievement = {};
+  typeOptions = ['GOAL', 'DAILY', 'AMOUNT'];
 
   onAddNewAchievement(){
-    // pop up with achievement creation window
+    this.toggleCreateNewAchievement = true;
   }
+
+
 }

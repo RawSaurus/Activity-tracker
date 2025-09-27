@@ -15,7 +15,7 @@ export interface Activity {
   info?: string;
   name?: string;
   picture?: File;
-  private?: boolean;
+  isPrivate?: boolean;
   profile?: Profile;
   sessions?: Array<Session>;
   type?: string;

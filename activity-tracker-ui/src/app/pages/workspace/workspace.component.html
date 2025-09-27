@@ -1,16 +1,45 @@
-<div id="side-bar">
-  <ul>
-    @for(a of userActivities; track a.activityId){
-      <li>
-        <button (click)="onChooseActivity(a)">{{a.name}}</button>
-      </li>
+<button (click)="onToggleSidebar()">Sidebar</button>
+@if(isSidebarActive()){ <!-- Open sidebar -->
+  <div class="side-bar">
+  <button (click)="openCreateGroupPopup()">New Group</button>
+  @if(newGroup()){
+    <textarea #groupName></textarea>
+    <button (click)="createGroup(groupName.value)">Create</button>
+  }
+    @if(groups.length === 0){<!-- display activities, if groups are empty, else display groups -->
+    <ul>
+      @for(a of userActivities; track a.activityId){
+        <li>
+          <button (click)="onChooseActivity(a)">{{a.name}}</button>
+        </li>
+      }
+    </ul>
+    }@else{ <!-- currently doesn't display uncategorized activities-->
+      <ul>
+        @for(g of groups; track g.name){
+          <li>
+            <p>{{g.name}}</p>
+            <button (click)="toggleIsGroupActive(g.name)">{{g.sign}}</button>
+            @if(g.isActive){
+              <ul>
+                @for(a of g.activities; track a.activityId){
+                  <li>
+                    <button (click)="onChooseActivity(a)">{{a.name}}</button>
+                  </li>
+                }
+              </ul>
+            }
+          </li>
+        }
+      </ul>
     }
-  </ul>
-</div>
-@if(chosenActivity().name){
-  <div id="activity-display">
+  <button (click)="showNewActivityWindow()">Add activity</button>
+  </div>
+}
+@if(chosenActivity().name){<!-- display activity clicked on in sidebar -->
+  <div class="activity-display">
     <p>{{chosenActivity().name}}</p>
-    <img [src]="chosenActivity()?.picture?.filePath || 'default.jpg'" alt="Activity picture">
+    <img [src]="chosenActivity().picture?.filePath || 'default.jpg'" alt="Activity picture">
     <button (click)="onChooseActivityOptions('ACHIEVEMENTS')">Achievements</button>
     <button (click)="onChooseActivityOptions('SESSIONS')">Sessions</button>
     <button (click)="onChooseActivityOptions('SETTINGS')">SETTINGS</button>
@@ -22,4 +51,29 @@
   }@else if (activityOption() === 'SETTINGS'){
     <p>Settings</p>
   }
+}@else{
+  <div>
+    <div>
+      <label>Name</label>
+      <input [(ngModel)]="newActivity.name">
+    </div>
+    <div>
+      <label>Info</label>
+      <input [(ngModel)]="newActivity.info">
+    </div>
+    <div>
+      <label>Category</label>
+      <input [(ngModel)]="newActivity.category">
+    </div>
+    <div>
+      <label>Private</label>
+      <input [(ngModel)]="newActivity.isPrivate">
+    </div>
+    <div>
+      <label>Type</label>
+      <input [(ngModel)]="newActivity.type">
+    </div>
+    <button type=submit (click)="addNewActivity()">Add activity</button>
+  </div>
 }
+

@@ -1,6 +1,29 @@
 <div>
-  @for(a of achievements(); track a.achievementId){
-  <app-achievement-display [achievement]="a"/>
-  }
+  @if(!toggleCreateNewAchievement){
+    @for(a of achievements(); track a.achievementId){
+      <app-achievement-display [achievement]="a"/>
+    }
   <button (click)="onAddNewAchievement()">Add New Achievement</button>
+  }@else{
+    <div>
+      <label>Name</label>
+      <input [(ngModel)]="newAchievement.name">
+    </div>
+    <div>
+      <label>Info</label>
+      <input [(ngModel)]="newAchievement.info">
+    </div>
+    <div>
+      <label>Category</label>
+      <input [(ngModel)]="newAchievement.xp">
+    </div>
+    <div>
+      <select name="type">
+        @for(t of typeOptions; track typeOptions.length){
+          <option [value]="t">{{t}}</option>
+        }
+      </select>
+    </div>
+<!--    <button type=submit (click)="addNewActivity()">Add activity</button>-->
+  }
 </div>
