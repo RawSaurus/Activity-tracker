@@ -1,0 +1,19 @@
+@for(s of sessions(); track s.name){
+  <div id="sess-display">
+    <div class="sess-name">
+      <p>{{s.name}}</p>
+    </div>
+    <div class="sess-info">
+      <span>{{s.info}}</span>
+    </div>
+    <div class="sess-notes">
+      <span>{{s.notes}}</span>
+    </div>
+    <div class="sess-start">
+      <span>{{s.start}}</span>
+    </div>
+    <div class="sess-duration">
+      <span>{{s.duration}}</span>
+    </div>
+  </div>
+}

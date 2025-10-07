@@ -8,7 +8,7 @@ import { Session } from '../models/session';
 export interface Activity {
   achievements?: Array<Achievement>;
   activityId?: number;
-  category?: 'ACTIVITY' | 'SPORT';
+  category?: string;
   comments?: Array<Comment>;
   createdAt?: string;
   creator?: string;

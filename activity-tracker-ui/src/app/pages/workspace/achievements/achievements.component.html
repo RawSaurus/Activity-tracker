@@ -5,25 +5,36 @@
     }
   <button (click)="onAddNewAchievement()">Add New Achievement</button>
   }@else{
-    <div>
-      <label>Name</label>
-      <input [(ngModel)]="newAchievement.name">
-    </div>
-    <div>
-      <label>Info</label>
-      <input [(ngModel)]="newAchievement.info">
-    </div>
-    <div>
-      <label>Category</label>
-      <input [(ngModel)]="newAchievement.xp">
-    </div>
-    <div>
-      <select name="type">
-        @for(t of typeOptions; track typeOptions.length){
-          <option [value]="t">{{t}}</option>
-        }
-      </select>
-    </div>
-<!--    <button type=submit (click)="addNewActivity()">Add activity</button>-->
+    <form [formGroup]="newAchievementForm" (ngSubmit)="addNewAchievement()">
+      <div>
+        <label>Name</label>
+        <input
+          id="name"
+          name="name"
+          formControlName="name"
+        >
+      </div>
+      <div>
+        <label>Info</label>
+        <input
+          id="info"
+          name="info"
+          formControlName="info"
+        >
+      </div>
+      <div>
+        <label>Type</label>
+        <select
+          id="type"
+          name="type"
+          formControlName="type"
+        >
+          @for(t of typeOptions; track typeOptions.length){
+            <option [value]="t">{{t}}</option>
+          }
+        </select>
+      </div>
+      <button type="submit">Add Achievement</button>
+    </form>
   }
 </div>

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-import { Activity } from '../models/activity';
+import { Activity } from './activity';
 export interface Session {
   activity?: Activity;
   createdAt?: string;

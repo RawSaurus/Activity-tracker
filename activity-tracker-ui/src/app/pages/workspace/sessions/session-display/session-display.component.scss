@@ -1,0 +1,49 @@
+#sess-display {
+  display: grid;
+  grid-template-columns: 120px 120px 1fr 100px 80px;
+  background: #232f22;
+  color: #fff;
+  border: 1px solid #bfcdb7;
+  align-items: stretch;
+  min-height: 80px;
+}
+
+#sess-display > div {
+  border-right: 1px solid #bfcdb7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px;
+  min-height: 80px;
+}
+
+#sess-display > div:last-child {
+  border-right: none;
+}
+
+.sess-name {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+}
+
+.sess-info {
+  align-items: flex-start;
+}
+
+.sess-notes {
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.sess-start {
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.sess-duration {
+  align-items: flex-start;
+  justify-content: center;
+}
+

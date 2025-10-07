@@ -1,24 +1,26 @@
-<div class="div">
-  <p>HOME</p>
-  <ul>
-    <li>
-      <a href="/workspace">Workspace</a>
+<div class="header-container">
+  <a class="logo" [class.active]="router.url === '/'" routerLink="/">HOME</a>
+  <ul class="nav-list">
+    <li [class.active]="router.url.startsWith('/workspace')">
+      <a routerLink="/workspace">Workspace</a>
     </li>
-    <li>
-      <a href="/templates">Templates</a>
+    <li [class.active]="router.url.startsWith('/templates')">
+      <a routerLink="/templates">Templates</a>
     </li>
-    <li>
-      <a href="/profile">Profile</a>
+    <li [class.active]="router.url.startsWith('/profile')">
+      <a routerLink="/profile">Profile</a>
     </li>
-    <li>
-      <a href="/settings">Settings</a>
+    <li [class.active]="router.url.startsWith('/settings')">
+      <a routerLink="/settings">Settings</a>
     </li>
   </ul>
-  @if (isLoggedIn()) {
-    <button>Log out</button>
-  } @else {
-    <button (click)="onClickLogin()">Log in</button>
-    <button (click)="onClickRegister()">Register</button>
-  }
+  <div class="auth-buttons">
+    @if (isLoggedIn()) {
+      <button>Log out</button>
+    } @else {
+      <button (click)="onClickLogin()">Log in</button>
+      <button (click)="onClickRegister()">Register</button>
+    }
+  </div>
 </div>
 <router-outlet/>

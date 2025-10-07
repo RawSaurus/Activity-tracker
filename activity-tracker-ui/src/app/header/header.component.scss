@@ -1,5 +1,80 @@
-.div {
-  align-content: center;
-  display: compact;
-  border-color: red;
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 0 32px;
+  height: 64px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 32px;
+  color: #333;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+.logo.active {
+  background: #1976d2;
+  color: #fff;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 16px;
+}
+
+.nav-list li {
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nav-list li.active, .nav-list li:hover {
+  background: #1976d2;
+}
+
+.nav-list li.active a, .nav-list li:hover a {
+  color: #fff;
+}
+
+.nav-list a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.auth-buttons button {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  background: #f5f5f5;
+  color: #333;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+
+.auth-buttons button:hover {
+  background: #1976d2;
+  color: #fff;
+}
+
+//.div {
+//  align-content: center;
+//  display: compact;
+//  border-color: red;
+//}

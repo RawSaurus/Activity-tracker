@@ -1,4 +1,4 @@
-<button (click)="onToggleSidebar()">Sidebar</button>
+<button (click)="onToggleSidebar()">☰</button>
 @if(isSidebarActive()){ <!-- Open sidebar -->
   <div class="side-bar">
   <button (click)="openCreateGroupPopup()">New Group</button>
@@ -36,44 +36,63 @@
   <button (click)="showNewActivityWindow()">Add activity</button>
   </div>
 }
+<div class="activity-display">
 @if(chosenActivity().name){<!-- display activity clicked on in sidebar -->
-  <div class="activity-display">
+  <div>
     <p>{{chosenActivity().name}}</p>
     <img [src]="chosenActivity().picture?.filePath || 'default.jpg'" alt="Activity picture">
     <button (click)="onChooseActivityOptions('ACHIEVEMENTS')">Achievements</button>
     <button (click)="onChooseActivityOptions('SESSIONS')">Sessions</button>
     <button (click)="onChooseActivityOptions('SETTINGS')">SETTINGS</button>
-  </div>
+</div>
   @if(activityOption() === "ACHIEVEMENTS"){
     <app-achievements [achievements]="chosenActivity().achievements"/>
   }@else if (activityOption() === 'SESSIONS'){
-    <p>Sessions</p>
+    <app-sessions [sessions]="chosenActivity().sessions"></app-sessions>
   }@else if (activityOption() === 'SETTINGS'){
     <p>Settings</p>
   }
 }@else{
-  <div>
-    <div>
-      <label>Name</label>
-      <input [(ngModel)]="newActivity.name">
-    </div>
-    <div>
-      <label>Info</label>
-      <input [(ngModel)]="newActivity.info">
-    </div>
-    <div>
-      <label>Category</label>
-      <input [(ngModel)]="newActivity.category">
-    </div>
-    <div>
-      <label>Private</label>
-      <input [(ngModel)]="newActivity.isPrivate">
-    </div>
-    <div>
-      <label>Type</label>
-      <input [(ngModel)]="newActivity.type">
-    </div>
-    <button type=submit (click)="addNewActivity()">Add activity</button>
-  </div>
+    <form [formGroup]="newActivityForm" (ngSubmit)="addNewActivity()">
+      <div>
+        <label>Name</label>
+        <input
+        id="name"
+        name="name"
+        formControlName="name">
+      </div>
+      <div>
+        <label>Info</label>
+        <input
+        id="info"
+        name="info"
+        formControlName="info">
+      </div>
+      <div>
+        <label>Category</label>
+        <input
+        id="category"
+        name="category"
+        formControlName="category">
+      </div>
+      <div>
+        <label>Private</label>
+        <input
+          type="checkbox"
+          id="isPrivate"
+          name="isPrivate"
+          formControlName="isPrivate">
+      </div>
+      <div>
+        <label>Type</label>
+        <input
+          id="type"
+          name="type"
+          formControlName="type"
+        >
+      </div>
+      <button type=submit>Add activity</button>
+    </form>
 }
+</div>
 

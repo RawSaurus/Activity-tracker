@@ -1,0 +1,16 @@
+<div>
+  <div>
+    <p>{{time | date:'HH:mm:ss'}}</p>
+  </div>
+  <div>
+    @if(!timerService.isRunning){
+      <button class="btn-primary" (click)="startTimer()">Start</button>
+    } @else {
+      <button class="btn-light" (click)="stopTimer()">Stop</button>
+    }
+    <button class="btn-outline-dark" (click)="resetTimer()">Reset</button>
+  </div>
+  <div>
+    <textarea [(ngModel)]="comment"></textarea>
+  </div>
+</div>
