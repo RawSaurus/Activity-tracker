@@ -31,6 +31,10 @@ You might be telling to yourself "Oh great, just another fancy TODO app." ... An
 
 ## Getting Started
 To get started:
+- Clone the repository:
+  ```
+  git clone https://github.com/RawSaurus/Activity-tracker.git
+  ```
 - Create *.env* file in same directory as *docker-compose.yml* and fill these values:
   ```
   DB_USERNAME=[your-db-username]
