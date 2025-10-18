@@ -11,6 +11,19 @@
     <button class="btn-outline-dark" (click)="resetTimer()">Reset</button>
   </div>
   <div>
-    <textarea [(ngModel)]="comment"></textarea>
+    <button (click)="outputSessionData()">Submit</button>
+  </div>
+  <div>
+    <textarea [(ngModel)]="currentNote"></textarea>
+    <button (click)="addNote()">Add note</button>
+    @if(notes){
+      <p>Notes:</p>
+      @for(n of notes; track $index){
+        <div>
+          <p>{{n}}</p>
+          <button (click)="deleteNote($index)">X</button>
+        </div>
+      }
+    }
   </div>
 </div>

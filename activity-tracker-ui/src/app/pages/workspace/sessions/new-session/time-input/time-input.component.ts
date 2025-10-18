@@ -34,6 +34,7 @@ export class TimeInputComponent {
       end: this.inputForm.controls.end.value!,
       notes: this.notes,
     }
+    console.log('input');
 
     this.sessionData.emit(newSession);
 
@@ -44,6 +45,10 @@ export class TimeInputComponent {
   addNote(){
     this.notes.push(this.currentNote);
     this.currentNote = '';
+  }
+
+  deleteNote(index: number){
+    this.notes.splice(index, 1);
   }
 
 }

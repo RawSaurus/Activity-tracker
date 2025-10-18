@@ -6,6 +6,10 @@ import {WorkspaceComponent} from "./pages/workspace/workspace.component";
 import {TemplatesComponent} from "./pages/templates/templates.component";
 import {ProfileComponent} from "./pages/profile/profile.component";
 import {SettingsComponent} from "./pages/settings/settings.component";
+import {AchievementsComponent} from "./pages/workspace/achievements/achievements.component";
+import {SessionsComponent} from "./pages/workspace/sessions/sessions.component";
+import {SessionDisplayComponent} from "./pages/workspace/sessions/session-display/session-display.component";
+import {NewSessionComponent} from "./pages/workspace/sessions/new-session/new-session.component";
 
 export const routes: Routes = [
   {
@@ -18,7 +22,23 @@ export const routes: Routes = [
   },
   {
     path: 'workspace',
-    component: WorkspaceComponent
+    component: WorkspaceComponent,
+    children: [
+      {
+        path: 'achievements',
+        component: AchievementsComponent
+      },
+      {
+        path: 'sessions',
+        component: SessionsComponent,
+        children: [
+          {
+            path: 'new',
+            component: NewSessionComponent
+          }
+        ]
+      }
+    ]
   },
   {
     path: 'templates',

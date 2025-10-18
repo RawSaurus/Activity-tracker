@@ -18,8 +18,7 @@ export class SessionsComponent {
   toggleNewSessions = false;
   sessions = input.required<Session[] | undefined>();
 
-  onToggleNewSession(){
-    this.toggleNewSessions = true;
+  onToggleNewSession(val: boolean){
+    this.toggleNewSessions = val;
   }
-
 }

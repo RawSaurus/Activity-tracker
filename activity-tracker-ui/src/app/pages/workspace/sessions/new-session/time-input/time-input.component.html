@@ -21,6 +21,9 @@
 @if(notes){
   <p>Notes:</p>
   @for(n of notes; track $index){
-    <P>{{n}}</P>
+    <div>
+      <p>{{n}}</p>
+      <button (click)="deleteNote($index)">X</button>
+    </div>
   }
 }
