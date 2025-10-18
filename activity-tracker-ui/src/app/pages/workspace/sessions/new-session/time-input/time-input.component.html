@@ -1,0 +1,26 @@
+<form [formGroup]="inputForm">
+  <label for="start">Start:</label>
+  <input
+    type="datetime-local"
+    id="start"
+    name="start"
+    formControlName="start"
+  >
+  <label for="end">End:</label>
+  <input
+    type="datetime-local"
+    id="end"
+    name="end"
+    formControlName="end"
+  >
+  <input type="submit" (click)="outputSessionData()">
+</form>
+
+<textarea [(ngModel)]="currentNote"></textarea>
+<button (click)="addNote()">Add note</button>
+@if(notes){
+  <p>Notes:</p>
+  @for(n of notes; track $index){
+    <P>{{n}}</P>
+  }
+}

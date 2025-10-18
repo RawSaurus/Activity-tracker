@@ -1,10 +1,10 @@
-import {afterNextRender, Component, DestroyRef, effect, inject, signal} from '@angular/core';
+import {afterNextRender, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import {Activity} from "../../services/models/activity";
 import {AchievementsComponent} from "./achievements/achievements.component";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {ActivityRequest} from "../../services/models/activity-request";
-import {debounceTime, of} from "rxjs";
 import {SessionsComponent} from "./sessions/sessions.component";
+import {ActivityControllerService} from "../../services/services/activity-controller.service";
+import {Session} from "../../services/models/session";
 
 @Component({
   selector: 'app-workspace',
@@ -18,7 +18,8 @@ import {SessionsComponent} from "./sessions/sessions.component";
   templateUrl: './workspace.component.html',
   styleUrl: './workspace.component.scss'
 })
-export class WorkspaceComponent {
+export class WorkspaceComponent implements OnInit{
+  private activityService = inject(ActivityControllerService);
 
   private destroyRef = inject(DestroyRef);
 
@@ -65,16 +66,19 @@ export class WorkspaceComponent {
       name: 'test2',
       achievements: [
         {
+          achievementId: 1,
           name: 'achievement test21',
           type: 'GOAL',
           info: 'info about test21',
         },
         {
+          achievementId: 2,
           name: 'achievement test22',
           type: 'AMOUNT',
           info: 'info about test22',
         },
         {
+          achievementId: 3,
           name: 'achievement test23',
           type: 'DAILY',
           info: 'info about test23',
@@ -128,6 +132,13 @@ export class WorkspaceComponent {
       // });
     //
     // this.destroyRef.onDestroy(() => subscription.unsubscribe());
+  }
+
+  ngOnInit(){
+    //call for getUserActivities
+    if(this.userActivities.length !== 0){
+      this.chosenActivity.set(this.userActivities[0]);
+    }
   }
 
 

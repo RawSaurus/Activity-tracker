@@ -29,7 +29,7 @@
           name="type"
           formControlName="type"
         >
-          @for(t of typeOptions; track typeOptions.length){
+          @for(t of typeOptions; track t){
             <option [value]="t">{{t}}</option>
           }
         </select>

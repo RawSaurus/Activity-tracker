@@ -1,19 +1,33 @@
-@for(s of sessions(); track s.name){
+@for(s of displaySessions; track s.session.name){
   <div id="sess-display">
     <div class="sess-name">
-      <p>{{s.name}}</p>
+      <p>{{s.session.name}}</p>
     </div>
     <div class="sess-info">
-      <span>{{s.info}}</span>
+      <span>{{s.session.info}}</span>
     </div>
-    <div class="sess-notes">
-      <span>{{s.notes}}</span>
+    <div>
+      <button (click)="toggleNotes(s.session.name!)">{{(s.showNotes ? "Hide" : "Show") + " notes"}}</button>
     </div>
     <div class="sess-start">
-      <span>{{s.start}}</span>
+      <span>{{s.session.start}}</span>
+    </div>
+    <div class="sess-finish">
+      <span>{{s.session.finish}}</span>
     </div>
     <div class="sess-duration">
-      <span>{{s.duration}}</span>
+      <span>{{s.session.duration}}</span>
     </div>
+    @if (s.showNotes) {
+      <div>
+        @for (n of s.session.notes; track n){
+          <div>
+            <span>
+              {{n}}
+            </span>
+          </div>
+        }
+      </div>
+    }
   </div>
 }

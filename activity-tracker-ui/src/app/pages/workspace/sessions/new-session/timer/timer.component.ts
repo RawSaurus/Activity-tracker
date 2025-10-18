@@ -14,7 +14,7 @@ import {FormsModule} from "@angular/forms";
   templateUrl: './timer.component.html',
   styleUrl: './timer.component.scss'
 })
-export class TimerComponent implements OnDestroy{
+export class TimerComponent {
 
   time = new Date(0,0,0);
   startDate: Date | undefined = undefined;
@@ -40,7 +40,8 @@ export class TimerComponent implements OnDestroy{
   }
 
   ngOnDestroy() {
-    this.destroyRef.onDestroy(() => this.subscription.unsubscribe());
+    // this.destroyRef.onDestroy(() => this.subscription.unsubscribe());
+    this.subscription.unsubscribe();
   }
 
   startTimer(){

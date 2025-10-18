@@ -1,1 +1,20 @@
-<app-timer></app-timer>
+<div>
+  <div>
+    <button (click)="toggleTimerOrInput()">{{timerOrInput}}</button>
+  </div>
+ <div>
+   @if(timerOrInput === 'Timer'){
+     <app-timer></app-timer>
+   }
+   @if(timerOrInput === 'Input'){
+     <app-time-input (sessionData)="test($event)" ></app-time-input>
+   }
+ </div>
+  <div>
+    note-inp
+  </div>
+  <div>
+    button to add
+    <button (click)="test1()">test</button>
+  </div>
+</div>
