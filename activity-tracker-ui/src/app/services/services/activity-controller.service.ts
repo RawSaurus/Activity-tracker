@@ -267,7 +267,7 @@ export class ActivityControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findAll1(params?: FindAll1$Params, context?: HttpContext): Observable<PageActivityResponse> {
+  findAll1(params ?: FindAll1$Params, context ?: HttpContext): Observable<PageActivityResponse> {
     return this.findAll1$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageActivityResponse>): PageActivityResponse => r.body)
     );

@@ -16,7 +16,7 @@
   </ul>
   <div class="auth-buttons">
     @if (isLoggedIn()) {
-      <button>Log out</button>
+      <button (click)="onClickLogout()">Log out</button>
     } @else {
       <button (click)="onClickLogin()">Log in</button>
       <button (click)="onClickRegister()">Register</button>

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {AuthenticationRequest, AuthenticationResponse} from '../../services/models';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../../services/services';
 import {TokenService} from '../../services/token/token.service';
 import {NgFor, NgIf} from '@angular/common';
 import {FormsModule, NgModel} from '@angular/forms';
+import {WINDOW} from "../../services/window-token";
 
 @Component({
   standalone: true,
@@ -13,16 +14,21 @@ import {FormsModule, NgModel} from '@angular/forms';
   styleUrl: './login.component.scss',
   imports: [NgIf, NgFor, FormsModule]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
 
   authRequest: AuthenticationRequest = {email: '', password: ''};
   errorMsg: Array<string> = [];
+  private _window = inject(WINDOW);
 
   constructor(
     private router: Router,
     private authService: AuthenticationService,
     private tokenService: TokenService
   ){}
+
+  ngOnInit(){
+    localStorage.setItem('token', '');
+  }
 
   login(){
     this.errorMsg = [];

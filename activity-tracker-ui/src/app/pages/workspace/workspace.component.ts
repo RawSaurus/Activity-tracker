@@ -5,6 +5,8 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {SessionsComponent} from "./sessions/sessions.component";
 import {ActivityControllerService} from "../../services/services/activity-controller.service";
 import {Session} from "../../services/models/session";
+import {ActivityResponse} from "../../services/models/activity-response";
+import {delay, firstValueFrom, interval, lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-workspace',
@@ -23,7 +25,9 @@ export class WorkspaceComponent implements OnInit{
 
   private destroyRef = inject(DestroyRef);
 
-  userActivities: Activity[] = [
+  userActivities: Activity[] = [];
+
+  userActivitiesTest: Activity[] = [
     {
       activityId: 1,
       name: 'test1',
@@ -134,8 +138,41 @@ export class WorkspaceComponent implements OnInit{
     // this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
 
-  ngOnInit(){
+  async ngOnInit(){
     //call for getUserActivities
+    this.groups = [];
+    let list: ActivityResponse[] = [];
+
+    console.log(1);
+    this.activityService.findAll1().subscribe({
+      next: activities =>{
+        list = activities.content ?? [];
+      }
+    });
+
+    const i = await lastValueFrom(this.activityService.findAll1());
+
+
+    console.log(3);
+    console.log(list);
+
+    this.userActivities = [];
+
+    list.forEach(value => {
+      this.userActivities.push({
+        name: value.name,
+        info: value.info,
+        type: value.type,
+        category: value.category
+      })
+    });
+
+    console.log(4);
+    console.log(this.userActivities);
+
+    this.userActivities[0].activityId = 1;
+    this.userActivities[1].activityId = 2;
+
     if(this.userActivities.length !== 0){
       this.chosenActivity.set(this.userActivities[0]);
     }
@@ -209,9 +246,29 @@ export class WorkspaceComponent implements OnInit{
     //     g.activities.push(activityToAdd);
     //   }
     // });
+    this.activityService.createActivity({
+      body: {
+        name: activityToAdd.name ?? '',
+        info: activityToAdd.info ?? '',
+        type: activityToAdd.type ?? '',
+        category: activityToAdd.category,
+        isPrivate: activityToAdd.isPrivate
+      }
+    }).subscribe();
     this.chosenActivity.set(activityToAdd);
     this.newActivityForm.reset();
     console.log(this.userActivities);
+  }
+
+  addNewSession(session: Session){
+    this.userActivities.filter((a) => {
+      if(a.name === this.chosenActivity().name){
+        a.sessions?.push(session);
+      }
+    });
+  }
+
+  deleteActivity(){
   }
 }
 

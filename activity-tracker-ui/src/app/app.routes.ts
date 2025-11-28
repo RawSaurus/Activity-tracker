@@ -10,6 +10,7 @@ import {AchievementsComponent} from "./pages/workspace/achievements/achievements
 import {SessionsComponent} from "./pages/workspace/sessions/sessions.component";
 import {SessionDisplayComponent} from "./pages/workspace/sessions/session-display/session-display.component";
 import {NewSessionComponent} from "./pages/workspace/sessions/new-session/new-session.component";
+import {ActivateAccountComponent} from "./pages/activate-account/activate-account.component";
 
 export const routes: Routes = [
   {
@@ -19,6 +20,10 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'activate-account',
+    component: ActivateAccountComponent
   },
   {
     path: 'workspace',

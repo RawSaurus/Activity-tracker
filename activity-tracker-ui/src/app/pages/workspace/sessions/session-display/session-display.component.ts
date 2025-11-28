@@ -30,4 +30,6 @@ export class SessionDisplayComponent implements OnInit{
       }
     });
   }
+
+
 }

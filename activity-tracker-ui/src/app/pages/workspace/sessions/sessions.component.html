@@ -2,5 +2,8 @@
   <app-session-display [sessions]="sessions()"></app-session-display>
   <button class="btn-primary" (click)="onToggleNewSession(true)">New Session</button>
 }@else{
-  <app-new-session (return)="onToggleNewSession($event)"></app-new-session>
+  <app-new-session
+    (return)="onToggleNewSession($event)"
+    (sessionToOutput)="addNewSession($event)">
+  </app-new-session>
 }

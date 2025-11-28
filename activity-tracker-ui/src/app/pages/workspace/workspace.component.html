@@ -48,9 +48,11 @@
   @if(activityOption() === "ACHIEVEMENTS"){
     <app-achievements [achievements]="chosenActivity().achievements"/>
   }@else if (activityOption() === 'SESSIONS'){
-    <app-sessions [sessions]="chosenActivity().sessions"></app-sessions>
+    <app-sessions [sessions]="chosenActivity().sessions" (newSessionOutput)="addNewSession($event)"></app-sessions>
   }@else if (activityOption() === 'SETTINGS'){
-    <p>Settings</p>
+    <div>
+      <button (click)="deleteActivity()">Delete {{chosenActivity()}}</button>
+    </div>
   }
 }@else{
     <form [formGroup]="newActivityForm" (ngSubmit)="addNewActivity()">

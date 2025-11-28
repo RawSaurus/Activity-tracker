@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RegistrationRequest} from '../../services/models';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../../services/services';
@@ -12,7 +12,7 @@ import {FormsModule, NgModel} from '@angular/forms';
   styleUrl: './register.component.scss',
   imports: [NgIf, NgFor, FormsModule]
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
 
   registerRequest: RegistrationRequest = {firstname: '', lastname: '', email: '', password: ''};
   errorMsg: Array<string> = [];
@@ -21,6 +21,10 @@ export class RegisterComponent {
     private router: Router,
     private authService: AuthenticationService
   ){}
+
+  ngOnInit(){
+    window.localStorage.setItem('token', '');
+  }
 
   register(){
     this.errorMsg = [];
