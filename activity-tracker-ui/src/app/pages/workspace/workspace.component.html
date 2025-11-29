@@ -51,7 +51,7 @@
     <app-sessions [sessions]="chosenActivity().sessions" (newSessionOutput)="addNewSession($event)"></app-sessions>
   }@else if (activityOption() === 'SETTINGS'){
     <div>
-      <button (click)="deleteActivity()">Delete {{chosenActivity()}}</button>
+      <button (click)="deleteActivity()">Delete {{chosenActivity().name}}</button>
     </div>
   }
 }@else{

@@ -1,4 +1,4 @@
-import {afterNextRender, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import {afterNextRender, ChangeDetectorRef, Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import {Activity} from "../../services/models/activity";
 import {AchievementsComponent} from "./achievements/achievements.component";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -23,9 +23,10 @@ import {delay, firstValueFrom, interval, lastValueFrom} from "rxjs";
 export class WorkspaceComponent implements OnInit{
   private activityService = inject(ActivityControllerService);
 
+  // private cdRef = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
 
-  userActivities: Activity[] = [];
+  userActivities : Activity[] = [];
 
   userActivitiesTest: Activity[] = [
     {
@@ -138,44 +139,44 @@ export class WorkspaceComponent implements OnInit{
     // this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
 
-  async ngOnInit(){
+  ngOnInit(){
     //call for getUserActivities
     this.groups = [];
+
+    this.updateUserActivities();
+
+    if(this.userActivities.length !== 0){
+      this.chosenActivity.set(this.userActivities[0]);
+    }
+  }
+
+  async updateUserActivities(){
     let list: ActivityResponse[] = [];
 
-    console.log(1);
     this.activityService.findAll1().subscribe({
       next: activities =>{
         list = activities.content ?? [];
+        // console.log(list);
       }
     });
 
     const i = await lastValueFrom(this.activityService.findAll1());
 
-
-    console.log(3);
-    console.log(list);
-
     this.userActivities = [];
 
     list.forEach(value => {
       this.userActivities.push({
+        activityId: value.activityId,
         name: value.name,
         info: value.info,
         type: value.type,
         category: value.category
       })
     });
+    // this.cdRef.detectChanges();
 
-    console.log(4);
     console.log(this.userActivities);
 
-    this.userActivities[0].activityId = 1;
-    this.userActivities[1].activityId = 2;
-
-    if(this.userActivities.length !== 0){
-      this.chosenActivity.set(this.userActivities[0]);
-    }
   }
 
 
@@ -240,7 +241,7 @@ export class WorkspaceComponent implements OnInit{
       isPrivate: this.newActivityForm.controls.isPrivate.value!,
       type: this.newActivityForm.controls.type.value!
     }
-    this.userActivities.push(activityToAdd);
+    // this.userActivities.push(activityToAdd);
     // this.groups.some((g) => {
     //   if(g.name === 'Uncategorized'){
     //     g.activities.push(activityToAdd);
@@ -254,7 +255,9 @@ export class WorkspaceComponent implements OnInit{
         category: activityToAdd.category,
         isPrivate: activityToAdd.isPrivate
       }
-    }).subscribe();
+    }).subscribe({
+      complete: () => this.updateUserActivities()
+    });
     this.chosenActivity.set(activityToAdd);
     this.newActivityForm.reset();
     console.log(this.userActivities);
@@ -269,6 +272,15 @@ export class WorkspaceComponent implements OnInit{
   }
 
   deleteActivity(){
+    this.activityService.deleteActivityById({
+      "activity-id": this.chosenActivity().activityId!
+    }).subscribe({
+      complete: () => this.updateUserActivities(),
+      error: err => console.log(err)
+    });
+    // if(this.userActivities.length !== 0){
+    //   this.chosenActivity.set(this.userActivities[0]);
+    // }
   }
 }
 
