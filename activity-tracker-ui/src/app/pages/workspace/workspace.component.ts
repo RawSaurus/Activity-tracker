@@ -176,7 +176,7 @@ export class WorkspaceComponent implements OnInit{
     // this.cdRef.detectChanges();
 
     console.log(this.userActivities);
-
+    console.log(this.chosenActivity());
   }
 
 

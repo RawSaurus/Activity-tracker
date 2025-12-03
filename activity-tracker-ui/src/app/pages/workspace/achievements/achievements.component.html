@@ -1,39 +1,73 @@
 <div>
   @if(!toggleCreateNewAchievement){
-    @for(a of achievements(); track a.achievementId){
+    @for(a of achievements; track a.name){
       <app-achievement-display [achievement]="a"/>
     }
   <button (click)="onAddNewAchievement()">Add New Achievement</button>
   }@else{
     <form [formGroup]="newAchievementForm" (ngSubmit)="addNewAchievement()">
-      <div>
-        <label>Name</label>
-        <input
-          id="name"
-          name="name"
-          formControlName="name"
-        >
+      <div formGroupName="base">
+        <div>
+          <label>Name</label>
+          <input
+            id="name"
+            name="name"
+            formControlName="name"
+          >
+        </div>
+        <div>
+          <label>Info</label>
+          <input
+            id="info"
+            name="info"
+            formControlName="info"
+          >
+        </div>
+        <div>
+          <label>Set XP gain</label>
+          <input
+            id="setXpGain"
+            name="setXpGain"
+            formControlName="setXpGain"
+          >
+        </div>
+        <div>
+          <label>Type</label>
+          <select
+            id="type"
+            name="type"
+            formControlName="type"
+          >
+            @for(t of typeOptions; track t){
+              <option [value]="t">{{t}}</option>
+            }
+          </select>
+        </div>
       </div>
-      <div>
-        <label>Info</label>
-        <input
-          id="info"
-          name="info"
-          formControlName="info"
-        >
-      </div>
-      <div>
-        <label>Type</label>
-        <select
-          id="type"
-          name="type"
-          formControlName="type"
-        >
-          @for(t of typeOptions; track t){
-            <option [value]="t">{{t}}</option>
-          }
-        </select>
-      </div>
+      @if (newAchievementForm.controls.base.value.type === 'GOAL' ) {
+        <div formGroupName="extra">
+          <div>
+            <label>Deadline</label>
+            <input
+              type="datetime-local"
+              id="deadline"
+              name="deadline"
+              formControlName="deadline"
+            >
+          </div>
+        </div>
+      }@else if (newAchievementForm.controls.base.value.type === 'AMOUNT' ) {
+        <div formGroupName="extra">
+          <div>
+            <label>Unit</label>
+            <input
+              id="unit"
+              name="unit"
+              formControlName="unit"
+            >
+          </div>
+        </div>
+      }
       <button type="submit">Add Achievement</button>
     </form>
   }
