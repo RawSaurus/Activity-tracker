@@ -1,6 +1,6 @@
 <div>
   @if(!toggleCreateNewAchievement){
-    @for(a of achievements; track a.name){
+    @for(a of achievementService.achievements; track a.name){
       <app-achievement-display [achievement]="a"/>
     }
   <button (click)="onAddNewAchievement()">Add New Achievement</button>
@@ -28,7 +28,15 @@
           <input
             id="setXpGain"
             name="setXpGain"
-            formControlName="setXpGain"
+            formControlName="setXPGain"
+          >
+        </div>
+        <div>
+          <label>Total XP</label>
+          <input
+            id="totalXP"
+            name="totalXP"
+            formControlName="totalXP"
           >
         </div>
         <div>

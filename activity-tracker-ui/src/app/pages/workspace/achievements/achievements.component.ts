@@ -5,6 +5,8 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {AchievementControllerService} from "../../../services/services/achievement-controller.service";
 import {lastValueFrom} from "rxjs";
 import {AchievementResponseV2} from "../../../services/models/achievement-response-v-2";
+import {AchievementRequest} from "../../../services/models/achievement-request";
+import {AchievementService} from "./achievement.service";
 
 type achievementOptions = 'GOAL' | 'DAILY' | 'AMOUNT';
 
@@ -24,7 +26,8 @@ export class AchievementsComponent implements OnInit{
   private cdRef =  inject(ChangeDetectorRef);
 
   typeOptions = ['GOAL', 'DAILY', 'AMOUNT'];
-  achievementService = inject(AchievementControllerService);
+  // achievementService = inject(AchievementControllerService);
+  achievementService = inject(AchievementService);
 
   selectedActivity = input.required<number | undefined>();
   achievements: AchievementResponseV2[] = [];
@@ -36,7 +39,8 @@ export class AchievementsComponent implements OnInit{
       name: new FormControl(''),
       info: new FormControl(''),
       type: new FormControl<achievementOptions>('GOAL'),
-      setXpGain: new FormControl(0),
+      setXPGain: new FormControl(0),
+      totalXP: new FormControl(0)
     }, {validators: [Validators.required]}),
     extra: new FormGroup({
       unit: new FormControl(''),
@@ -45,25 +49,28 @@ export class AchievementsComponent implements OnInit{
   });
 
   ngOnInit() {
+    this.achievementService.setSelectedActivity(this.selectedActivity() ?? 0);
+    this.achievementService.updateAchievements();
   }
 
   ngOnChanges(){
-    this.updateAchievements().then(result => this.achievements = result.content ?? []);
+    this.achievementService.updateAchievements();
+    // this.updateAchievements().then(result => this.achievements = result.content ?? []);
   }
 
-  async updateAchievements(){
+  // async updateAchievements(){
     // this.achievementService.findAll2({
     //   "activity-id": this.selectedActivity() ?? 0
     // }).subscribe({
     //   next: (val) => console.log(val.content)
     // });
 
-    const achRes = await lastValueFrom(this.achievementService.findAll2({
-      "activity-id": this.selectedActivity() ?? 0
-    }));
-
-    return achRes;
-  }
+  //   const achRes = await lastValueFrom(this.achievementService.findAll2({
+  //     "activity-id": this.selectedActivity() ?? 0
+  //   }));
+  //
+  //   return achRes;
+  // }
 
   onAddNewAchievement(){
     this.toggleCreateNewAchievement = true;
@@ -71,50 +78,60 @@ export class AchievementsComponent implements OnInit{
 
   addNewAchievement(){
 
-    const achievementToAdd: AchievementResponseV2 = {
+    const achievementToAdd: AchievementRequest = {
       name: this.newAchievementForm.controls.base.value.name!,
       info: this.newAchievementForm.controls.base.value.info!,
       type: this.newAchievementForm.controls.base.value.type!,
+      setXPGain: this.newAchievementForm.controls.base.value.setXPGain ?? 0,
+      totalXP: this.newAchievementForm.controls.base.value.totalXP ?? 0,
       deadline: this.newAchievementForm.controls.extra.value.deadline ?? '',
       unit: this.newAchievementForm.controls.extra.value.unit ?? '',
-      // setXpGain: this.newAchievementForm.controls.extra.value.setXpGain ?? '',
     }
 
-    if(achievementToAdd.type === 'GOAL'){
-      this.achievementService.createGoalAchievement({
-        "activity-id": this.selectedActivity() ?? 0,
-        deadline: achievementToAdd.deadline?.toString() ?? '',
-        setXpGain: 20,
-        body: {
-          name: achievementToAdd.name!,
-          info: achievementToAdd.info!,
-          type: achievementToAdd.type
-        }
-      }).subscribe();
-    }else if(achievementToAdd.type === 'DAILY'){
-      this.achievementService.createDailyAchievement({
-        "activity-id": this.selectedActivity() ?? 0,
-        setXpGain: 20,
-        body: {
-          name: achievementToAdd.name!,
-          info: achievementToAdd.info!,
-          type: achievementToAdd.type
-        }
-      }).subscribe();
-    }else{
-      this.achievementService.createAmountAchievement({
-        "activity-id": this.selectedActivity() ?? 0,
-        setXpGain: 20,
-        unit: achievementToAdd.unit ?? '',
-        body: {
-          name: achievementToAdd.name!,
-          info: achievementToAdd.info!,
-          type: achievementToAdd.type
-        }
-      }).subscribe();
-    }
-    // this.achievements.push(achievementToAdd);
-    this.updateAchievements().then(result => this.achievements = result.content ?? []);
+    // if(achievementToAdd.type === 'GOAL'){
+    //   this.achievementService.createGoalAchievement({
+    //     "activity-id": this.selectedActivity() ?? 0,
+    //     body: {
+    //       name: achievementToAdd.name!,
+    //       info: achievementToAdd.info!,
+    //       type: achievementToAdd.type,
+    //       setXPGain: achievementToAdd.setXPGain,
+    //       totalXP: achievementToAdd.totalXP,
+    //       deadline: achievementToAdd.deadline,
+    //       unit: achievementToAdd.unit,
+    //     }
+    //   }).subscribe();
+    // }else if(achievementToAdd.type === 'DAILY'){
+    //   this.achievementService.createDailyAchievement({
+    //     "activity-id": this.selectedActivity() ?? 0,
+    //     body: {
+    //       name: achievementToAdd.name!,
+    //       info: achievementToAdd.info!,
+    //       type: achievementToAdd.type,
+    //       setXPGain: achievementToAdd.setXPGain,
+    //       totalXP: achievementToAdd.totalXP,
+    //       deadline: achievementToAdd.deadline,
+    //       unit: achievementToAdd.unit,
+    //     }
+    //   }).subscribe();
+    // }else{
+    //   this.achievementService.createAmountAchievement({
+    //     "activity-id": this.selectedActivity() ?? 0,
+    //     body: {
+    //       name: achievementToAdd.name!,
+    //       info: achievementToAdd.info!,
+    //       type: achievementToAdd.type,
+    //       setXPGain: achievementToAdd.setXPGain,
+    //       totalXP: achievementToAdd.totalXP,
+    //       deadline: achievementToAdd.deadline,
+    //       unit: achievementToAdd.unit,
+    //     }
+    //   }).subscribe();
+    // }
+    // // this.achievements.push(achievementToAdd);
+    // this.updateAchievements().then(result => this.achievements = result.content ?? []);
+
+    this.achievementService.addNewAchievement(achievementToAdd);
 
     this.toggleCreateNewAchievement = false;
     this.newAchievementForm.reset();

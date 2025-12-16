@@ -2,6 +2,7 @@
 /* eslint-disable */
 import { TypeSuperclass } from '../models/type-superclass';
 export interface AchievementResponseV2 {
+  achievementId: number;
   biggestStreak?: number;
   currentStreak?: number;
   deadline?: string;

@@ -10,17 +10,13 @@ import { AchievementRequest } from '../../models/achievement-request';
 
 export interface CreateGoalAchievement$Params {
   'activity-id': number;
-  deadline: string;
-  setXpGain: number;
-      body: AchievementRequest
+  body: AchievementRequest;
 }
 
 export function createGoalAchievement(http: HttpClient, rootUrl: string, params: CreateGoalAchievement$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
   const rb = new RequestBuilder(rootUrl, createGoalAchievement.PATH, 'post');
   if (params) {
     rb.path('activity-id', params['activity-id'], {});
-    rb.query('deadline', params.deadline, {});
-    rb.query('setXpGain', params.setXpGain, {});
     rb.body(params.body, 'application/json');
   }
 
