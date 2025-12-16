@@ -50,7 +50,7 @@ public class Activity {
     @Column(name = "creator_name")
     private String creator;
 //    private Integer originalActivity;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(name = "_profile_activities",
             joinColumns = {@JoinColumn(name = "activityId")},
             inverseJoinColumns = {@JoinColumn(name = "profileId")}

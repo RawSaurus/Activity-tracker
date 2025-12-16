@@ -127,7 +127,7 @@ public class ActivityService {
     }
 
     //new
-    public String deleteActivityById(Integer activityId) {
+    public void deleteActivityById(Integer activityId) {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
@@ -141,9 +141,10 @@ public class ActivityService {
                 }
             }
             activityRepository.delete(activity);
-            return "Activity deleted successfully";
-        }else
+            //returning string throws error in FE - invalid JSON
+//            return "Activity deleted successfully";
+        }else {
             throw new ActionNotAllowed("You are not creator of this activity");
-
+        }
     }
 }

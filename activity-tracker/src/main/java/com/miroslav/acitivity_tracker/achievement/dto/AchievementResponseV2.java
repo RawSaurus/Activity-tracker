@@ -2,6 +2,7 @@ package com.miroslav.acitivity_tracker.achievement.dto;
 
 
 import com.miroslav.acitivity_tracker.achievement.model.*;
+import com.miroslav.acitivity_tracker.exception.ActionNotAllowed;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class AchievementResponseV2 {
 
+    private int achievementId;
     private String name;
     private String info;
     private Type type;
@@ -25,14 +27,16 @@ public class AchievementResponseV2 {
     private int currentStreak;
     private int biggestStreak;
 
-    public AchievementResponseV2(String name, String info, Type type, int xp, TypeSuperclass typeClass){
+    public AchievementResponseV2(int achievementId, String name, String info, Type type, int xp, TypeSuperclass typeClass){
+        this.achievementId = achievementId;
         this.name = name;
         this.info = info;
         this.type = type;
         this.xp = xp;
         setTypeData(typeClass);
     }
-    public AchievementResponseV2(String name, String info, Type type, int xp){
+    public AchievementResponseV2(int achievementId, String name, String info, Type type, int xp){
+        this.achievementId = achievementId;
         this.name = name;
         this.info = info;
         this.type = type;
@@ -41,6 +45,7 @@ public class AchievementResponseV2 {
 
     public AchievementResponseV2 toResponse(Achievement achievement, TypeSuperclass typeClass){
         return new AchievementResponseV2(
+                achievement.getAchievementId(),
                 achievement.getName(),
                 achievement.getInfo(),
                 achievement.getType(),
@@ -57,6 +62,8 @@ public class AchievementResponseV2 {
         }else if(typeClass.getClass().equals(DailyAchievement.class)){
             this.currentStreak = ((DailyAchievement) typeClass).getCurrentStreak();
             this.biggestStreak = ((DailyAchievement) typeClass).getBiggestStreak();
+        }else{
+            throw new ActionNotAllowed("Type must be set to one of the values");
         }
     }
 }

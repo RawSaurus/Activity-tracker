@@ -88,26 +88,21 @@ public class AchievementController {
 
     @PostMapping("/goal-achievement/{activity-id}")
     public ResponseEntity<Integer> createGoalAchievement(@RequestBody AchievementRequest request,
-                                                         @PathVariable("activity-id")Integer activityId,
-                                                         @RequestParam("deadline") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date deadline,
-                                                         @RequestParam("setXpGain") int setXpGain
+                                                         @PathVariable("activity-id")Integer activityId
                                                          ){
-        return ResponseEntity.ok(achievementTypeService.createGoalAchievement(request, activityId, deadline, setXpGain));
+        return ResponseEntity.ok(achievementTypeService.createGoalAchievement(request, activityId));
     }
     @PostMapping("/daily-achievement/{activity-id}")
     public ResponseEntity<Integer> createDailyAchievement(@RequestBody AchievementRequest request,
-                                                         @PathVariable("activity-id")Integer activityId,
-                                                         @RequestParam int setXpGain
+                                                         @PathVariable("activity-id")Integer activityId
     ){
-        return ResponseEntity.ok(achievementTypeService.createDailyAchievement(request, activityId, setXpGain));
+        return ResponseEntity.ok(achievementTypeService.createDailyAchievement(request, activityId));
     }
     @PostMapping("/amount-achievement/{activity-id}")
     public ResponseEntity<Integer> createAmountAchievement(@RequestBody AchievementRequest request,
-                                                        @PathVariable("activity-id")Integer activityId,
-                                                        @RequestParam int setXpGain,
-                                                        @RequestParam String unit
+                                                        @PathVariable("activity-id")Integer activityId
     ){
-        return ResponseEntity.ok(achievementTypeService.createAmountAchievement(request, activityId, setXpGain, unit));
+        return ResponseEntity.ok(achievementTypeService.createAmountAchievement(request, activityId));
     }
 
 

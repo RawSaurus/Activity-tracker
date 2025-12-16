@@ -1,9 +1,14 @@
 package com.miroslav.acitivity_tracker.achievement.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.OptBoolean;
 import com.miroslav.acitivity_tracker.achievement.model.Type;
 import com.miroslav.acitivity_tracker.util.enums.EnumValidator;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 public record AchievementRequest(
         @NotEmpty(message = "Achievement needs a name")
@@ -12,7 +17,11 @@ public record AchievementRequest(
         @NotEmpty(message = "Write some info about achievement")
         String info,
         @EnumValidator(enumClazz = Type.class)
-        String type
-
+        String type,
+        int setXPGain,
+        int totalXP,
+        String unit,
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        Date deadline
 ) {
 }

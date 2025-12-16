@@ -186,7 +186,7 @@ public class ActivityControllerTest {
     }
     @Test
     public void deleteActivityById_returnOk() throws Exception {
-        when(activityService.deleteActivityById(activityId)).thenReturn("Activity deleted successfully");
+//        when(activityService.deleteActivityById(activityId)).thenReturn("Activity deleted successfully");
 
         mockMvc.perform(delete(BASE_PATH + "/" + activityId)
                 .contentType(MediaType.APPLICATION_JSON))

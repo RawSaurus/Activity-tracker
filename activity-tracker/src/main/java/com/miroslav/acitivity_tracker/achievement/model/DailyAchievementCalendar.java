@@ -22,7 +22,8 @@ public class DailyAchievementCalendar {
     private boolean checkmark;
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate day;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+//    {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "type_achievement_id", referencedColumnName = "typeAchievementId")
     private DailyAchievement dailyAchievement;
 }

@@ -228,7 +228,7 @@ public class AchievementTypeServiceTest {
 
     @Test
     public void shouldCreateGoalAchievement(){
-        AchievementRequest request = new AchievementRequest("Goal Achievement", "Description", "GOAL");
+        AchievementRequest request = new AchievementRequest("Goal Achievement", "Description", "GOAL", 10, 100, "unit", any(java.util.Date.class));
         Date deadline = Date.valueOf(LocalDate.now().plusDays(5));
         int setXpGain = 50;
 
@@ -242,7 +242,7 @@ public class AchievementTypeServiceTest {
             return savedGoal;
         });
 
-        Integer achievementId = achievementTypeService.createGoalAchievement(request, activity.getActivityId(), deadline, setXpGain);
+        Integer achievementId = achievementTypeService.createGoalAchievement(request, activity.getActivityId());
 
         assertThat(achievementId).isNotNull();
         assertThat(achievementId).isEqualTo(1);
@@ -250,7 +250,7 @@ public class AchievementTypeServiceTest {
 
     @Test
     public void shouldCreateDailyAchievement(){
-        AchievementRequest request = new AchievementRequest("Goal Achievement", "Description", "DAILY");
+        AchievementRequest request = new AchievementRequest("Goal Achievement", "Description", "DAILY", 10, 100, "unit", any(java.util.Date.class));
         int setXpGain = 50;
 
         when(userContext.getAuthenticatedUser()).thenReturn(user);
@@ -263,7 +263,7 @@ public class AchievementTypeServiceTest {
             return savedDaily;
         });
 
-        Integer achievementId = achievementTypeService.createDailyAchievement(request, activity.getActivityId(), setXpGain);
+        Integer achievementId = achievementTypeService.createDailyAchievement(request, activity.getActivityId());
 
         assertThat(achievementId).isNotNull();
         assertThat(achievementId).isEqualTo(1);
@@ -271,7 +271,7 @@ public class AchievementTypeServiceTest {
 
     @Test
     public void shouldCreateAmountAchievement(){
-        AchievementRequest request = new AchievementRequest("Goal Achievement", "Description", "AMOUNT");
+        AchievementRequest request = new AchievementRequest("Goal Achievement", "Description", "AMOUNT", 10, 100, "unit", any(java.util.Date.class));
         int setXpGain = 50;
 
         when(userContext.getAuthenticatedUser()).thenReturn(user);
@@ -284,7 +284,7 @@ public class AchievementTypeServiceTest {
             return savedAmount;
         });
 
-        Integer achievementId = achievementTypeService.createAmountAchievement(request, activity.getActivityId(), setXpGain, "weight");
+        Integer achievementId = achievementTypeService.createAmountAchievement(request, activity.getActivityId());
 
         assertThat(achievementId).isNotNull();
         assertThat(achievementId).isEqualTo(1);

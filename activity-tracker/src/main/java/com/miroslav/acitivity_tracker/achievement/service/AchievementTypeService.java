@@ -43,7 +43,7 @@ public class AchievementTypeService {
 
     private final AmountAchievementRepository amountARepository;
     private final DailyAchievementRepository dailyARepository;
-    private final DailyAchievementCalendarRepository dailyCalendar;
+    private final DailyAchievementCalendarRepository dailyCalendarRepository;
     private final GoalAchievementRepository goalARepository;
     private final FileService fileService;
     private final FileAssembler<AchievementResponseV2> fileAssembler;
@@ -99,6 +99,7 @@ public class AchievementTypeService {
         Achievement achievement = achievementRepository.findById(achievementId)
                 .orElseThrow(() -> new EntityNotFoundException("Achievement not found"));
         AchievementResponseV2 responseV2 = new AchievementResponseV2(
+                achievement.getAchievementId(),
                 achievement.getName(),
                 achievement.getInfo(),
                 achievement.getType(),
@@ -129,6 +130,7 @@ public class AchievementTypeService {
         Achievement achievement = achievementRepository.findById(achievementId)
                 .orElseThrow(() -> new EntityNotFoundException("Achievement not found"));
         AchievementResponseV2 responseV2 = new AchievementResponseV2(
+                achievement.getAchievementId(),
                 achievement.getName(),
                 achievement.getInfo(),
                 achievement.getType(),
@@ -155,6 +157,7 @@ public class AchievementTypeService {
         //fuck shit up
         //map to dtos
         AchievementResponseV2 responseV2 = new AchievementResponseV2(
+                achievement.getAchievementId(),
                 achievement.getName(),
                 achievement.getInfo(),
                 achievement.getType(),
@@ -189,6 +192,7 @@ public class AchievementTypeService {
         //map to AchievementResponse
         for(Achievement a : achievements){
             AchievementResponseV2 res = new AchievementResponseV2(
+                    a.getAchievementId(),
                     a.getName(),
                     a.getInfo(),
                     a.getType(),
@@ -206,6 +210,7 @@ public class AchievementTypeService {
         return achievements.map(
                 achievement -> {
                     AchievementResponseV2 res = new AchievementResponseV2(
+                            achievement.getAchievementId(),
                             achievement.getName(),
                             achievement.getInfo(),
                             achievement.getType(),
@@ -217,7 +222,7 @@ public class AchievementTypeService {
         );
     }
 
-    public Integer createGoalAchievement(AchievementRequest request, Integer activityId, Date deadline, int setXpGain) {
+    public Integer createGoalAchievement(AchievementRequest request, Integer activityId) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
         Activity activity = activityRepository.findById(activityId)
@@ -236,13 +241,13 @@ public class AchievementTypeService {
         GoalAchievement goalAchievement = GoalAchievement.builder()
                 .typeAchievementId(achievementRepository.save(achievement).getAchievementId())
                 .achievement(achievement)
-                .deadline(deadline)
-                .setXPGain(setXpGain)
+                .deadline(request.deadline())
+                .setXPGain(request.setXPGain())
                 .build();
 
         return goalARepository.save(goalAchievement).getTypeAchievementId();
     }
-    public Integer createDailyAchievement(AchievementRequest request, Integer activityId, int setXpGain) {
+    public Integer createDailyAchievement(AchievementRequest request, Integer activityId) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
         Activity activity = activityRepository.findById(activityId)
@@ -261,7 +266,7 @@ public class AchievementTypeService {
         DailyAchievement dailyAchievement = DailyAchievement.builder()
                 .typeAchievementId(achievementRepository.save(achievement).getAchievementId())
                 .achievement(achievement)
-                .setXPGain(setXpGain)
+                .setXPGain(request.setXPGain())
                 .build();
         //TODO DailyAchievementCalendar
         var dailyToSave = dailyARepository.save(dailyAchievement);
@@ -270,7 +275,7 @@ public class AchievementTypeService {
                 .dailyAchievement(dailyToSave)
                 .build();
 
-        dailyCalendar.save(cal);
+        dailyCalendarRepository.save(cal);
 
 //        achievement.setTypeSuperclass(dailyARepository.save(dailyAchievement).getTypeAchievementId());
 
@@ -278,7 +283,7 @@ public class AchievementTypeService {
 //        activityRepository.save(activity);
         return dailyToSave.getTypeAchievementId();
     }
-    public Integer createAmountAchievement(AchievementRequest request, Integer activityId, int setXpGain, String unit) {
+    public Integer createAmountAchievement(AchievementRequest request, Integer activityId) {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
         Activity activity = activityRepository.findById(activityId)
@@ -295,8 +300,8 @@ public class AchievementTypeService {
         AmountAchievement amountAchievement = AmountAchievement.builder()
                 .typeAchievementId(achievementRepository.save(achievement).getAchievementId())
                 .achievement(achievement)
-                .setXPGain(setXpGain)
-                .unit(unit)
+                .setXPGain(request.setXPGain())
+                .unit(request.unit())
                 .build();
 
 //        achievement.setTypeSuperclass(amountARepository.save(amountAchievement).getTypeAchievementId());
@@ -333,9 +338,16 @@ public class AchievementTypeService {
         Profile profile = profileRepository.findById(userContext.getAuthenticatedUser().getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
         Achievement achievement = achievementRepository.findById(achievementId)
-                .orElseThrow(() -> new EntityNotFoundException("achievement not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Achievement not found"));
+
+        if(achievement.getType() == Type.DAILY){
+            var a = dailyCalendarRepository.findByDailyAchievement_TypeAchievementId(achievementId)
+                    .orElseThrow(() -> new EntityNotFoundException("Daily achievement not found"));
+            dailyCalendarRepository.delete(a);
+        }
 
         getType(achievement).deleteById(achievementId);
+
 
         if(!achievement.getActivity().getProfile().getProfileId().equals(profile.getProfileId())){
             throw new ActionNotAllowed("You are not allowed to change this template");

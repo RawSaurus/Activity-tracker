@@ -95,6 +95,7 @@ public class ActivityController {
 
     @DeleteMapping("/{activity-id}")
     public ResponseEntity<?> deleteActivityById(@PathVariable("activity-id") Integer activityId){
-        return ResponseEntity.ok(activityService.deleteActivityById(activityId));
+        activityService.deleteActivityById(activityId);
+        return ResponseEntity.ok().build();
     }
 }

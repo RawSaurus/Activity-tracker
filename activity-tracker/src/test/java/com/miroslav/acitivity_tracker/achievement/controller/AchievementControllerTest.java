@@ -64,7 +64,7 @@ public class AchievementControllerTest {
     public void setUp() {
         response1 = new AchievementResponse( "Achievement 1", "Description 1", Type.GOAL, 100);
         response2 = new AchievementResponse( "Achievement 2", "Description 2", Type.GOAL, 200);
-        request = new AchievementRequest("New Achievement", "New Description", "GOAL");
+        request = new AchievementRequest("New Achievement", "New Description", "GOAL", 10, 100, "unit", new Date(System.currentTimeMillis()));
         responseV2 = new AchievementResponseV2();
         responseV2.setName("Achievement 3");
         responseV2.setInfo("Description 3");
@@ -138,38 +138,34 @@ public class AchievementControllerTest {
 
     @Test
     public void createGoalAchievement_returnOk_givenValidRequest() throws Exception {
-        when(achievementTypeService.createGoalAchievement(any(AchievementRequest.class), anyInt(), any(Date.class), anyInt())).thenReturn(1);
+        when(achievementTypeService.createGoalAchievement(any(AchievementRequest.class), anyInt())).thenReturn(1);
 
         mockMvc.perform(post(BASE_PATH + "/goal-achievement/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
-                        .param("deadline", LocalDateTime.now().plusDays(2).toString())
-                        .param("setXpGain", "50"))
+                )
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"));
     }
 
     @Test
     public void createDailyAchievement_returnOk_givenValidRequest() throws Exception {
-        when(achievementTypeService.createDailyAchievement(any(AchievementRequest.class), anyInt(), anyInt())).thenReturn(1);
+        when(achievementTypeService.createDailyAchievement(any(AchievementRequest.class), anyInt())).thenReturn(1);
 
         mockMvc.perform(post(BASE_PATH + "/daily-achievement/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request))
-                        .param("setXpGain", "50"))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"));
     }
 
     @Test
     public void createAmountAchievement_returnOk_givenValidRequest() throws Exception {
-        when(achievementTypeService.createAmountAchievement(any(AchievementRequest.class), anyInt(), anyInt(), anyString())).thenReturn(1);
+        when(achievementTypeService.createAmountAchievement(any(AchievementRequest.class), anyInt())).thenReturn(1);
 
         mockMvc.perform(post(BASE_PATH + "/amount-achievement/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request))
-                        .param("setXpGain", "50")
-                        .param("unit", "test-unit"))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"));
     }
