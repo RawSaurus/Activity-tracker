@@ -87,6 +87,16 @@ export class AchievementService {
     }
   }
 
+  updateAchievement(activityId: number, achievementId: number, achRequest: AchievementRequest){
+    this.achievementService.updateAchievement({
+      "activity-id": activityId,
+      "achievement-id": achievementId,
+      body: achRequest
+    }).subscribe({
+      complete: () => this.updateAchievements()
+    })
+  }
+
   deleteAchievement(achievementId: number){
     this.achievementService.deleteAchievement({
       "achievement-id": achievementId

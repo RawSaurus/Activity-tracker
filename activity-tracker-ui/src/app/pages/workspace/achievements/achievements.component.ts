@@ -32,6 +32,7 @@ export class AchievementsComponent implements OnInit{
   selectedActivity = input.required<number | undefined>();
   achievements: AchievementResponseV2[] = [];
   toggleCreateNewAchievement = false;
+  toggleUpdateAchievement = false;
   newAchievement: Achievement = {};
 
   newAchievementForm = new FormGroup({
@@ -48,6 +49,8 @@ export class AchievementsComponent implements OnInit{
     }),
   });
 
+  achievementToUpdate = 0;
+
   ngOnInit() {
     this.achievementService.setSelectedActivity(this.selectedActivity() ?? 0);
     this.achievementService.updateAchievements();
@@ -55,28 +58,14 @@ export class AchievementsComponent implements OnInit{
 
   ngOnChanges(){
     this.achievementService.updateAchievements();
-    // this.updateAchievements().then(result => this.achievements = result.content ?? []);
   }
 
-  // async updateAchievements(){
-    // this.achievementService.findAll2({
-    //   "activity-id": this.selectedActivity() ?? 0
-    // }).subscribe({
-    //   next: (val) => console.log(val.content)
-    // });
-
-  //   const achRes = await lastValueFrom(this.achievementService.findAll2({
-  //     "activity-id": this.selectedActivity() ?? 0
-  //   }));
-  //
-  //   return achRes;
-  // }
 
   onAddNewAchievement(){
     this.toggleCreateNewAchievement = true;
   }
 
-  addNewAchievement(){
+  addOrUpdateAchievement(){
 
     const achievementToAdd: AchievementRequest = {
       name: this.newAchievementForm.controls.base.value.name!,
@@ -88,53 +77,36 @@ export class AchievementsComponent implements OnInit{
       unit: this.newAchievementForm.controls.extra.value.unit ?? '',
     }
 
-    // if(achievementToAdd.type === 'GOAL'){
-    //   this.achievementService.createGoalAchievement({
-    //     "activity-id": this.selectedActivity() ?? 0,
-    //     body: {
-    //       name: achievementToAdd.name!,
-    //       info: achievementToAdd.info!,
-    //       type: achievementToAdd.type,
-    //       setXPGain: achievementToAdd.setXPGain,
-    //       totalXP: achievementToAdd.totalXP,
-    //       deadline: achievementToAdd.deadline,
-    //       unit: achievementToAdd.unit,
-    //     }
-    //   }).subscribe();
-    // }else if(achievementToAdd.type === 'DAILY'){
-    //   this.achievementService.createDailyAchievement({
-    //     "activity-id": this.selectedActivity() ?? 0,
-    //     body: {
-    //       name: achievementToAdd.name!,
-    //       info: achievementToAdd.info!,
-    //       type: achievementToAdd.type,
-    //       setXPGain: achievementToAdd.setXPGain,
-    //       totalXP: achievementToAdd.totalXP,
-    //       deadline: achievementToAdd.deadline,
-    //       unit: achievementToAdd.unit,
-    //     }
-    //   }).subscribe();
-    // }else{
-    //   this.achievementService.createAmountAchievement({
-    //     "activity-id": this.selectedActivity() ?? 0,
-    //     body: {
-    //       name: achievementToAdd.name!,
-    //       info: achievementToAdd.info!,
-    //       type: achievementToAdd.type,
-    //       setXPGain: achievementToAdd.setXPGain,
-    //       totalXP: achievementToAdd.totalXP,
-    //       deadline: achievementToAdd.deadline,
-    //       unit: achievementToAdd.unit,
-    //     }
-    //   }).subscribe();
-    // }
-    // // this.achievements.push(achievementToAdd);
-    // this.updateAchievements().then(result => this.achievements = result.content ?? []);
-
-    this.achievementService.addNewAchievement(achievementToAdd);
+    if(this.toggleUpdateAchievement){
+      this.achievementService.updateAchievement(this.selectedActivity() ?? 0, this.achievementToUpdate, achievementToAdd);
+    }else{
+      this.achievementService.addNewAchievement(achievementToAdd);
+    }
 
     this.toggleCreateNewAchievement = false;
+    this.toggleUpdateAchievement = false;
     this.newAchievementForm.reset();
+  }
+
+  updateAchievement(achToUpdate: AchievementResponseV2){
+    this.toggleCreateNewAchievement = true;
+    this.toggleUpdateAchievement = true;
+
+    this.newAchievementForm.setValue({
+      base:{
+        name: achToUpdate.name ?? '',
+        info: achToUpdate.info ?? '',
+        type: achToUpdate.type ?? null,
+        setXPGain: 0,
+        totalXP: 0
+      },
+      extra: {
+        deadline: achToUpdate.deadline ?? '',
+        unit: achToUpdate.unit ?? '',
+      }
+    })
+
+    this.achievementToUpdate = achToUpdate.achievementId;
   }
 
 

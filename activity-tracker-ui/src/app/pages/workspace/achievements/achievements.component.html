@@ -1,11 +1,11 @@
 <div>
   @if(!toggleCreateNewAchievement){
     @for(a of achievementService.achievements; track a.name){
-      <app-achievement-display [achievement]="a"/>
+      <app-achievement-display (achToUpdate)="updateAchievement($event)" [achievement]="a"/>
     }
   <button (click)="onAddNewAchievement()">Add New Achievement</button>
   }@else{
-    <form [formGroup]="newAchievementForm" (ngSubmit)="addNewAchievement()">
+    <form [formGroup]="newAchievementForm" (ngSubmit)="addOrUpdateAchievement()">
       <div formGroupName="base">
         <div>
           <label>Name</label>
@@ -76,7 +76,7 @@
           </div>
         </div>
       }
-      <button type="submit">Add Achievement</button>
+      <button type="submit">{{toggleUpdateAchievement ? "Update" : "Add"}}</button>
     </form>
   }
 </div>
