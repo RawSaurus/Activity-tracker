@@ -58,8 +58,12 @@
   height: 24px;
   border: 2px solid #fff;
   margin-top: 8px;
+
+  &[data-finished="true"] {
+    background-color: green;
+  }
 }
 
-.checkmark:hover{
-  background-color: green;
+.checkmark:hover {
+  background-color: lightgreen;
 }

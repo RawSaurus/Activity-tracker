@@ -9,12 +9,12 @@
     <span>{{achievement().info}}</span>
   </div>
   <div class="ach-check">
-    @if(achievement().type=== 'GOAL'){
+    @if(achievement().type === 'GOAL'){
     <span>Finished</span>
-    <div class="checkmark"></div>
+    <div class="checkmark" [attr.data-finished]="achievement().finished" (click)="markFinished()"></div>
     }@else if(achievement().type === 'DAILY'){
       <span>Today</span>
-      <div class="checkmark"></div>
+      <div class="checkmark" [attr.data-finished]="achievement().finished"></div>
     } @else if (achievement().type === 'AMOUNT'){
       <p>amount</p>
     }

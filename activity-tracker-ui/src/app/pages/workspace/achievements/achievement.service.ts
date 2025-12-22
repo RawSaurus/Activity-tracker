@@ -94,7 +94,15 @@ export class AchievementService {
       body: achRequest
     }).subscribe({
       complete: () => this.updateAchievements()
-    })
+    });
+  }
+
+  markFinished(achievementId: number){
+    return this.achievementService.markFinished({
+      "achievement-id": achievementId
+    }).subscribe({
+      complete: () => this.updateAchievements()
+    });
   }
 
   deleteAchievement(achievementId: number){

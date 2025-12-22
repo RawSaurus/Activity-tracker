@@ -16,6 +16,7 @@ export class AchievementDisplayComponent {
   achievement = input.required<AchievementResponseV2>();
   achievementService = inject(AchievementService);
   achToUpdate = output<AchievementResponseV2>();
+  finishBg = ''
 
   updateAchievement(){
     this.achToUpdate.emit(this.achievement());
@@ -23,5 +24,9 @@ export class AchievementDisplayComponent {
 
   deleteAchievement(){
     this.achievementService.deleteAchievement(this.achievement().achievementId);
+  }
+
+  markFinished(){
+    this.achievementService.markFinished(this.achievement().achievementId);
   }
 }
