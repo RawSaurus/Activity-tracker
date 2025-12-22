@@ -27,20 +27,22 @@ public class AchievementResponseV2 {
     private int currentStreak;
     private int biggestStreak;
 
-    public AchievementResponseV2(int achievementId, String name, String info, Type type, int xp, TypeSuperclass typeClass){
+    public AchievementResponseV2(int achievementId, String name, String info, Type type, int xp, boolean finished, TypeSuperclass typeClass){
         this.achievementId = achievementId;
         this.name = name;
         this.info = info;
         this.type = type;
         this.xp = xp;
+        this.finished = finished;
         setTypeData(typeClass);
     }
-    public AchievementResponseV2(int achievementId, String name, String info, Type type, int xp){
+    public AchievementResponseV2(int achievementId, String name, String info, Type type, int xp, boolean finished){
         this.achievementId = achievementId;
         this.name = name;
         this.info = info;
         this.type = type;
         this.xp = xp;
+        this.finished = finished;
     }
 
     public AchievementResponseV2 toResponse(Achievement achievement, TypeSuperclass typeClass){
@@ -50,6 +52,7 @@ public class AchievementResponseV2 {
                 achievement.getInfo(),
                 achievement.getType(),
                 achievement.getXp(),
+                achievement.isFinished(),
                 typeClass
                 );
     }

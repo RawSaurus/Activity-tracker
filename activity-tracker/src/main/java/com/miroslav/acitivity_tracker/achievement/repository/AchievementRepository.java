@@ -47,8 +47,8 @@ public interface AchievementRepository extends JpaRepository<Achievement, Intege
     @Modifying
     @Query("""
     UPDATE Achievement a
-    SET a.finished = true
+    SET a.finished = :finished
     WHERE a.achievementId = :achievementId
     """)
-    void updateFinished(Integer achievementId);
+    void updateFinished(Integer achievementId, boolean finished);
 }

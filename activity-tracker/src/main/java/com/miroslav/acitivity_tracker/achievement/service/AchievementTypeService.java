@@ -103,7 +103,8 @@ public class AchievementTypeService {
                 achievement.getName(),
                 achievement.getInfo(),
                 achievement.getType(),
-                achievement.getXp()
+                achievement.getXp(),
+                achievement.isFinished()
         );
         try {
             responseV2.setTypeData((TypeSuperclass) getType(achievement.getType()).findById(achievementId)
@@ -134,7 +135,8 @@ public class AchievementTypeService {
                 achievement.getName(),
                 achievement.getInfo(),
                 achievement.getType(),
-                achievement.getXp()
+                achievement.getXp(),
+                achievement.isFinished()
         );
         try {
             responseV2.setTypeData((TypeSuperclass) getType(achievement.getType()).findById(achievementId)
@@ -161,7 +163,8 @@ public class AchievementTypeService {
                 achievement.getName(),
                 achievement.getInfo(),
                 achievement.getType(),
-                achievement.getXp()
+                achievement.getXp(),
+                achievement.isFinished()
         );
 //        AchievementResponseWType response = achievementMapper.toResponseWType(achievement);
         if(achievement.getType() == Type.GOAL){
@@ -196,7 +199,8 @@ public class AchievementTypeService {
                     a.getName(),
                     a.getInfo(),
                     a.getType(),
-                    a.getXp()
+                    a.getXp(),
+                    a.isFinished()
                     );
             res.setTypeData((TypeSuperclass) getType(a).findById(a.getAchievementId()).orElse(null));
             response.add(res);
@@ -214,7 +218,8 @@ public class AchievementTypeService {
                             achievement.getName(),
                             achievement.getInfo(),
                             achievement.getType(),
-                            achievement.getXp()
+                            achievement.getXp(),
+                            achievement.isFinished()
                     );
                     res.setTypeData((TypeSuperclass) getType(achievement).findById(achievement.getAchievementId()).orElse(null));
                     return res;

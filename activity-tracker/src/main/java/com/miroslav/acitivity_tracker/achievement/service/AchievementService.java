@@ -114,6 +114,9 @@ public class AchievementService {
         Achievement achievement = achievementRepository.findById(achievementId)
                 .orElseThrow(() -> new EntityNotFoundException("Achievement not found"));
 
+        if(!achievement.isFinished()){
+//            achievement.setFinished(true);
+
         Event event = Event.builder()
                 .name(achievement.getName() + " finished")
                 .type(EventType.ACHIEVEMENT_DONE)
@@ -124,8 +127,13 @@ public class AchievementService {
                 .build();
         eventRepository.save(event);
 
+//        achievementRepository.save(achievement);
 
-        achievementRepository.updateFinished(achievementId);
+
+        achievementRepository.updateFinished(achievementId, true);
+        }else{
+            throw new ActionNotAllowed("Achievement is already finished");
+        }
     }
 
 
