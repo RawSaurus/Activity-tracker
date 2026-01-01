@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {DatePipe} from "@angular/common";
 import {Session} from "../../../../services/models/session";
+import {SessionService} from "../session.service";
 
 export type TimeData = {
   start: string,
@@ -26,11 +27,13 @@ export type TimeData = {
 })
 export class NewSessionComponent {
 
+  sessionService = inject(SessionService);
+
   timerOrInput: 'Timer' | 'Input' = 'Input';
   timeData: TimeData = {start:'', end:'', notes:[]};
   return = output<boolean>();
   showNewForm = false;
-  sessionToOutput = output<Session>();
+  // sessionToOutput = output<Session>();
 
   newSessionForm = new FormGroup({
     name: new FormControl(''),
@@ -72,16 +75,31 @@ export class NewSessionComponent {
   back(){
     this.return.emit(!window.confirm('Do you want to exit ? Data may be lost'));
   }
-  backNoConfirm(){
-    const session: Session = {
-      name: this.newSessionForm.controls.name.value!,
-      info: this.newSessionForm.controls.info.value!,
-      start: this.newSessionForm.controls.start.value!,
-      finish: this.newSessionForm.controls.end.value!,
-      notes: this.timeData.notes,
-      duration: this.newSessionForm.controls.duration.value?.toString()
-    }
-    this.sessionToOutput.emit(session);
-    console.log(session);
+
+  addNewSession(){
+    //missing values in req
+
+    this.sessionService.addSession({
+      name: this.newSessionForm.controls.name.value ?? '',
+      info: this.newSessionForm.controls.info.value ?? '',
+      duration: this.newSessionForm.controls.duration.value?.toString(),
+      start: this.newSessionForm.controls.start.value ?? '',
+      end: this.newSessionForm.controls.end.value ?? '',
+      notes: this.timeData.notes
+    });
+
+    // const session: Session = {
+    //   name: this.newSessionForm.controls.name.value!,
+    //   info: this.newSessionForm.controls.info.value!,
+    //   start: this.newSessionForm.controls.start.value!,
+    //   finish: this.newSessionForm.controls.end.value!,
+    //   notes: this.timeData.notes,
+    //   duration: this.newSessionForm.controls.duration.value?.toString()
+    // }
+    console.log("new-session");
+    console.log(this.sessionService.selectedActivity);
+
+    this.newSessionForm.reset();
+    this.return.emit(false);
   }
 }

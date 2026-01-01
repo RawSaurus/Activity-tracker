@@ -104,7 +104,7 @@ export class AchievementsComponent implements OnInit{
         deadline: achToUpdate.deadline ?? '',
         unit: achToUpdate.unit ?? '',
       }
-    })
+    });
 
     this.achievementToUpdate = achToUpdate.achievementId;
   }

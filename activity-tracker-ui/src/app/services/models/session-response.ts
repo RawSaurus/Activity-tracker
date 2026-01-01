@@ -6,4 +6,5 @@ export interface SessionResponse {
   info?: string;
   name?: string;
   start?: string;
+  notes?: Array<string>;
 }

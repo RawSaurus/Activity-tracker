@@ -48,7 +48,7 @@
   @if(activityOption() === "ACHIEVEMENTS"){
     <app-achievements [selectedActivity]="chosenActivity().activityId"/>
   }@else if (activityOption() === 'SESSIONS'){
-    <app-sessions [sessions]="chosenActivity().sessions" (newSessionOutput)="addNewSession($event)"></app-sessions>
+    <app-sessions [selectedActivity]="chosenActivity().activityId"></app-sessions>
   }@else if (activityOption() === 'SETTINGS'){
     <div>
       <button (click)="deleteActivity()">Delete {{chosenActivity().name}}</button>

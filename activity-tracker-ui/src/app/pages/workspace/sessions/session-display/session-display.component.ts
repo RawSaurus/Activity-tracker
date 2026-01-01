@@ -1,5 +1,7 @@
-import {Component, input, OnInit} from '@angular/core';
+import {Component, inject, input, OnInit} from '@angular/core';
 import {Session} from "../../../../services/models/session";
+import {SessionService} from "../session.service";
+import {SessionResponse} from "../../../../services/models/session-response";
 
 @Component({
   selector: 'app-session-display',
@@ -10,25 +12,24 @@ import {Session} from "../../../../services/models/session";
 })
 export class SessionDisplayComponent implements OnInit{
 
-  sessions = input.required<Session[] | undefined>();
-  displaySessions: {session: Session, showNotes: boolean}[] = [];
+  // sessions = input.required<Session[] | undefined>();
+  sessionService = inject(SessionService);
+  displaySessions: {session: SessionResponse, showNotes: boolean}[] = [];
+  showNotes = false;
+  session = input.required<SessionResponse>()
 
   ngOnInit(){
-    const array: Session[] = [...this.sessions() as Session[]]
-    for (const s of array) {
-      this.displaySessions.push({
-        session: s,
-        showNotes: false,
-      })
-    }
+    // const array: Session[] = [...this.sessions() as Session[]]
+    // for (const s of array) {
+    //   this.displaySessions.push({
+    //     session: s,
+    //     showNotes: false,
+    //   })
+    // }
   }
 
-  toggleNotes(name: string){
-    this.displaySessions.filter(s => {
-      if(s.session.name === name){
-        s.showNotes = !s.showNotes;
-      }
-    });
+  toggleNotes(){
+    this.showNotes = !this.showNotes;
   }
 
 

@@ -65,5 +65,7 @@
 }
 
 .checkmark:hover {
-  background-color: lightgreen;
+  &[data-finished="false"] {
+    background-color: lightgreen;
+  }
 }

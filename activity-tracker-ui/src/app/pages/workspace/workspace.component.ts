@@ -263,14 +263,6 @@ export class WorkspaceComponent implements OnInit{
     console.log(this.userActivities);
   }
 
-  addNewSession(session: Session){
-    this.userActivities.filter((a) => {
-      if(a.name === this.chosenActivity().name){
-        a.sessions?.push(session);
-      }
-    });
-  }
-
   deleteActivity(){
     this.activityService.deleteActivityById({
       "activity-id": this.chosenActivity().activityId!

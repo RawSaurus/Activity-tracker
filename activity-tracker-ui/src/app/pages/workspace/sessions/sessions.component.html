@@ -1,9 +1,11 @@
 @if(!toggleNewSessions){
-  <app-session-display [sessions]="sessions()"></app-session-display>
+  @for(s of sessionService.sessions; track s.name){
+    <app-session-display [session]="s"></app-session-display>
+  }
   <button class="btn-primary" (click)="onToggleNewSession(true)">New Session</button>
 }@else{
   <app-new-session
     (return)="onToggleNewSession($event)"
-    (sessionToOutput)="addNewSession($event)">
+    >
   </app-new-session>
 }
